@@ -4,7 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("admin/programs")
+@RequestMapping("/admin/programs")
 public class ProgramAdminController {
 
     // 1. create program (should have title, description and image (compress it and store to mongo))
