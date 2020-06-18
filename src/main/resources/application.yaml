@@ -1,0 +1,7 @@
+spring:
+  freemarker:
+    template-loader-path: "classpath:/templates"
+    suffix: ".ftl"
+  data:
+    mongodb:
+      uri: ${MONGO_DB_URI:mongodb://localhost/radio_service}
