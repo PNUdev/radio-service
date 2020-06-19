@@ -9,4 +9,5 @@ public class ProgramApiController {
 
     // 1. list all programs (with pagination)
     // 2. info about specific program
+    // 3. find by name or part of the description
 }
