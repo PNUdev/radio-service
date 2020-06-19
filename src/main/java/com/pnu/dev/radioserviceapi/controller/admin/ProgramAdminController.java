@@ -34,6 +34,11 @@ public class ProgramAdminController {
         return "programs/index";
     }
 
+    @GetMapping("/new")
+    public String create() {
+        return "programs/form";
+    }
+
     // 1. create program (should have title, description and image (compress it and store to mongo))
     // 2. update program
     // 3. delete program

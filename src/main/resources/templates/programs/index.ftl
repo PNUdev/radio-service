@@ -5,7 +5,9 @@
         <a href="/admin/programs"><h2 class="text-center">Список програм</h2></a>
     <#else>
         <div class="py-4">
-            <div class="btn btn-primary btn-lg btn-block">Додати нову програму</div>
+            <a href="/admin/programs/new">
+                <div class="btn btn-primary btn-lg btn-block">Додати нову програму</div>
+            </a>
         </div>
 
         <div>
@@ -19,7 +21,7 @@
                         <div>
                             <div class="p">${program.description}</div>
                         </div>
-                        <div class="ml-auto">
+                        <div class="ml-auto pt-3">
                             <div class="btn btn-primary">Редагувати</div>
                         </div>
                     </div>
