@@ -1,7 +1,7 @@
 <#include "../include/header.ftl">
 
 <div class="row d-flex justify-content-around">
-    <div class="col-md-6 mt-5 p-5 rounded bg-light">
+    <div class="col-md-7 mt-5 p-5 rounded bg-light">
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">Назва</span>
@@ -26,7 +26,9 @@
                 <div class="row">
                     <div class="pt-3">
                         <div class="btn btn-primary">Оновити</div>
-                        <div class="btn btn-danger">Видалити</div>
+                        <a href="/admin/programs/delete/${program.id}">
+                            <div class="btn btn-danger">Видалити</div>
+                        </a>
                     </div>
                 </div>
             <#else >

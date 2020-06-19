@@ -45,6 +45,14 @@ public class ProgramAdminController {
         return "programs/form";
     }
 
+    @GetMapping("/delete/{id}")
+    public String deleteConfirmation(Model model, @PathVariable("id") String id) {
+        Program program = programService.findById(id).orElseThrow(RuntimeException::new);
+
+        model.addAttribute("program", program);
+        return "programs/deleteConfirmation";
+    }
+
     // 1. create program (should have title, description and image (compress it and store to mongo))
     // 2. update program
     // 3. delete program
