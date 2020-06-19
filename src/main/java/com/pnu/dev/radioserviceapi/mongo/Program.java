@@ -21,6 +21,6 @@ public class Program {
 
     private String description;
 
-    private String image;
+    private String imageUrl;
 
 }

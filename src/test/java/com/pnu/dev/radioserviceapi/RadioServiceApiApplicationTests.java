@@ -20,7 +20,7 @@ class RadioServiceApiApplicationTests {
         // setup db for programs
         IntStream.range(0, 20)
                 .mapToObj(idx -> Program.builder()
-                        .image("https://www.somagnews.com/wp-content/uploads/2020/04/75-e1586981465263.png")
+                        .imageUrl("https://www.somagnews.com/wp-content/uploads/2020/04/75-e1586981465263.png")
                         .title("Title " + idx)
                         .description("Lorem ipsum dolor sit amet, consectetur adipiscing elit," +
                                 " sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." +

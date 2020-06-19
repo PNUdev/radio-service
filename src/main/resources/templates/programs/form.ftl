@@ -6,23 +6,34 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">Назва</span>
             </div>
-            <input type="text" class="form-control">
+            <input type="text" class="form-control" value="${(program.title)!}">
         </div>
         <div class="input-group mb-3">
             <div class="input-group-prepend">
                 <span class="input-group-text">Посилання на зображення</span>
             </div>
-            <input type="text" class="form-control" id="image-url">
+            <input type="text" class="form-control" id="image-url" value="${(program.imageUrl)!}">
         </div>
         <div class="input-group">
             <div class="input-group-prepend">
                 <span class="input-group-text">Опис</span>
             </div>
-            <textarea class="form-control" rows="10"></textarea>
+            <textarea class="form-control" rows="10">${(program.description)!}</textarea>
         </div>
-        <div class="pt-3">
-            <div class="btn btn-primary">Додати програму</div>
+
+        <div class="p-3">
+            <#if program??>
+                <div class="row">
+                    <div class="pt-3">
+                        <div class="btn btn-primary">Оновити</div>
+                        <div class="btn btn-danger">Видалити</div>
+                    </div>
+                </div>
+            <#else >
+                <div class="btn btn-primary">Додати програму</div>
+            </#if>
         </div>
+
     </div>
     <div class="col-md-4 mt-5 p-5 rounded bg-light">
         <div id="image-preview-block">
@@ -41,9 +52,12 @@
     let imagePreviewBlock = $('#image-preview-block');
     let imageLoadingErrorBlock = $('#image-loading-error');
 
-    imageUrl.change(function () {
+    let setImageSrcUrl = function () {
         imageDisplay.attr('src', imageUrl.val())
-    });
+    };
+
+    $(document).ready(setImageSrcUrl);
+    imageUrl.change(setImageSrcUrl);
 
     imageDisplay
         .on('load', function () {

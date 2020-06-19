@@ -14,7 +14,7 @@
             <#list programsPage.content as program >
                 <div class="row my-3 bg-light rounded p-3">
                     <div class="col-md-4">
-                        <img src="${program.image}" alt="Ілюстрація до програми" class="mw-100 mh-100">
+                        <img src="${program.imageUrl}" alt="Ілюстрація до програми" class="mw-100 mh-100">
                     </div>
                     <div class="col-md-3 h3">${program.title}</div>
                     <div class="col-md-5 d-flex flex-column col-md-5 justify-content-between">
@@ -22,7 +22,9 @@
                             <div class="p">${program.description}</div>
                         </div>
                         <div class="ml-auto pt-3">
-                            <div class="btn btn-primary">Редагувати</div>
+                            <a href="/admin/programs/edit/${program.id}">
+                                <div class="btn btn-primary">Редагувати</div>
+                            </a>
                         </div>
                     </div>
                 </div>

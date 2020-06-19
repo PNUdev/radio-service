@@ -9,10 +9,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
-import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/admin/programs")
@@ -36,6 +34,14 @@ public class ProgramAdminController {
 
     @GetMapping("/new")
     public String create() {
+        return "programs/form";
+    }
+
+    @GetMapping("/edit/{id}")
+    public String edit(Model model, @PathVariable("id") String id) {
+        Program program = programService.findById(id).orElseThrow(RuntimeException::new);
+
+        model.addAttribute("program", program);
         return "programs/form";
     }
 

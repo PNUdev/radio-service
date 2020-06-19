@@ -7,6 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class ProgramServiceImpl implements ProgramService {
 
@@ -20,5 +22,10 @@ public class ProgramServiceImpl implements ProgramService {
     @Override
     public Page<Program> findAll(Pageable pageable) {
         return programRepository.findAll(pageable);
+    }
+
+    @Override
+    public Optional<Program> findById(String id) {
+        return programRepository.findById(id);
     }
 }
