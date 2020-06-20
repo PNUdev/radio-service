@@ -43,11 +43,7 @@ public class ProgramServiceImpl implements ProgramService {
     @Override
     public void create(ProgramForm programForm) {
 
-        ValidationResult validationResult = dataValidator.validate(programForm);
-
-        if (validationResult.isError()) {
-            throw new RadioServiceAdminException("Помилка валідації: " + validationResult.getErrorMessage());
-        }
+        validateProgramForm(programForm);
 
         Program program = Program.builder()
                 .title(programForm.getTitle())
@@ -61,11 +57,7 @@ public class ProgramServiceImpl implements ProgramService {
     @Override
     public void update(String id, ProgramForm programForm) {
 
-        ValidationResult validationResult = dataValidator.validate(programForm);
-
-        if (validationResult.isError()) {
-            throw new RadioServiceAdminException("Помилка валідації: " + validationResult.getErrorMessage());
-        }
+        validateProgramForm(programForm);
 
         Program program = findById(id);
 
@@ -76,5 +68,13 @@ public class ProgramServiceImpl implements ProgramService {
                 .build();
 
         programRepository.save(updatedProgram);
+    }
+
+    private void validateProgramForm(ProgramForm programForm) {
+        ValidationResult validationResult = dataValidator.validate(programForm);
+
+        if (validationResult.isError()) {
+            throw new RadioServiceAdminException("Помилка валідації: " + validationResult.getErrorMessage());
+        }
     }
 }

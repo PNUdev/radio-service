@@ -8,8 +8,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.stream.IntStream;
 
+// Class can be used to setup test db on local machine to start development
 @SpringBootTest
-class RadioServiceApiApplicationTests {
+class DbSetupUtil {
 
     @Autowired
     private ProgramRepository programRepository;
