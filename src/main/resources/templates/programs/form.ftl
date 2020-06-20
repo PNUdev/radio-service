@@ -1,40 +1,44 @@
 <#include "../include/header.ftl">
 
+<#assign formSubmissionUrl = program???then('/admin/programs/update/${program.id}', '/admin/programs/new') >
+
 <div class="row d-flex justify-content-around">
     <div class="col-md-7 mt-5 p-5 rounded bg-light">
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Назва</span>
-            </div>
-            <input type="text" class="form-control" value="${(program.title)!}">
-        </div>
-        <div class="input-group mb-3">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Посилання на зображення</span>
-            </div>
-            <input type="text" class="form-control" id="image-url" value="${(program.imageUrl)!}">
-        </div>
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text">Опис</span>
-            </div>
-            <textarea class="form-control" rows="10">${(program.description)!}</textarea>
-        </div>
-
-        <div class="p-3">
-            <#if program??>
-                <div class="row">
-                    <div class="pt-3">
-                        <div class="btn btn-primary">Оновити</div>
-                        <a href="/admin/programs/delete/${program.id}">
-                            <div class="btn btn-danger">Видалити</div>
-                        </a>
-                    </div>
+        <form method="POST" action="${formSubmissionUrl}">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Назва</span>
                 </div>
-            <#else >
-                <div class="btn btn-primary">Додати програму</div>
-            </#if>
-        </div>
+                <input type="text" class="form-control" name="title" value="${(program.title)!}" required>
+            </div>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Посилання на зображення</span>
+                </div>
+                <input type="text" class="form-control" name="imageUrl" id="image-url" value="${(program.imageUrl)!}" required>
+            </div>
+            <div class="input-group">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Опис</span>
+                </div>
+                <textarea class="form-control" name="description" rows="10" required>${(program.description)!}</textarea>
+            </div>
+
+            <div class="p-3">
+                <#if program??>
+                    <div class="row">
+                        <div class="pt-3">
+                            <button class="btn btn-primary">Оновити</button>
+                            <a href="/admin/programs/delete/${program.id}">
+                                <div class="btn btn-danger">Видалити</div>
+                            </a>
+                        </div>
+                    </div>
+                <#else >
+                    <button class="btn btn-primary">Додати програму</button>
+                </#if>
+            </div>
+        </form>
 
     </div>
     <div class="col-md-4 mt-5 p-5 rounded bg-light">

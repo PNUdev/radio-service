@@ -6,7 +6,9 @@
             <a href="/admin/programs/edit/${program.id}">
                 <div class="btn btn-outline-primary mx-4">Ні, відмінити дію</div>
             </a>
-            <div class="btn btn-outline-danger mx-4">Так, видалити!</div>
+            <form method="POST">
+                <button class="btn btn-outline-danger mx-4">Так, видалити!</button>
+            </form>
         </div>
     </div>
 </div>
