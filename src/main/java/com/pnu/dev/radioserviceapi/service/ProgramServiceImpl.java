@@ -1,6 +1,6 @@
 package com.pnu.dev.radioserviceapi.service;
 
-import com.pnu.dev.radioserviceapi.dto.ProgramForm;
+import com.pnu.dev.radioserviceapi.dto.form.ProgramForm;
 import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;

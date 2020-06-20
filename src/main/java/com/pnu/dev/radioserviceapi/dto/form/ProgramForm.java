@@ -1,4 +1,4 @@
-package com.pnu.dev.radioserviceapi.dto;
+package com.pnu.dev.radioserviceapi.dto.form;
 
 import lombok.Data;
 

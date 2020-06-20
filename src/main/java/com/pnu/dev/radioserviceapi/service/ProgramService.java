@@ -1,6 +1,6 @@
 package com.pnu.dev.radioserviceapi.service;
 
-import com.pnu.dev.radioserviceapi.dto.ProgramForm;
+import com.pnu.dev.radioserviceapi.dto.form.ProgramForm;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
