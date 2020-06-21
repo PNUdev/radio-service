@@ -39,8 +39,8 @@ public class ProgramApiServiceImpl implements ProgramApiService {
     }
 
     @Override
-    public ProgramsPageResponse searchByTitle(String query, Pageable pageable) {
-        Page<Program> mongoProgramsPage = programRepository.findAllByTitleContains(query, pageable);
+    public ProgramsPageResponse findByTitleContains(String query, Pageable pageable) {
+        Page<Program> mongoProgramsPage = programRepository.findAllByTitleContainsIgnoreCase(query, pageable);
         return programMapper.mapMongoProgramsPageToProgramsPageResponse(mongoProgramsPage);
     }
 

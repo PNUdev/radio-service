@@ -3,6 +3,7 @@ package com.pnu.dev.radioserviceapi.controller.admin;
 import com.pnu.dev.radioserviceapi.dto.form.ProgramForm;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.service.ProgramService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -32,11 +34,18 @@ public class ProgramAdminController {
 
     @GetMapping
     public String listPrograms(Model model,
+                               @RequestParam(value = "q", required = false) String query,
                                @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
                                        Pageable pageable) {
 
-        Page<Program> programsPage = programService.findAll(pageable);
-        model.addAttribute("programsPage", programsPage);
+        if (StringUtils.isNoneBlank(query)) {
+            Page<Program> programsPage = programService.findByTitleContains(query, pageable);
+            model.addAttribute("programsPage", programsPage);
+            model.addAttribute("searchKeyword", query);
+        } else {
+            Page<Program> programsPage = programService.findAll(pageable);
+            model.addAttribute("programsPage", programsPage);
+        }
 
         return "programs/index";
     }

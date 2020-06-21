@@ -10,6 +10,6 @@ public interface ProgramApiService {
 
     ProgramDto findById(String id);
 
-    ProgramsPageResponse searchByTitle(String query, Pageable pageable);
+    ProgramsPageResponse findByTitleContains(String query, Pageable pageable);
 
 }

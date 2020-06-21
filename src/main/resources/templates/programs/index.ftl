@@ -1,6 +1,6 @@
 <#include "../include/header.ftl">
 <div class="container">
-    <#if programsPage.number lt 0 || programsPage.number gt programsPage.totalPages - 1>
+    <#if programsPage.number lt 0 || (programsPage.totalPages !=0 && programsPage.number gt programsPage.totalPages - 1) >
         <h1 class="text-center">Неіснуючий номер сторінки</h1>
         <a href="/admin/programs"><h2 class="text-center">Список програм</h2></a>
     <#else>
@@ -16,7 +16,28 @@
             </a>
         </div>
 
+        <form action="/admin/programs">
+            <div class="form-row my-3">
+                <div class="col-md-4">
+                    <input class="form-control py-1 lime-border my-2" name="q" type="text" placeholder="Пошук"
+                           aria-label="Пошук">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary form-control my-2">Шукати</button>
+                </div>
+            </div>
+        </form>
+
         <div>
+            <#if searchKeyword?? >
+                <div class="row mt-5 d-flex justify-content-around">
+                    <div class="h4 text-center">
+                        Результати пошуку: <b>${searchKeyword}</b>
+                    </div>
+                    <a href="/admin/programs" class="h3">Всі програми</a>
+                </div>
+            </#if>
+
             <#list programsPage.content as program >
                 <div class="row my-3 bg-light rounded p-3">
                     <div class="col-md-4">
@@ -37,22 +58,31 @@
             </#list>
         </div>
         <#if programsPage.number == 0 && !programsPage.content?has_content>
-            <h1 class="text-center">Список програм пустий</h1>
+            <#if searchKeyword?? >
+                <h1 class="text-center mt-5">Результатів не знайдено</h1>
+            <#else >
+                <h1 class="text-center">Список програм пустий</h1>
+            </#if>
         <#else>
             <nav>
+                <#assign searchQueryParam = searchKeyword???then('&q=${searchKeyword}', '') >
                 <ul class="pagination justify-content-center mt-3">
                     <li class="page-item <#if programsPage.number == 0 >disabled</#if>">
-                        <a class="page-link" href="?page=${programsPage.number - 1}">Попередня сторінка</a>
+                        <a class="page-link" href="?page=${programsPage.number - 1}${searchQueryParam}">
+                            Попередня сторінка
+                        </a>
                     </li>
                     <#list 1..programsPage.totalPages as pageNumber>
                         <li class="page-item <#if programsPage.number == pageNumber - 1>active</#if>">
-                            <a class="page-link" href="?page=${pageNumber - 1}">
+                            <a class="page-link" href="?page=${pageNumber - 1}${searchQueryParam}">
                                 ${pageNumber}
                             </a>
                         </li>
                     </#list>
                     <li class="page-item <#if programsPage.number == programsPage.totalPages - 1 >disabled</#if>">
-                        <a class="page-link" href="?page=${programsPage.number + 1}">Наступна сторінка</a>
+                        <a class="page-link" href="?page=${programsPage.number + 1}${searchQueryParam}">
+                            Наступна сторінка
+                        </a>
                     </li>
             </nav>
         </#if>

@@ -70,6 +70,11 @@ public class ProgramServiceImpl implements ProgramService {
         programRepository.save(updatedProgram);
     }
 
+    @Override
+    public Page<Program> findByTitleContains(String query, Pageable pageable) {
+        return programRepository.findAllByTitleContainsIgnoreCase(query, pageable);
+    }
+
     private void validateProgramForm(ProgramForm programForm) {
         ValidationResult validationResult = dataValidator.validate(programForm);
 

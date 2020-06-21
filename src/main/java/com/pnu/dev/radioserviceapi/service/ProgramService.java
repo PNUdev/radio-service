@@ -17,4 +17,6 @@ public interface ProgramService {
 
     void update(String id, ProgramForm programForm);
 
+    Page<Program> findByTitleContains(String query, Pageable pageable);
+
 }

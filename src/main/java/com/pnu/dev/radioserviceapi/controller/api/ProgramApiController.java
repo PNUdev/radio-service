@@ -38,8 +38,9 @@ public class ProgramApiController {
 
     @GetMapping("/search")
     public ProgramsPageResponse searchByTitle(@RequestParam("q") String query,
-                                              @PageableDefault(size = 10) Pageable pageable) {
-        return programApiService.searchByTitle(query, pageable);
+                                              @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                                      Pageable pageable) {
+        return programApiService.findByTitleContains(query, pageable);
     }
 
 }

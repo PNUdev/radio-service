@@ -7,6 +7,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface ProgramRepository extends MongoRepository<Program, String> {
 
-    Page<Program> findAllByTitleContains(String query, Pageable pageable);
+    Page<Program> findAllByTitleContainsIgnoreCase(String query, Pageable pageable);
 
 }
