@@ -8,3 +8,10 @@
     <title>Admin</title>
 </head>
 <body>
+<nav class="navbar navbar-dark bg-info">
+    <div>
+        <a class="navbar-brand" href="/admin/schedule">Розклад</a>
+        <a class="navbar-brand" href="/admin/programs">Програми</a>
+        <a class="navbar-brand" href="/admin/videos">Відео</a>
+    </div>
+</nav>

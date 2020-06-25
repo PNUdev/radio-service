@@ -1,20 +1,16 @@
-package com.pnu.dev.radioserviceapi.mongo;
+package com.pnu.dev.radioserviceapi.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document
 @Data
-@Builder(toBuilder = true)
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Program {
+public class ProgramDto {
 
-    @Id
     private String id;
 
     private String title;
