@@ -1,7 +1,7 @@
 package com.pnu.dev.radioserviceapi.client.dto.search;
 
-import com.pnu.dev.radioserviceapi.client.dto.ThumbnailsYoutubeResponse;
 import com.pnu.dev.radioserviceapi.client.dto.SnippetYoutubeResponse;
+import com.pnu.dev.radioserviceapi.client.dto.ThumbnailsYoutubeResponse;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

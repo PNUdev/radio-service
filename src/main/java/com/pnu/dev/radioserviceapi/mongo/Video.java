@@ -23,4 +23,6 @@ public class Video {
 
     private String imageUrl;
 
+    private int priority;
+
 }

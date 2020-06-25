@@ -10,9 +10,10 @@ public interface VideoService {
 
     void deleteById(String id);
 
-    Video findVideoOnYoutubeById(String id);
+    Video findVideoOnYoutubeByLink(String link);
 
     void create(Video video);
 
     void update(Video video);
+
 }
