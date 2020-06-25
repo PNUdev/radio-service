@@ -8,4 +8,6 @@ public interface YoutubeApiClient {
 
     List<VideoItemResponse> getChannelLastVideos();
 
+    VideoItemResponse getVideoById(String id);
+
 }

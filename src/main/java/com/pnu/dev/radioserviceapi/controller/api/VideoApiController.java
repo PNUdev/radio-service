@@ -1,8 +1,5 @@
 package com.pnu.dev.radioserviceapi.controller.api;
 
-import com.pnu.dev.radioserviceapi.client.YoutubeApiClient;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

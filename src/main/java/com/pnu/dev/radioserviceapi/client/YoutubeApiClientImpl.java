@@ -15,8 +15,12 @@ import java.util.List;
 @Component
 public class YoutubeApiClientImpl implements YoutubeApiClient {
 
-    private static final String GET_VIDEOS_URI =
+    private static final String GET_VIDEOS_BY_CHANNEL_URI =
             "https://www.googleapis.com/youtube/v3/search?part=snippet,id&order=date&type=video";
+
+    private static final String GET_VIDEO_BY_ID_URI =
+            "https://www.googleapis.com/youtube/v3/search?part=snippet&order=date&type=video";
+
 
     @Value("${youtube.api_key}")
     private String api_key;
@@ -38,7 +42,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     public List<VideoItemResponse> getChannelLastVideos() {
         URIBuilder uriRequest;
         try {
-            uriRequest = new URIBuilder(GET_VIDEOS_URI);
+            uriRequest = new URIBuilder(GET_VIDEOS_BY_CHANNEL_URI);
         } catch (URISyntaxException e) {
             throw new ServiceException("Bad uri Youtube.api");
         }
@@ -48,6 +52,24 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
         VideoPageResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), VideoPageResponse.class);
         if (responseEntity != null) {
             return responseEntity.getItems();
+        } else {
+            throw new ServiceException("Youtube api response error");
+        }
+    }
+
+    @Override
+    public VideoItemResponse getVideoById(String id) {
+        URIBuilder uriRequest;
+        try {
+            uriRequest = new URIBuilder(GET_VIDEO_BY_ID_URI);
+        } catch (URISyntaxException e) {
+            throw new ServiceException("Bad uri Youtube.api");
+        }
+        uriRequest.addParameter("key", api_key)
+                .addParameter("id", id);
+        VideoPageResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), VideoPageResponse.class);
+        if (responseEntity != null) {
+            return responseEntity.getItems().get(0);
         } else {
             throw new ServiceException("Youtube api response error");
         }
