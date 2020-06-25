@@ -1,7 +1,9 @@
 package com.pnu.dev.radioserviceapi.client;
 
-import com.pnu.dev.radioserviceapi.client.dto.VideoItemResponse;
-import com.pnu.dev.radioserviceapi.client.dto.VideoPageResponse;
+import com.pnu.dev.radioserviceapi.client.dto.search.ItemYoutubeSearchResponse;
+import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
+import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
+import com.pnu.dev.radioserviceapi.client.dto.videos.YoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.exception.ServiceException;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,10 +18,10 @@ import java.util.List;
 public class YoutubeApiClientImpl implements YoutubeApiClient {
 
     private static final String GET_VIDEOS_BY_CHANNEL_URI =
-            "https://www.googleapis.com/youtube/v3/search?part=snippet,id&order=date&type=video";
+            "https://www.googleapis.com/youtube/v3/search?part=snippet&order=date&type=video";
 
     private static final String GET_VIDEO_BY_ID_URI =
-            "https://www.googleapis.com/youtube/v3/search?part=snippet&order=date&type=video";
+            "https://www.googleapis.com/youtube/v3/videos?part=snippet";
 
 
     @Value("${youtube.api_key}")
@@ -37,9 +39,8 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
         this.restTemplate = new RestTemplate();
     }
 
-
     @Override
-    public List<VideoItemResponse> getChannelLastVideos() {
+    public List<ItemYoutubeSearchResponse> getChannelLastVideos() {
         URIBuilder uriRequest;
         try {
             uriRequest = new URIBuilder(GET_VIDEOS_BY_CHANNEL_URI);
@@ -49,7 +50,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
         uriRequest.addParameter("key", api_key)
                 .addParameter("channelId", CHANNEL_ID)
                 .addParameter("maxResults", String.valueOf(MAX_RESULTS_NUMBER));
-        VideoPageResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), VideoPageResponse.class);
+        YoutubeSearchResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeSearchResponse.class);
         if (responseEntity != null) {
             return responseEntity.getItems();
         } else {
@@ -58,7 +59,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     }
 
     @Override
-    public VideoItemResponse getVideoById(String id) {
+    public ItemYoutubeVideosResponse getVideoById(String id) {
         URIBuilder uriRequest;
         try {
             uriRequest = new URIBuilder(GET_VIDEO_BY_ID_URI);
@@ -67,7 +68,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
         }
         uriRequest.addParameter("key", api_key)
                 .addParameter("id", id);
-        VideoPageResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), VideoPageResponse.class);
+        YoutubeVideosResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeVideosResponse.class);
         if (responseEntity != null) {
             return responseEntity.getItems().get(0);
         } else {

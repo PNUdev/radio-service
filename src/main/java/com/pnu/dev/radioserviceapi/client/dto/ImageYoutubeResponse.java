@@ -7,6 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoIdResponse {
-    private String videoId;
+public class ImageYoutubeResponse {
+
+    private String url;
+
+    private int width;
+
+    private int height;
 }

@@ -9,9 +9,14 @@ import java.time.LocalDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoSnippetResponse {
+public class SnippetYoutubeResponse {
+
     private LocalDateTime publishedAt;
+
     private String title;
+
     private String description;
+
+    private ThumbnailsYoutubeResponse thumbnails;
 
 }
