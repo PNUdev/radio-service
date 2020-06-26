@@ -6,7 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface VideoApiService {
-    Page<VideoDto> findAllRecommended(Pageable pageable);
 
-    VideosCollectionResponse findChannelVideos();
+    Page<VideoDto> findRecommended(Pageable pageable);
+
+    VideosCollectionResponse findLast();
 }

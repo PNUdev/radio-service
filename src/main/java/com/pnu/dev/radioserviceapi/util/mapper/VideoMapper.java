@@ -15,22 +15,23 @@ import java.util.stream.Collectors;
 @Component
 public class VideoMapper {
 
-    public Video itemVideosResponseToMongoVideo(ItemYoutubeVideosResponse itemVideosResponse) {
+    public Video itemVideosResponseToVideo(ItemYoutubeVideosResponse itemVideosResponse) {
 
-        Video video = Video.builder()
+        return Video.builder()
                 .id(itemVideosResponse.getId())
                 .title(itemVideosResponse.getSnippet().getTitle())
                 .description(itemVideosResponse.getSnippet().getDescription())
                 .build();
-        return video;
     }
 
     public List<VideoDto> itemSearchResponseListToVideoDtoList(List<ItemYoutubeSearchResponse> youtubeSearchResponse) {
+
         return youtubeSearchResponse.stream().map(this::itemSearchResponseToVideoDto).collect(Collectors.toList());
     }
 
     private VideoDto itemSearchResponseToVideoDto(ItemYoutubeSearchResponse itemSearchResponse) {
-        VideoDto videoDto = VideoDto.builder()
+
+        return VideoDto.builder()
                 .id(itemSearchResponse.getId().getVideoId())
                 .title(itemSearchResponse.getSnippet().getTitle())
                 .description(itemSearchResponse.getSnippet().getDescription())
@@ -38,23 +39,24 @@ public class VideoMapper {
                 .liveBroadcastContent(LiveBroadcastContent
                         .valueOf(itemSearchResponse.getSnippet().getLiveBroadcastContent().toUpperCase()))
                 .build();
-        return videoDto;
     }
 
     public Page<VideoDto> videoPageToVideoDtoPage(Page<Video> videoPage) {
+
         return new PageImpl<>(videoListToVideoDtoList(videoPage.getContent()));
     }
 
     private List<VideoDto> videoListToVideoDtoList(List<Video> videoList) {
+
         return videoList.stream().map(this::videoToDto).collect(Collectors.toList());
     }
 
     private VideoDto videoToDto(Video video) {
-        VideoDto videoDto = VideoDto.builder()
+
+        return VideoDto.builder()
                 .id(video.getId())
                 .title(video.getTitle())
                 .description(video.getDescription())
                 .build();
-        return videoDto;
     }
 }

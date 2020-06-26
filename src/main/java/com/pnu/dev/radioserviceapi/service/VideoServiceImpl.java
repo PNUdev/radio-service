@@ -36,24 +36,22 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public List<Video> getAll() {
+    public List<Video> findAll() {
+
         return videoRepository.findAll(Sort.by("priority").ascending());
     }
 
     @Override
-//    @Transactional
+    @Transactional
     public void deleteById(String id) {
+
         Video video = findVideoByIdOrThrowException(id);
         changePriorityFor(video.getPriority(), Integer.MAX_VALUE, -1);
         videoRepository.deleteById(id);
     }
 
-    private Video findVideoByIdOrThrowException(String id) {
-        return videoRepository.findById(id).orElseThrow(() -> new RadioServiceAdminException("Video not found"));
-    }
-
     @Override
-    public Video findVideoOnYoutubeByLink(String link) throws ServiceException {
+    public Video findVideoOnYoutube(String link) throws ServiceException {
 
         Pattern youtubeLinkPattern = Pattern.compile(youtubeLinkRegex);
         Matcher matcher = youtubeLinkPattern.matcher(link);
@@ -61,13 +59,14 @@ public class VideoServiceImpl implements VideoService {
         if (matcher.find()) {
             String id = matcher.group(1);
             try {
-                ItemYoutubeVideosResponse itemYoutubeVideosResponse = youtubeApiClient.getVideoById(id);
-                Video video = videoMapper.itemVideosResponseToMongoVideo(itemYoutubeVideosResponse);
+                ItemYoutubeVideosResponse itemYoutubeVideosResponse = youtubeApiClient.findVideo(id);
+                Video video = videoMapper.itemVideosResponseToVideo(itemYoutubeVideosResponse);
                 return video;
             } catch (IndexOutOfBoundsException ex) {
                 throw new ServiceException("Bad video id");
             }
         }
+
         throw new ServiceException("Link does not refer to Youtube video");
 
     }
@@ -79,6 +78,7 @@ public class VideoServiceImpl implements VideoService {
         video = video.toBuilder()
                 .priority(1)
                 .build();
+
         changePriorityFor(video.getPriority() - 1, Integer.MAX_VALUE, 1);
 
         videoRepository.save(video);
@@ -86,18 +86,37 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     @Transactional
-    public void update(Video video) {
-        Video videoFromDb = findVideoByIdOrThrowException(video.getId());
-        if (videoFromDb.getPriority() > video.getPriority()) {
-            changePriorityFor(video.getPriority() - 1, videoFromDb.getPriority(), 1);
+    public void update(String id, Video video) {
+
+        Video videoFromDb = findVideoByIdOrThrowException(id);
+
+        int previousPriority = videoFromDb.getPriority();
+        int newPriority = video.getPriority();
+
+        if (previousPriority != newPriority) {
+
+            Video updatedVideo = videoFromDb.toBuilder()
+                    .priority(newPriority)
+                    .build();
+
+            if (previousPriority > newPriority) {
+                changePriorityFor(newPriority - 1, previousPriority, 1);
+            }
+            if (previousPriority < newPriority) {
+                changePriorityFor(previousPriority, newPriority + 1, -1);
+            }
+            videoRepository.save(updatedVideo);
         }
-        if (videoFromDb.getPriority() < video.getPriority()) {
-            changePriorityFor(videoFromDb.getPriority(), video.getPriority() + 1, -1);
-        }
-        videoRepository.save(video);
+
+    }
+
+    private Video findVideoByIdOrThrowException(String id) {
+
+        return videoRepository.findById(id).orElseThrow(() -> new RadioServiceAdminException("Video not found"));
     }
 
     private void changePriorityFor(int priorityStart, int priorityEnd, int i) {
+
         List<Video> videoListToChangePriority = videoRepository.findAllByPriorityBetween(priorityStart, priorityEnd);
         videoListToChangePriority.forEach(v -> v.setPriority(v.getPriority() + i));
         videoRepository.saveAll(videoListToChangePriority);

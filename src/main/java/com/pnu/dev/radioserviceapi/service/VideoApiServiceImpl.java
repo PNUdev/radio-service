@@ -33,33 +33,34 @@ public class VideoApiServiceImpl implements VideoApiService {
     }
 
     @Override
-    public Page<VideoDto> findAllRecommended(Pageable pageable) {
+    public Page<VideoDto> findRecommended(Pageable pageable) {
+
         Page<Video> videoPage = videoRepository.findAll(pageable);
         return videoMapper.videoPageToVideoDtoPage(videoPage);
     }
 
     @Override
-    public VideosCollectionResponse findChannelVideos() {
-        List<ItemYoutubeSearchResponse> channelVideos = youtubeApiClient.getChannelLastVideos();
-        List<ItemYoutubeSearchResponse> recent =
-                channelVideos
+    public VideosCollectionResponse findLast() {
+
+        List<ItemYoutubeSearchResponse> lastVideos = youtubeApiClient.getLastVideos();
+        List<VideoDto> videoDtoList = videoMapper.itemSearchResponseListToVideoDtoList(lastVideos);
+        List<VideoDto> recent =
+                videoDtoList
                         .stream()
-                        .filter(v -> v.getSnippet().getLiveBroadcastContent().equalsIgnoreCase(LiveBroadcastContent.COMPLETED.toString())
-                                || v.getSnippet().getLiveBroadcastContent().equalsIgnoreCase(LiveBroadcastContent.NONE.toString()))
+                        .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.COMPLETED)
+                                || v.getLiveBroadcastContent().equals(LiveBroadcastContent.NONE))
                         .collect(Collectors.toList());
 
-        List<ItemYoutubeSearchResponse> streams =
-                channelVideos
+        List<VideoDto> streams =
+                videoDtoList
                         .stream()
-                        .filter(v -> v.getSnippet().getLiveBroadcastContent().equalsIgnoreCase(LiveBroadcastContent.UPCOMING.toString())
-                                || v.getSnippet().getLiveBroadcastContent().equalsIgnoreCase(LiveBroadcastContent.LIVE.toString()))
+                        .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.UPCOMING)
+                                || v.getLiveBroadcastContent().equals(LiveBroadcastContent.LIVE))
                         .collect(Collectors.toList());
-        VideosCollectionResponse videos = VideosCollectionResponse.builder()
-                .recent(videoMapper
-                        .itemSearchResponseListToVideoDtoList(recent))
-                .streams(videoMapper.itemSearchResponseListToVideoDtoList(streams))
+
+        return VideosCollectionResponse.builder()
+                .recent(recent)
+                .streams(streams)
                 .build();
-
-        return videos;
     }
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/videos")
 public class VideoApiController {
 
+
     private final VideoApiService videoApiService;
 
     @Autowired
@@ -24,14 +25,14 @@ public class VideoApiController {
     }
 
     @GetMapping("/recommended")
-    public Page<VideoDto> findAllRecommended(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
-                                                     Pageable pageable){
-        return videoApiService.findAllRecommended(pageable);
+    public Page<VideoDto> findRecommended(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                                     Pageable pageable) {
+        return videoApiService.findRecommended(pageable);
     }
 
     @GetMapping("/last")
-    public VideosCollectionResponse findLast(){
-        return videoApiService.findChannelVideos();
+    public VideosCollectionResponse findLast() {
+        return videoApiService.findLast();
     }
 
 

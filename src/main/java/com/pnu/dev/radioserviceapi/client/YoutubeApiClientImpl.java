@@ -42,7 +42,8 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     }
 
     @Override
-    public List<ItemYoutubeSearchResponse> getChannelLastVideos() {
+    public List<ItemYoutubeSearchResponse> getLastVideos() {
+
         URIBuilder uriRequest;
         try {
             uriRequest = new URIBuilder(GET_VIDEOS_BY_CHANNEL_URI);
@@ -61,7 +62,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     }
 
     @Override
-    public ItemYoutubeVideosResponse getVideoById(String id) {
+    public ItemYoutubeVideosResponse findVideo(String id) {
         URIBuilder uriRequest;
         try {
             uriRequest = new URIBuilder(GET_VIDEO_BY_ID_URI);

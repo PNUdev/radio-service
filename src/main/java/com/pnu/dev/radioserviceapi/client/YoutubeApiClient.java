@@ -7,8 +7,8 @@ import java.util.List;
 
 public interface YoutubeApiClient {
 
-    List<ItemYoutubeSearchResponse> getChannelLastVideos();
+    List<ItemYoutubeSearchResponse> getLastVideos();
 
-    ItemYoutubeVideosResponse getVideoById(String id);
+    ItemYoutubeVideosResponse findVideo(String id);
 
 }

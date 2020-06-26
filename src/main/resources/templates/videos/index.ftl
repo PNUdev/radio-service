@@ -19,7 +19,7 @@
                     <strong>${video.title}</strong>
                 </div>
 
-                <form action="/admin/videos/changePriority" method="post">
+                <form action="/admin/videos/update/${video.id}" method="post">
 
                     <div class="form-row form-inline">
                         <input type="hidden" name="id" value="${video.id}">

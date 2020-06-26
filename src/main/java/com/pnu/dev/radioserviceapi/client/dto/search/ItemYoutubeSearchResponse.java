@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ItemYoutubeSearchResponse {
 
-    private VideoIdYoutubeSearchResponse id;
+    private VideoIdYoutubeResponse id;
 
     private SnippetYoutubeResponse snippet;
 

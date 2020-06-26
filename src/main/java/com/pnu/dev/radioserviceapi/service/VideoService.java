@@ -6,14 +6,14 @@ import java.util.List;
 
 public interface VideoService {
 
-    List<Video> getAll();
+    List<Video> findAll();
 
     void deleteById(String id);
 
-    Video findVideoOnYoutubeByLink(String link);
+    Video findVideoOnYoutube(String link);
 
     void create(Video video);
 
-    void update(Video video);
+    void update(String id, Video video);
 
 }

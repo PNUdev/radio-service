@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class VideoIdYoutubeSearchResponse {
+public class VideoIdYoutubeResponse {
 
     private String videoId;
 }

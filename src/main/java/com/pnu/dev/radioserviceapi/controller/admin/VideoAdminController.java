@@ -30,21 +30,21 @@ public class VideoAdminController {
     }
 
     @GetMapping
-    public String listVideos(Model model) {
-        List<Video> videos = videoService.getAll();
+    public String findAll(Model model) {
+        List<Video> videos = videoService.findAll();
         model.addAttribute("videos", videos);
         return "videos/index";
     }
 
     @GetMapping("/add")
-    public String findVideo(@RequestParam(name = "link", required = false) String link, Model model) {
+    public String findVideoOnYoutube(@RequestParam(name = "link", required = false) String link, Model model) {
         if (Objects.isNull(link)) {
             return "videos/addVideo";
         }
         try {
             link = java.net.URLDecoder.decode(link, StandardCharsets.UTF_8.name());
             model.addAttribute("link", link);
-            Video video = videoService.findVideoOnYoutubeByLink(link);
+            Video video = videoService.findVideoOnYoutube(link);
             model.addAttribute("video", video);
         } catch (ServiceException | UnsupportedEncodingException e) {
             model.addAttribute("exception", "Відео за посиланням не знайдено");
@@ -58,9 +58,9 @@ public class VideoAdminController {
         return "redirect:/admin/videos";
     }
 
-    @PostMapping("/changePriority")
-    public String changePriority(@ModelAttribute Video video) {
-        videoService.update(video);
+    @PostMapping("/update/{id}")
+    public String update(@PathVariable("id") String id, @ModelAttribute Video video) {
+        videoService.update(id, video);
         return "redirect:/admin/videos";
     }
 
