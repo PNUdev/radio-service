@@ -29,7 +29,6 @@
                     <input type="hidden" name="id" value="${video.id}">
                     <input type="hidden" name="title" value="${video.title}">
                     <input type="hidden" name="description" value="${video.description}">
-                    <input type="hidden" name="imageUrl" value="${video.imageUrl}">
                     <button class="btn btn-primary row m-4">Додати це відео</button>
                 </form>
             </div>

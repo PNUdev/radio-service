@@ -37,16 +37,16 @@ public class VideoAdminController {
     }
 
     @GetMapping("/add")
-    public String findVideo(@RequestParam(name = "link", required = false) String link, Model model) throws UnsupportedEncodingException {
+    public String findVideo(@RequestParam(name = "link", required = false) String link, Model model) {
         if (Objects.isNull(link)) {
             return "videos/addVideo";
         }
-        link = java.net.URLDecoder.decode(link, StandardCharsets.UTF_8.name());
-        model.addAttribute("link", link);
         try {
+            link = java.net.URLDecoder.decode(link, StandardCharsets.UTF_8.name());
+            model.addAttribute("link", link);
             Video video = videoService.findVideoOnYoutubeByLink(link);
             model.addAttribute("video", video);
-        } catch (ServiceException serviceException) {
+        } catch (ServiceException | UnsupportedEncodingException e) {
             model.addAttribute("exception", "Відео за посиланням не знайдено");
         }
         return "videos/addVideo";

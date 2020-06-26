@@ -25,7 +25,6 @@
                         <input type="hidden" name="id" value="${video.id}">
                         <input type="hidden" name="title" value="${video.title}">
                         <input type="hidden" name="description" value="${video.description}">
-                        <input type="hidden" name="imageUrl" value="${video.imageUrl}">
                         <span class="my-3 ml-3">Приорітет</span>
                         <select class="form-control inline mx-3" name="priority" onchange="this.form.submit()"
                                 id="prioritySelect">

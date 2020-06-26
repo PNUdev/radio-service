@@ -5,6 +5,7 @@ import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.YoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.exception.ServiceException;
+import lombok.Data;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,6 +16,7 @@ import java.util.List;
 
 
 @Component
+@Data
 public class YoutubeApiClientImpl implements YoutubeApiClient {
 
     private static final String GET_VIDEOS_BY_CHANNEL_URI =

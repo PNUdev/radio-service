@@ -17,6 +17,6 @@ public class SnippetYoutubeResponse {
 
     private String description;
 
-    private ThumbnailsYoutubeResponse thumbnails;
+    private String liveBroadcastContent;
 
 }

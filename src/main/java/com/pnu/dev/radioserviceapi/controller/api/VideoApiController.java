@@ -1,5 +1,14 @@
 package com.pnu.dev.radioserviceapi.controller.api;
 
+import com.pnu.dev.radioserviceapi.dto.response.VideoDto;
+import com.pnu.dev.radioserviceapi.dto.response.VideosCollectionResponse;
+import com.pnu.dev.radioserviceapi.service.VideoApiService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -7,9 +16,23 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/videos")
 public class VideoApiController {
 
-    // DTO with :
-    // 1. recent - list of recent videos (call out to youtube api)
-    // 2. recommended - list of recommended videos
-    // 3. planned or current streams
+    private final VideoApiService videoApiService;
+
+    @Autowired
+    public VideoApiController(VideoApiService videoApiService) {
+        this.videoApiService = videoApiService;
+    }
+
+    @GetMapping("/recommended")
+    public Page<VideoDto> findAllRecommended(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                                     Pageable pageable){
+        return videoApiService.findAllRecommended(pageable);
+    }
+
+    @GetMapping("/last")
+    public VideosCollectionResponse findLast(){
+        return videoApiService.findChannelVideos();
+    }
+
 
 }

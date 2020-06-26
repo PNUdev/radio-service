@@ -21,8 +21,6 @@ public class Video {
 
     private String description;
 
-    private String imageUrl;
-
     private int priority;
 
 }
