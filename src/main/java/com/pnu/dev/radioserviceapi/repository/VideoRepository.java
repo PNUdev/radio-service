@@ -9,4 +9,6 @@ public interface VideoRepository extends MongoRepository<Video, String> {
 
     List<Video> findAllByPriorityBetween(int priorityStart, int priorityEnd);
 
+    List<Video> findAllByPriorityGreaterThan(int priority);
+
 }

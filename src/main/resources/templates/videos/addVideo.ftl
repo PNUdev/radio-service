@@ -37,10 +37,10 @@
 <script>
 
     const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/;
-    const resultDiv = document.getElementById("resultDiv");
-    const errorDiv = document.getElementById("errorMsg");
-    const youtubePlayer = document.getElementById("youtubePlayer");
-    const postLink = document.getElementById("postLink");
+    let resultDiv = document.getElementById("resultDiv");
+    let errorDiv = document.getElementById("errorMsg");
+    let youtubePlayer = document.getElementById("youtubePlayer");
+    let postLink = document.getElementById("postLink");
     const notFoundImgWidth = 120;
 
     function findVideo() {
