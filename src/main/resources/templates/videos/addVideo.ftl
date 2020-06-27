@@ -15,9 +15,13 @@
     </form>
 </div>
 
+<div class="container bg-light justify-content-center text-center" style="visibility: hidden" id="errorMsg">
+    <h2>Відео за цим посиланням не знайдено</h2>
+</div>
+
 <div class="container bg-light" style="visibility: hidden" id="resultDiv">
     <div class="row justify-content-center text-center">
-        <iframe width="420" height="315" id="youtubePlayer">
+        <iframe class="mt-3" width="420" height="315" id="youtubePlayer">
         </iframe>
     </div>
     <div class="row justify-content-center text-center">
@@ -28,9 +32,7 @@
     </div>
 </div>
 
-<div class="container d-flex bg-light justify-content-center text-center" style="visibility: hidden" id="errorMsg">
-    <h2>Відео за цим посиланням не знайдено</h2>
-</div>
+
 
 <script>
 
@@ -41,22 +43,43 @@
     const postLink = document.getElementById("postLink");
 
     function findVideo() {
+
+        hideResult();
+
         let link = document.getElementById("linkInput").value;
         let found = link.match(youtubeRegex);
 
         if (found == null) {
-            resultDiv.style.visibility = "hidden"
-            errorDiv.style.visibility = "visible"
-        } else {
-            let id = found[1];
-            let playerScr = "https://www.youtube.com/embed/" + id;
-            youtubePlayer.setAttribute("src", playerScr)
-            console.log(youtubePlayer.getAttribute("src"));
-            postLink.value = link;
-            errorDiv.style.visibility = "hidden"
-            resultDiv.style.visibility = "visible"
+            return;
+        }
+
+        let id = found[1];
+        let img = new Image();
+
+        img.src = "http://img.youtube.com/vi/" + id + "/mqdefault.jpg";
+        img.onload = function () {
+            if (this.width === 120) {
+                hideResult();
+            } else {
+                let playerScr = "https://www.youtube.com/embed/" + id;
+                youtubePlayer.setAttribute("src", playerScr)
+                console.log(youtubePlayer.getAttribute("src"));
+                postLink.value = link;
+                showResult();
+            }
         }
     }
+
+    function showResult() {
+        errorDiv.style.visibility = "hidden"
+        resultDiv.style.visibility = "visible"
+    }
+
+    function hideResult() {
+        resultDiv.style.visibility = "hidden"
+        errorDiv.style.visibility = "visible"
+    }
+
 
 </script>
 
