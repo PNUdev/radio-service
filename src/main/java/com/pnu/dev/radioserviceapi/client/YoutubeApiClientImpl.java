@@ -1,10 +1,9 @@
 package com.pnu.dev.radioserviceapi.client;
 
-import com.pnu.dev.radioserviceapi.client.dto.search.ItemYoutubeSearchResponse;
+import com.pnu.dev.radioserviceapi.client.dto.YoutubeApiResult;
 import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.YoutubeVideosResponse;
-import com.pnu.dev.radioserviceapi.exception.ServiceException;
 import lombok.Data;
 import org.apache.http.client.utils.URIBuilder;
 import org.springframework.beans.factory.annotation.Value;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URISyntaxException;
-import java.util.List;
 
 
 @Component
@@ -42,40 +40,40 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     }
 
     @Override
-    public List<ItemYoutubeSearchResponse> getLastVideos() {
+    public YoutubeApiResult<YoutubeSearchResponse> getLastVideos() {
 
         URIBuilder uriRequest;
         try {
             uriRequest = new URIBuilder(GET_VIDEOS_BY_CHANNEL_URI);
         } catch (URISyntaxException e) {
-            throw new ServiceException("Bad uri Youtube.api");
+            return YoutubeApiResult.error("Bad uri Youtube.api");
         }
         uriRequest.addParameter("key", api_key)
                 .addParameter("channelId", CHANNEL_ID)
                 .addParameter("maxResults", String.valueOf(MAX_RESULTS_NUMBER));
         YoutubeSearchResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeSearchResponse.class);
         if (responseEntity != null) {
-            return responseEntity.getItems();
+            return YoutubeApiResult.success(responseEntity);
         } else {
-            throw new ServiceException("Youtube api response error");
+            return YoutubeApiResult.error("Youtube api response error");
         }
     }
 
     @Override
-    public ItemYoutubeVideosResponse findVideo(String id) {
+    public YoutubeApiResult<ItemYoutubeVideosResponse> findVideo(String id) {
         URIBuilder uriRequest;
         try {
             uriRequest = new URIBuilder(GET_VIDEO_BY_ID_URI);
         } catch (URISyntaxException e) {
-            throw new ServiceException("Bad uri Youtube.api");
+            return YoutubeApiResult.error("Bad uri Youtube.api");
         }
         uriRequest.addParameter("key", api_key)
                 .addParameter("id", id);
         YoutubeVideosResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeVideosResponse.class);
         if (responseEntity != null) {
-            return responseEntity.getItems().get(0);
+            return YoutubeApiResult.success(responseEntity.getItems().get(0));
         } else {
-            throw new ServiceException("Youtube api response error");
+            return YoutubeApiResult.error("Youtube api response error");
         }
     }
 }

@@ -1,14 +1,14 @@
 package com.pnu.dev.radioserviceapi.client;
 
-import com.pnu.dev.radioserviceapi.client.dto.search.ItemYoutubeSearchResponse;
+import com.pnu.dev.radioserviceapi.client.dto.OperationResult;
+import com.pnu.dev.radioserviceapi.client.dto.YoutubeApiResult;
+import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
-
-import java.util.List;
 
 public interface YoutubeApiClient {
 
-    List<ItemYoutubeSearchResponse> getLastVideos();
+    YoutubeApiResult<YoutubeSearchResponse> getLastVideos();
 
-    ItemYoutubeVideosResponse findVideo(String id);
+    YoutubeApiResult<ItemYoutubeVideosResponse> findVideo(String id);
 
 }
