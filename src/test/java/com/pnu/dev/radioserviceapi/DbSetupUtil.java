@@ -59,12 +59,12 @@ class DbSetupUtil {
         // setup schedule
         List<ScheduleItem> scheduleItems = Stream.of(
                 buildScheduleItemsStream(programs.get(0).getId(), DayOfWeek.SUNDAY),
-                buildScheduleItemsStream(programs.get(0).getId(), DayOfWeek.MONDAY),
-                buildScheduleItemsStream(programs.get(0).getId(), DayOfWeek.TUESDAY),
-                buildScheduleItemsStream(programs.get(0).getId(), DayOfWeek.WEDNESDAY),
-                buildScheduleItemsStream(programs.get(0).getId(), DayOfWeek.THURSDAY),
-                buildScheduleItemsStream(programs.get(0).getId(), DayOfWeek.FRIDAY),
-                buildScheduleItemsStream(programs.get(0).getId(), DayOfWeek.SATURDAY)
+                buildScheduleItemsStream(programs.get(1).getId(), DayOfWeek.MONDAY),
+                buildScheduleItemsStream(programs.get(2).getId(), DayOfWeek.TUESDAY),
+                buildScheduleItemsStream(programs.get(3).getId(), DayOfWeek.WEDNESDAY),
+                buildScheduleItemsStream(programs.get(4).getId(), DayOfWeek.THURSDAY),
+                buildScheduleItemsStream(programs.get(5).getId(), DayOfWeek.FRIDAY),
+                buildScheduleItemsStream(programs.get(6).getId(), DayOfWeek.SATURDAY)
         )
                 .reduce(Stream::concat)
                 .orElseGet(Stream::empty)
