@@ -10,10 +10,8 @@ public interface VideoService {
 
     void deleteById(String id);
 
-    Video findVideoOnYoutube(String link);
+    void create(String link);
 
-    void create(Video video);
-
-    void update(String id, Video video);
+    void updatePriority(String id, Integer newPriority);
 
 }

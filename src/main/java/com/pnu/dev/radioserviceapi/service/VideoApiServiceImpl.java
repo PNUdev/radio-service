@@ -1,16 +1,21 @@
 package com.pnu.dev.radioserviceapi.service;
 
 import com.pnu.dev.radioserviceapi.client.YoutubeApiClient;
-import com.pnu.dev.radioserviceapi.client.dto.search.ItemYoutubeSearchResponse;
+import com.pnu.dev.radioserviceapi.client.dto.YoutubeApiResult;
+import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
+import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.VideoDto;
 import com.pnu.dev.radioserviceapi.dto.response.VideosCollectionResponse;
+import com.pnu.dev.radioserviceapi.exception.RadioServiceApiException;
 import com.pnu.dev.radioserviceapi.mongo.LiveBroadcastContent;
 import com.pnu.dev.radioserviceapi.mongo.Video;
 import com.pnu.dev.radioserviceapi.repository.VideoRepository;
 import com.pnu.dev.radioserviceapi.util.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +38,8 @@ public class VideoApiServiceImpl implements VideoApiService {
     }
 
     @Override
-    public Page<VideoDto> findRecommended(Pageable pageable) {
-
+    public PageResponse<VideoDto> findRecommended(Pageable pageable) {
+        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("priority").ascending());
         Page<Video> videoPage = videoRepository.findAll(pageable);
         return videoMapper.videoPageToVideoDtoPage(videoPage);
     }
@@ -42,18 +47,21 @@ public class VideoApiServiceImpl implements VideoApiService {
     @Override
     public VideosCollectionResponse findLast() {
 
-        List<ItemYoutubeSearchResponse> lastVideos = youtubeApiClient.getLastVideos();
-        List<VideoDto> videoDtoList = videoMapper.itemSearchResponseListToVideoDtoList(lastVideos);
+        YoutubeApiResult<YoutubeSearchResponse> apiResult = youtubeApiClient.getLastVideos();
+        if (apiResult.isError()) {
+            throw new RadioServiceApiException(apiResult.getErrorMessage());
+        }
+        List<VideoDto> videoDtoList = videoMapper.itemSearchResponseListToVideoDtoList(apiResult.getData().getItems());
         List<VideoDto> recent =
                 videoDtoList
-                        .stream()
+                        .parallelStream()
                         .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.COMPLETED)
                                 || v.getLiveBroadcastContent().equals(LiveBroadcastContent.NONE))
                         .collect(Collectors.toList());
 
         List<VideoDto> streams =
                 videoDtoList
-                        .stream()
+                        .parallelStream()
                         .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.UPCOMING)
                                 || v.getLiveBroadcastContent().equals(LiveBroadcastContent.LIVE))
                         .collect(Collectors.toList());

@@ -1,6 +1,5 @@
 package com.pnu.dev.radioserviceapi.controller.admin;
 
-import com.pnu.dev.radioserviceapi.exception.ServiceException;
 import com.pnu.dev.radioserviceapi.mongo.Video;
 import com.pnu.dev.radioserviceapi.service.VideoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +10,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin/videos")
@@ -37,30 +32,19 @@ public class VideoAdminController {
     }
 
     @GetMapping("/add")
-    public String findVideoOnYoutube(@RequestParam(name = "link", required = false) String link, Model model) {
-        if (Objects.isNull(link)) {
-            return "videos/addVideo";
-        }
-        try {
-            link = java.net.URLDecoder.decode(link, StandardCharsets.UTF_8.name());
-            model.addAttribute("link", link);
-            Video video = videoService.findVideoOnYoutube(link);
-            model.addAttribute("video", video);
-        } catch (ServiceException | UnsupportedEncodingException e) {
-            model.addAttribute("exception", "Відео за посиланням не знайдено");
-        }
+    public String findVideoOnYoutube() {
         return "videos/addVideo";
     }
 
     @PostMapping("/add")
-    public String addVideo(@ModelAttribute Video video) {
-        videoService.create(video);
+    public String addVideo(@ModelAttribute(name = "link") String link) {
+        videoService.create(link);
         return "redirect:/admin/videos";
     }
 
-    @PostMapping("/update/{id}")
-    public String update(@PathVariable("id") String id, @ModelAttribute Video video) {
-        videoService.update(id, video);
+    @PostMapping("/changePriority/{id}")
+    public String update(@PathVariable("id") String id, @ModelAttribute(name = "newPriority") Integer newPriority) {
+        videoService.updatePriority(id, newPriority);
         return "redirect:/admin/videos";
     }
 

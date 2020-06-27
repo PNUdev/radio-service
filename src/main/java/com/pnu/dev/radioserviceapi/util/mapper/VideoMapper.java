@@ -2,11 +2,11 @@ package com.pnu.dev.radioserviceapi.util.mapper;
 
 import com.pnu.dev.radioserviceapi.client.dto.search.ItemYoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
+import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.VideoDto;
 import com.pnu.dev.radioserviceapi.mongo.LiveBroadcastContent;
 import com.pnu.dev.radioserviceapi.mongo.Video;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -41,9 +41,13 @@ public class VideoMapper {
                 .build();
     }
 
-    public Page<VideoDto> videoPageToVideoDtoPage(Page<Video> videoPage) {
+    public PageResponse<VideoDto> videoPageToVideoDtoPage(Page<Video> videoPage) {
 
-        return new PageImpl<>(videoListToVideoDtoList(videoPage.getContent()));
+        return new PageResponse<VideoDto>().toBuilder()
+                .pageNumber(videoPage.getNumber())
+                .totalPages(videoPage.getTotalPages())
+                .content(videoListToVideoDtoList(videoPage.getContent()))
+                .build();
     }
 
     private List<VideoDto> videoListToVideoDtoList(List<Video> videoList) {

@@ -19,14 +19,10 @@
                     <strong>${video.title}</strong>
                 </div>
 
-                <form action="/admin/videos/update/${video.id}" method="post">
-
+                <form action="/admin/videos/changePriority/${video.id}" method="post">
                     <div class="form-row form-inline">
-                        <input type="hidden" name="id" value="${video.id}">
-                        <input type="hidden" name="title" value="${video.title}">
-                        <input type="hidden" name="description" value="${video.description}">
                         <span class="my-3 ml-3">Приорітет</span>
-                        <select class="form-control inline mx-3" name="priority" onchange="this.form.submit()"
+                        <select class="form-control inline mx-3" name="newPriority" onchange="this.form.submit()"
                                 id="prioritySelect">
                             <#list 1..videos?size as number>
                                 <option value="${number}" <#if number == (video?index + 1)>selected</#if>>

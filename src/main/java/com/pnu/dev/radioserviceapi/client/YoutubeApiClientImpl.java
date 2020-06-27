@@ -70,7 +70,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
         uriRequest.addParameter("key", api_key)
                 .addParameter("id", id);
         YoutubeVideosResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeVideosResponse.class);
-        if (responseEntity != null) {
+        if (responseEntity != null && responseEntity.getItems().size() == 1) {
             return YoutubeApiResult.success(responseEntity.getItems().get(0));
         } else {
             return YoutubeApiResult.error("Youtube api response error");

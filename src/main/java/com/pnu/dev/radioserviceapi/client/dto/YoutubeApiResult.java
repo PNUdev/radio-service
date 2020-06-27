@@ -3,12 +3,10 @@ package com.pnu.dev.radioserviceapi.client.dto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 
 @Data
 @Builder(access = AccessLevel.PRIVATE)
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class YoutubeApiResult<T> {
 
     T data;
