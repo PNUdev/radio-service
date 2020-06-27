@@ -45,7 +45,7 @@ public class VideoApiServiceImpl implements VideoApiService {
     }
 
     @Override
-    public VideosCollectionResponse findLast() {
+    public VideosCollectionResponse findRecent() {
 
         YoutubeApiResult<YoutubeSearchResponse> apiResult = youtubeApiClient.getLastVideos();
         if (apiResult.isError()) {

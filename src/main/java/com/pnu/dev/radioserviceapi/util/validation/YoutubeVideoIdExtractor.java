@@ -1,15 +1,20 @@
 package com.pnu.dev.radioserviceapi.util.validation;
 
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class YoutubeValidator {
+public class YoutubeVideoIdExtractor {
 
     private final static String youtubeLinkRegex =
             "http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?\u200C\u200B[\\w\\?\u200C\u200B=]*)?";
 
-    public static Matcher matchYoutubeLink(String link) {
+    public static Optional<String> getVideoIdFromLink(String link) {
         Pattern youtubeLinkPattern = Pattern.compile(youtubeLinkRegex);
-        return youtubeLinkPattern.matcher(link);
+        Matcher matcher = youtubeLinkPattern.matcher(link);
+        if (matcher.find()) {
+            return Optional.of(matcher.group(1));
+        }
+        return Optional.empty();
     }
 }

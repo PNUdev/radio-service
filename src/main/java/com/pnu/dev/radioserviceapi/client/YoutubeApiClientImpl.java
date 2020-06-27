@@ -25,7 +25,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
 
 
     @Value("${youtube.api_key}")
-    private String api_key;
+    private String API_KEY;
 
     @Value("${youtube.channel_id}")
     private String CHANNEL_ID;
@@ -46,16 +46,16 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
         try {
             uriRequest = new URIBuilder(GET_VIDEOS_BY_CHANNEL_URI);
         } catch (URISyntaxException e) {
-            return YoutubeApiResult.error("Bad uri Youtube.api");
+            return YoutubeApiResult.error("Помилка звернення до Youtube API");
         }
-        uriRequest.addParameter("key", api_key)
+        uriRequest.addParameter("key", API_KEY)
                 .addParameter("channelId", CHANNEL_ID)
                 .addParameter("maxResults", String.valueOf(MAX_RESULTS_NUMBER));
         YoutubeSearchResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeSearchResponse.class);
         if (responseEntity != null) {
             return YoutubeApiResult.success(responseEntity);
         } else {
-            return YoutubeApiResult.error("Youtube api response error");
+            return YoutubeApiResult.error("Помилка відповіді від Youtube API");
         }
     }
 
@@ -65,15 +65,15 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
         try {
             uriRequest = new URIBuilder(GET_VIDEO_BY_ID_URI);
         } catch (URISyntaxException e) {
-            return YoutubeApiResult.error("Bad uri Youtube.api");
+            return YoutubeApiResult.error("Помилка звернення до Youtube API");
         }
-        uriRequest.addParameter("key", api_key)
+        uriRequest.addParameter("key", API_KEY)
                 .addParameter("id", id);
         YoutubeVideosResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeVideosResponse.class);
         if (responseEntity != null && responseEntity.getItems().size() == 1) {
             return YoutubeApiResult.success(responseEntity.getItems().get(0));
         } else {
-            return YoutubeApiResult.error("Youtube api response error");
+            return YoutubeApiResult.error("Помилка відповіді від Youtube API");
         }
     }
 }

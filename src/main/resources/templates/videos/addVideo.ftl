@@ -41,15 +41,17 @@
     const errorDiv = document.getElementById("errorMsg");
     const youtubePlayer = document.getElementById("youtubePlayer");
     const postLink = document.getElementById("postLink");
+    const notFoundImgWidth = 120;
 
     function findVideo() {
 
-        hideResult();
+        hideResultAndError();
 
         let link = document.getElementById("linkInput").value;
         let found = link.match(youtubeRegex);
 
         if (found == null) {
+            showError();
             return;
         }
 
@@ -58,8 +60,8 @@
 
         img.src = "http://img.youtube.com/vi/" + id + "/mqdefault.jpg";
         img.onload = function () {
-            if (this.width === 120) {
-                hideResult();
+            if (this.width === notFoundImgWidth) {
+                showError();
             } else {
                 let playerScr = "https://www.youtube.com/embed/" + id;
                 youtubePlayer.setAttribute("src", playerScr)
@@ -75,9 +77,14 @@
         resultDiv.style.visibility = "visible"
     }
 
-    function hideResult() {
+    function showError() {
         resultDiv.style.visibility = "hidden"
         errorDiv.style.visibility = "visible"
+    }
+
+    function hideResultAndError() {
+        resultDiv.style.visibility = "hidden"
+        errorDiv.style.visibility = "hidden"
     }
 
 

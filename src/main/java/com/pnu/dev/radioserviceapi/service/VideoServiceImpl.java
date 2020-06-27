@@ -7,14 +7,14 @@ import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.mongo.Video;
 import com.pnu.dev.radioserviceapi.repository.VideoRepository;
 import com.pnu.dev.radioserviceapi.util.mapper.VideoMapper;
-import com.pnu.dev.radioserviceapi.util.validation.YoutubeValidator;
+import com.pnu.dev.radioserviceapi.util.validation.YoutubeVideoIdExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.regex.Matcher;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -45,7 +45,7 @@ public class VideoServiceImpl implements VideoService {
     public void deleteById(String id) {
 
         Video video = findVideoByIdOrThrowException(id);
-        changePriorityFor(video.getPriority(), Integer.MAX_VALUE, -1);
+        updatePriorityForRange(video.getPriority(), Integer.MAX_VALUE, -1);
         videoRepository.deleteById(id);
     }
 
@@ -61,20 +61,19 @@ public class VideoServiceImpl implements VideoService {
                 .priority(1)
                 .build();
 
-        changePriorityFor(video.getPriority() - 1, Integer.MAX_VALUE, 1);
+        updatePriorityForRange(video.getPriority() - 1, Integer.MAX_VALUE, 1);
 
         videoRepository.save(video);
     }
 
     private Video findVideoOnYoutube(String link) {
 
-        Matcher matcher = YoutubeValidator.matchYoutubeLink(link);
-
-        if (!matcher.find()) {
-            throw new RadioServiceAdminException("Link does not refer to Youtube video");
+        Optional<String> optionalId = YoutubeVideoIdExtractor.getVideoIdFromLink(link);
+        if (!optionalId.isPresent()) {
+            throw new RadioServiceAdminException("Посилання не відповідає Youtube посиланню");
         }
 
-        String id = matcher.group(1);
+        String id = optionalId.get();
         YoutubeApiResult<ItemYoutubeVideosResponse> apiResult = youtubeApiClient.findVideo(id);
 
         if (apiResult.isError()) {
@@ -94,7 +93,7 @@ public class VideoServiceImpl implements VideoService {
         long numberOfVideos = videoRepository.count();
 
         if (newPriority < 1 || newPriority > numberOfVideos) {
-            throw new RadioServiceAdminException("Priority should be in 1..{Videos number}");
+            throw new RadioServiceAdminException("Приорітет повинен бути в межах від 1 до кількості всіх відео");
         }
 
         Video videoFromDb = findVideoByIdOrThrowException(id);
@@ -109,10 +108,10 @@ public class VideoServiceImpl implements VideoService {
                     .build();
 
             if (previousPriority > newPriority) {
-                changePriorityFor(newPriority - 1, previousPriority, 1);
+                updatePriorityForRange(newPriority - 1, previousPriority, 1);
             }
             if (previousPriority < newPriority) {
-                changePriorityFor(previousPriority, newPriority + 1, -1);
+                updatePriorityForRange(previousPriority, newPriority + 1, -1);
             }
             videoRepository.save(updatedVideo);
         }
@@ -121,15 +120,15 @@ public class VideoServiceImpl implements VideoService {
 
     private Video findVideoByIdOrThrowException(String id) {
 
-        return videoRepository.findById(id).orElseThrow(() -> new RadioServiceAdminException("Video not found"));
+        return videoRepository.findById(id).orElseThrow(() -> new RadioServiceAdminException("Відео не знайдено"));
     }
 
-    private void changePriorityFor(int priorityStart, int priorityEnd, int i) {
+    private void updatePriorityForRange(int priorityStart, int priorityEnd, int additional) {
 
         List<Video> videoListToChangePriority = videoRepository.findAllByPriorityBetween(priorityStart, priorityEnd);
         List<Video> updatedVideos = videoListToChangePriority
                 .stream()
-                .peek(v -> v.setPriority(v.getPriority() + i))
+                .peek(v -> v.setPriority(v.getPriority() + additional))
                 .collect(Collectors.toList());
         videoRepository.saveAll(updatedVideos);
     }

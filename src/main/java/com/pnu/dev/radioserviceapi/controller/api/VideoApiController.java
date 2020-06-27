@@ -29,9 +29,9 @@ public class VideoApiController {
         return videoApiService.findRecommended(pageable);
     }
 
-    @GetMapping("/last")
-    public VideosCollectionResponse findLast() {
-        return videoApiService.findLast();
+    @GetMapping("/recent")
+    public VideosCollectionResponse findRecent() {
+        return videoApiService.findRecent();
     }
 
 
