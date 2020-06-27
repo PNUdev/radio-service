@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class RestExceptionInterceptor {
 
     @ExceptionHandler(Exception.class)
-    public ErrorResponse generalError() {
+    public ErrorResponse generalError(Exception e) { // ToDo remove this parameter
         return ErrorResponse.builder()
                 .message("Internal service error")
                 .status(500)
