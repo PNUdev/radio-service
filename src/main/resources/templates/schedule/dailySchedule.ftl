@@ -5,7 +5,9 @@
     <tr>
         <th scope="col" colspan="4" class="text-center h3">${dailySchedule.dayOfWeekName}</th>
         <th>
-            <div class="btn btn-lg btn-primary float-right mr-3">Додати</div>
+            <a href="/admin/schedule/item/new">
+                <div class="btn btn-lg btn-primary float-right mr-3">Додати</div>
+            </a>
         </th>
     </tr>
     </thead>
@@ -20,21 +22,31 @@
     </thead>
     <tbody>
 
-    <#list dailySchedule.scheduleItems as program>
+    <#list dailySchedule.scheduleItems as scheduledItem>
+        <#assign saveFormId="save-form-for-${scheduledItem.id}">
         <tr>
-            <th scope="row">${program.programName}</th>
+            <th scope="row">${scheduledItem.programName}</th>
             <td>
-                <textarea class="form-control" rows="6" cols="60">${program.comment}</textarea>
+                <textarea class="form-control" rows="6" cols="60" name="comment"
+                          form="${saveFormId}">${scheduledItem.comment}</textarea>
             </td>
             <td>
-                <input class="form-control" type="time" value="${program.time.startTime}">
+                <input class="form-control" type="time" value="${scheduledItem.time.startTime}" name="startTime"
+                       form="${saveFormId}">
             </td>
             <td>
-                <input class="form-control" type="time" value="${program.time.endTime}">
+                <input class="form-control" type="time" value="${scheduledItem.time.endTime}" name="endTime"
+                       form="${saveFormId}">
             </td>
             <td>
-                <div class="btn btn-primary m-2">Зберегти</div>
-                <div class="btn btn-danger m-2">Видалити</div>
+                <form action="/update" id="${saveFormId}">
+                    <input type="hidden" name="itemId" value="${scheduledItem.id}">
+                    <button class="btn btn-primary">Зберегти</button>
+                </form>
+                <form action="/delete">
+                    <input type="hidden" name="itemId" value="${scheduledItem.id}">
+                    <button class="btn btn-danger">Видалити</button>
+                </form>
             </td>
         </tr>
     </#list>

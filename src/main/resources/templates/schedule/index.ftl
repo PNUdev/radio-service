@@ -7,25 +7,25 @@
     </div>
 
     <div class="h3 my-2">
-        <a href="/admin/schedule/monday">Понеділок</a>
+        <a href="/admin/schedule/day/monday">Понеділок</a>
     </div>
     <div class="h3 my-2">
-        <a href="/admin/schedule/tuesday">Вівторок</a>
+        <a href="/admin/schedule/day/tuesday">Вівторок</a>
     </div>
     <div class="h3 my-2">
-        <a href="/admin/schedule/wednesday">Середа</a>
+        <a href="/admin/schedule/day/wednesday">Середа</a>
     </div>
     <div class="h3 my-2">
-        <a href="/admin/schedule/thursday">Четвер</a>
+        <a href="/admin/schedule/day/thursday">Четвер</a>
     </div>
     <div class="h3 my-2">
-        <a href="/admin/schedule/friday">П'ятниця</a>
+        <a href="/admin/schedule/day/friday">П'ятниця</a>
     </div>
     <div class="h3 my-2">
-        <a href="/admin/schedule/saturday">Субота</a>
+        <a href="/admin/schedule/day/saturday">Субота</a>
     </div>
     <div class="h3 my-2">
-        <a href="/admin/schedule/sunday">Неділя</a>
+        <a href="/admin/schedule/day/sunday">Неділя</a>
     </div>
 
 </div>
