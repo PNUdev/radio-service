@@ -1,5 +1,7 @@
 package com.pnu.dev.radioserviceapi.service;
 
+import com.pnu.dev.radioserviceapi.dto.form.NewScheduleItemForm;
+import com.pnu.dev.radioserviceapi.dto.form.UpdateScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.schedule.DailySchedule;
 import com.pnu.dev.radioserviceapi.dto.schedule.ScheduleItemDto;
 import com.pnu.dev.radioserviceapi.dto.schedule.WeeklySchedule;
@@ -8,11 +10,13 @@ import com.pnu.dev.radioserviceapi.exception.RadioServiceApiException;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
+import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,9 +37,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public DailySchedule findForDay(String dayOfWeekValue) {
 
-        DayOfWeek dayOfWeek = DayOfWeek.findByValue(dayOfWeekValue)
+        DayOfWeek dayOfWeek = DayOfWeek.findByValueEng(dayOfWeekValue)
                 .orElseThrow(() -> new RadioServiceAdminException("Сторінки не існує"));
-
 
         List<ScheduleItem> scheduleItems = scheduleItemRepository.findByDayOfWeek(dayOfWeek);
 
@@ -67,12 +70,61 @@ public class ScheduleServiceImpl implements ScheduleService {
         return toScheduleItemDto(scheduleItem);
     }
 
+    @Override
+    public void createScheduleItem(NewScheduleItemForm newScheduleItemForm) {
+
+        // ToDo add validation to dto
+        // ToDo add validation of time range (1. start before end; 2. time range is free for the day)
+
+        DayOfWeek dayOfWeek = DayOfWeek.findByValueEng(newScheduleItemForm.getDayOfWeek())
+                .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"));
+
+        ScheduleItem scheduleItem = ScheduleItem.builder()
+                .programId(newScheduleItemForm.getProgramId())
+                .time(TimeRange.builder()
+                        .startTime(LocalTime.parse(newScheduleItemForm.getStartTime()))
+                        .endTime(LocalTime.parse(newScheduleItemForm.getEndTime()))
+                        .build())
+                .dayOfWeek(dayOfWeek)
+                .comment(newScheduleItemForm.getComment())
+                .build();
+
+        scheduleItemRepository.save(scheduleItem);
+    }
+
+    @Override
+    public void updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm) {
+
+        // ToDo add validation to dto
+        // ToDo add validation of time range (1. start before end; 2. time range is free for the day)
+
+        ScheduleItem scheduleItemFromDb = scheduleItemRepository.findById(id)
+                .orElseThrow(() -> new RadioServiceAdminException("Спроба оновити не існуючий запис"));
+
+        ScheduleItem updatedScheduleItem = scheduleItemFromDb.toBuilder()
+                .time(TimeRange.builder()
+                        .startTime(LocalTime.parse(updateScheduleItemForm.getStartTime()))
+                        .endTime(LocalTime.parse(updateScheduleItemForm.getEndTime()))
+                        .build())
+                .comment(updateScheduleItemForm.getComment())
+                .build();
+
+        scheduleItemRepository.save(updatedScheduleItem);
+
+    }
+
+    @Override
+    public void deleteScheduleItem(String id) {
+        scheduleItemRepository.deleteById(id);
+    }
+
     private DailySchedule toDailySchedule(List<ScheduleItem> scheduleItems, DayOfWeek dayOfWeek) { // ToDo move to separate class
 
         return DailySchedule.builder()
-                .dayOfWeekName(dayOfWeek.getHumanReadableName())
+                .dayOfWeekNameEng(dayOfWeek.getValueEng())
+                .dayOfWeekNameUkr(dayOfWeek.getValueUkr())
                 .scheduleItems(
-                        scheduleItems.stream()
+                        scheduleItems.stream() // ToDo should be sorted by start time
                                 .filter(scheduleItem -> scheduleItem.getDayOfWeek() == dayOfWeek)
                                 .map(this::toScheduleItemDto)
                                 .collect(Collectors.toList())

@@ -3,11 +3,12 @@
 <table class="table my-5">
     <thead class="thead-dark">
     <tr>
-        <th scope="col" colspan="4" class="text-center h3">${dailySchedule.dayOfWeekName}</th>
+        <th scope="col" colspan="4" class="text-center h3">${dailySchedule.dayOfWeekNameUkr}</th>
         <th>
-            <a href="/admin/schedule/item/new">
-                <div class="btn btn-lg btn-primary float-right mr-3">Додати</div>
-            </a>
+            <form action="/admin/schedule/item/new">
+                <input type="hidden" name="day" value="${dailySchedule.dayOfWeekNameEng}">
+                <button class="btn btn-lg btn-primary float-right mr-3">Додати</button>
+            </form>
         </th>
     </tr>
     </thead>
@@ -24,7 +25,7 @@
 
     <#list dailySchedule.scheduleItems as scheduledItem>
         <#assign saveFormId="save-form-for-${scheduledItem.id}">
-        <tr>
+        <tr id="${scheduledItem.id}">
             <th scope="row">${scheduledItem.programName}</th>
             <td>
                 <textarea class="form-control" rows="6" cols="60" name="comment"
@@ -39,10 +40,12 @@
                        form="${saveFormId}">
             </td>
             <td>
-                <form action="/admin/schedule/item/update/${scheduledItem.id}" id="${saveFormId}">
+                <form action="/admin/schedule/item/update/${scheduledItem.id}" id="${saveFormId}" method="POST">
+                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeekNameEng}">
                     <button class="btn btn-primary">Зберегти</button>
                 </form>
                 <form action="/admin/schedule/item/delete/${scheduledItem.id}">
+                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeekNameEng}">
                     <button class="btn btn-danger">Видалити</button>
                 </form>
             </td>
@@ -51,5 +54,17 @@
     </tbody>
 </table>
 
+<style>
+    :target {
+        border: 2px solid #D4D4D4;
+        animation: blink 1s
+    }
+
+    @keyframes blink {
+        to {
+            background-color: orange;
+        }
+    }
+</style>
 
 <#include "../include/footer.ftl">

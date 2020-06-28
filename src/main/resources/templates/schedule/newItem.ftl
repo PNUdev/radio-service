@@ -1,7 +1,8 @@
 <#include "../include/header.ftl">
 
 <div class="col-md-7 mt-5 px-5 pb-2 pt-4 rounded bg-light mx-auto">
-    <form method="POST" action="/admin/schedule/item/new">
+    <form method="POST">
+        <input type="hidden" value="${dayOfWeek}" name="dayOfWeek">
         <div class="input-group mb-3">
             <select class="select-program col-md-12" name="programId" required>
                 <option value="" disabled selected>Виберіть програму</option>

@@ -17,18 +17,18 @@ public enum DayOfWeek {
     FRIDAY("П'ятниця", "friday"),
     SATURDAY("Субота", "saturday");
 
-    private String humanReadableName;
+    private String valueUkr;
 
-    private String value;
+    private String valueEng;
 
-    DayOfWeek(String humanReadableName, String value) {
-        this.humanReadableName = humanReadableName;
-        this.value = value;
+    DayOfWeek(String valueUkr, String valueEng) {
+        this.valueUkr = valueUkr;
+        this.valueEng = valueEng;
     }
 
-    public static Optional<DayOfWeek> findByValue(String value) {
+    public static Optional<DayOfWeek> findByValueEng(String value) {
         return Stream.of(DayOfWeek.values())
-                .filter(dayOfWeek -> StringUtils.equals(dayOfWeek.getValue(), value))
+                .filter(dayOfWeek -> StringUtils.equals(dayOfWeek.getValueEng(), value))
                 .findFirst();
     }
 }

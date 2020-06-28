@@ -37,6 +37,9 @@ public class ProgramServiceImpl implements ProgramService {
 
     @Override
     public void deleteById(String id) {
+
+        // ToDo remove occurrences in schedule as well
+
         programRepository.deleteById(id);
     }
 

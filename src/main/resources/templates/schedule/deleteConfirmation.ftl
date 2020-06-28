@@ -3,7 +3,7 @@
     <div class="col-md-5 jumbotron mx-auto mt-5">
         <div class="h3">Ви впевнені, що справді хочете запис з розкладу?</div>
         <div class="row d-flex justify-content-end mt-5">
-            <a href="/admin/schedule">
+            <a href="/admin/schedule/day/${dayOfWeek}">
                 <div class="btn btn-outline-primary mx-4">Ні, відмінити дію</div>
             </a>
             <form method="POST">
