@@ -52,4 +52,9 @@ public class ScheduleAdminController {
 
         return "schedule/newItem";
     }
+
+    @GetMapping("/item/delete/{id}")
+    public String deleteConfirmation() {
+        return "schedule/deleteConfirmation";
+    }
 }

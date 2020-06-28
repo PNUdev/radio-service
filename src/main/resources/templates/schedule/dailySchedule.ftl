@@ -39,12 +39,10 @@
                        form="${saveFormId}">
             </td>
             <td>
-                <form action="/update" id="${saveFormId}">
-                    <input type="hidden" name="itemId" value="${scheduledItem.id}">
+                <form action="/admin/schedule/item/update/${scheduledItem.id}" id="${saveFormId}">
                     <button class="btn btn-primary">Зберегти</button>
                 </form>
-                <form action="/delete">
-                    <input type="hidden" name="itemId" value="${scheduledItem.id}">
+                <form action="/admin/schedule/item/delete/${scheduledItem.id}">
                     <button class="btn btn-danger">Видалити</button>
                 </form>
             </td>

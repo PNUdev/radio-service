@@ -58,6 +58,15 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .build();
     }
 
+    @Override
+    public ScheduleItemDto findScheduleItemById(String id) { // ToDo remove this method if not used
+
+        ScheduleItem scheduleItem = scheduleItemRepository.findById(id)
+                .orElseThrow(() -> new RadioServiceAdminException("Exception")); // ToDo
+
+        return toScheduleItemDto(scheduleItem);
+    }
+
     private DailySchedule toDailySchedule(List<ScheduleItem> scheduleItems, DayOfWeek dayOfWeek) { // ToDo move to separate class
 
         return DailySchedule.builder()
