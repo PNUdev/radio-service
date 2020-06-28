@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class DailySchedule {
 
+    private String dayOfWeekName;
+
     private List<ScheduleItemDto> scheduleItems;
 
 }

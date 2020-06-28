@@ -3,6 +3,7 @@ package com.pnu.dev.radioserviceapi.service;
 import com.pnu.dev.radioserviceapi.dto.schedule.DailySchedule;
 import com.pnu.dev.radioserviceapi.dto.schedule.ScheduleItemDto;
 import com.pnu.dev.radioserviceapi.dto.schedule.WeeklySchedule;
+import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.exception.RadioServiceApiException;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
@@ -30,7 +31,11 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public DailySchedule findForDay(DayOfWeek dayOfWeek) {
+    public DailySchedule findForDay(String dayOfWeekValue) {
+
+        DayOfWeek dayOfWeek = DayOfWeek.findByValue(dayOfWeekValue)
+                .orElseThrow(() -> new RadioServiceAdminException("Сторінки не існує"));
+
 
         List<ScheduleItem> scheduleItems = scheduleItemRepository.findByDayOfWeek(dayOfWeek);
 
@@ -38,7 +43,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public WeeklySchedule findForWeek() {
+    public WeeklySchedule findForWeek() { // ToDo this method should be used only from api
 
         List<ScheduleItem> scheduleItems = scheduleItemRepository.findAll();
 
@@ -56,6 +61,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private DailySchedule toDailySchedule(List<ScheduleItem> scheduleItems, DayOfWeek dayOfWeek) { // ToDo move to separate class
 
         return DailySchedule.builder()
+                .dayOfWeekName(dayOfWeek.getHumanReadableName())
                 .scheduleItems(
                         scheduleItems.stream()
                                 .filter(scheduleItem -> scheduleItem.getDayOfWeek() == dayOfWeek)

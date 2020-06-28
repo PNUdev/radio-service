@@ -79,8 +79,8 @@ class DbSetupUtil {
                 .mapToObj(idx -> ScheduleItem.builder()
                         .programId(programId)
                         .time(TimeRange.builder()
-                                .startTime(LocalTime.of(10, 33))
-                                .endTime(LocalTime.MAX)
+                                .startTime(LocalTime.of(13, 33))
+                                .endTime(LocalTime.of(14, 33))
                                 .build())
                         .dayOfWeek(dayOfWeek)
                         .comment("Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
