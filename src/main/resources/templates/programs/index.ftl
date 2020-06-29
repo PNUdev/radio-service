@@ -48,8 +48,11 @@
                         <div>
                             <div class="p">${program.description}</div>
                         </div>
-                        <div class="ml-auto pt-3">
-                            <a href="/admin/programs/edit/${program.id}">
+                        <div class="ml-auto pt-3 d-flex flex-column justify-content-between">
+                            <a href="/admin/schedule/program/${program.id}" class="pt-3">
+                                Показати записи у розкладі
+                            </a>
+                            <a href="/admin/programs/edit/${program.id}" class="pt-3">
                                 <div class="btn btn-primary">Редагувати</div>
                             </a>
                         </div>

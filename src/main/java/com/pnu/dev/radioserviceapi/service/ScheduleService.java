@@ -6,10 +6,14 @@ import com.pnu.dev.radioserviceapi.dto.response.schedule.DailySchedule;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.WeeklySchedule;
 
+import java.util.List;
+
 // ToDo probably methods should be split to two separate classes
 public interface ScheduleService {
 
     DailySchedule findForDay(String dayOfWeekValue);
+
+    List<ScheduleItemDto> findForProgram(String programId);
 
     WeeklySchedule findForWeek();
 

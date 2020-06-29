@@ -49,6 +49,13 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public List<ScheduleItemDto> findForProgram(String programId) {
+        return scheduleItemRepository.findAllByProgramId(programId).stream()
+                .map(this::toScheduleItemDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public WeeklySchedule findForWeek() { // ToDo this method should be used only from api
 
         List<ScheduleItem> scheduleItems = scheduleItemRepository.findAll(SORT_BY_START_TIME);
@@ -148,7 +155,14 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .programName(program.getTitle())
                 .programLink("/api/v1/programs/" + program.getId())
                 .comment(scheduleItem.getComment())
-                .time(scheduleItem.getTime())
+                .time(com.pnu.dev.radioserviceapi.dto.response.TimeRange.builder()
+                        .startTime(scheduleItem.getTime().getStartTime())
+                        .endTime(scheduleItem.getTime().getEndTime())
+                        .build())
+                .dayOfWeek(com.pnu.dev.radioserviceapi.dto.response.DayOfWeek.builder()
+                        .nameUkr(scheduleItem.getDayOfWeek().getValueUkr())
+                        .nameEng(scheduleItem.getDayOfWeek().getValueEng())
+                        .build())
                 .build();
     }
 }

@@ -47,7 +47,7 @@ public class ProgramAdminController {
             model.addAttribute("programsPage", programsPage);
         }
 
-        return "programs/index"; // ToDo occurrences in schedule should be displayed as well
+        return "programs/index";
     }
 
     @GetMapping("/new")

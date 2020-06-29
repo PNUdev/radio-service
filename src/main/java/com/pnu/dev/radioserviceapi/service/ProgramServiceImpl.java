@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 public class ProgramServiceImpl implements ProgramService {
 
@@ -34,6 +36,11 @@ public class ProgramServiceImpl implements ProgramService {
     @Override
     public Page<Program> findAll(Pageable pageable) {
         return programRepository.findAll(pageable);
+    }
+
+    @Override
+    public List<Program> findAll() {
+        return programRepository.findAll();
     }
 
     @Override
