@@ -14,6 +14,7 @@ import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
@@ -23,6 +24,8 @@ import java.util.stream.Collectors;
 // ToDo move all the mapping logic to separate class
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
+
+    private Sort SORT_BY_START_TIME = Sort.by("time.startTime");
 
     private ScheduleItemRepository scheduleItemRepository;
 
@@ -40,7 +43,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         DayOfWeek dayOfWeek = DayOfWeek.findByValueEng(dayOfWeekValue)
                 .orElseThrow(() -> new RadioServiceAdminException("Сторінки не існує"));
 
-        List<ScheduleItem> scheduleItems = scheduleItemRepository.findByDayOfWeek(dayOfWeek);
+        List<ScheduleItem> scheduleItems = scheduleItemRepository.findByDayOfWeek(dayOfWeek, SORT_BY_START_TIME);
 
         return toDailySchedule(scheduleItems, dayOfWeek);
     }
@@ -48,7 +51,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public WeeklySchedule findForWeek() { // ToDo this method should be used only from api
 
-        List<ScheduleItem> scheduleItems = scheduleItemRepository.findAll();
+        List<ScheduleItem> scheduleItems = scheduleItemRepository.findAll(SORT_BY_START_TIME);
 
         return WeeklySchedule.builder()
                 .sunday(toDailySchedule(scheduleItems, DayOfWeek.SUNDAY))
@@ -124,7 +127,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .dayOfWeekNameEng(dayOfWeek.getValueEng())
                 .dayOfWeekNameUkr(dayOfWeek.getValueUkr())
                 .scheduleItems(
-                        scheduleItems.stream() // ToDo should be sorted by start time
+                        scheduleItems.stream()
                                 .filter(scheduleItem -> scheduleItem.getDayOfWeek() == dayOfWeek)
                                 .map(this::toScheduleItemDto)
                                 .collect(Collectors.toList())
