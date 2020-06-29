@@ -64,7 +64,7 @@ public class ProgramAdminController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteConfirmation(Model model, @PathVariable("id") String id) { // ToDo add list of schedule occurrences
+    public String deleteConfirmation(Model model, @PathVariable("id") String id) {
         Program program = programService.findById(id);
 
         model.addAttribute("program", program);
