@@ -11,6 +11,8 @@ public interface ScheduleItemRepository extends MongoRepository<ScheduleItem, St
 
     List<ScheduleItem> findByDayOfWeek(DayOfWeek dayOfWeek, Sort sort);
 
+    List<ScheduleItem> findAllByProgramId(String programId);
+
     void deleteAllByProgramId(String programId);
 
 }

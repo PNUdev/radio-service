@@ -5,22 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProgramDto {
+public class ScheduleOccurrence {
 
-    private String id;
+    private DayOfWeek dayOfWeek;
 
-    private String title;
-
-    private String description;
-
-    private String imageUrl;
-
-    private List<ScheduleOccurrence> scheduleOccurrences;
+    private TimeRange timeRange;
 
 }

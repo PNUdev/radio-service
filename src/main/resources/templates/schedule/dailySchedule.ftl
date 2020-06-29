@@ -3,10 +3,10 @@
 <table class="table my-5">
     <thead class="thead-dark">
     <tr>
-        <th scope="col" colspan="4" class="text-center h3">${dailySchedule.dayOfWeekNameUkr}</th>
+        <th scope="col" colspan="4" class="text-center h3">${dailySchedule.dayOfWeek.nameUkr}</th>
         <th>
             <form action="/admin/schedule/item/new">
-                <input type="hidden" name="day" value="${dailySchedule.dayOfWeekNameEng}">
+                <input type="hidden" name="day" value="${dailySchedule.dayOfWeek.nameEng}">
                 <button class="btn btn-lg btn-primary float-right mr-3">Додати</button>
             </form>
         </th>
@@ -41,11 +41,11 @@
             </td>
             <td>
                 <form action="/admin/schedule/item/update/${scheduledItem.id}" id="${saveFormId}" method="POST">
-                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeekNameEng}">
+                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeek.nameEng}">
                     <button class="btn btn-primary">Зберегти</button>
                 </form>
                 <form action="/admin/schedule/item/delete/${scheduledItem.id}">
-                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeekNameEng}">
+                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeek.nameEng}">
                     <button class="btn btn-danger">Видалити</button>
                 </form>
             </td>

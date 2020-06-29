@@ -1,7 +1,7 @@
 package com.pnu.dev.radioserviceapi.controller.api;
 
+import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.ProgramDto;
-import com.pnu.dev.radioserviceapi.dto.response.ProgramsPageResponse;
 import com.pnu.dev.radioserviceapi.service.ProgramApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -26,8 +26,8 @@ public class ProgramApiController {
     }
 
     @GetMapping
-    public ProgramsPageResponse findAll(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
-                                                Pageable pageable) {
+    public PageResponse findAll(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                        Pageable pageable) {
         return programApiService.findAll(pageable);
     }
 
@@ -37,9 +37,9 @@ public class ProgramApiController {
     }
 
     @GetMapping("/search")
-    public ProgramsPageResponse searchByTitle(@RequestParam("q") String query,
-                                              @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
-                                                      Pageable pageable) {
+    public PageResponse searchByTitle(@RequestParam("q") String query,
+                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                              Pageable pageable) {
         return programApiService.findByTitleContains(query, pageable);
     }
 

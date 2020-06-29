@@ -1,4 +1,4 @@
-package com.pnu.dev.radioserviceapi.dto.schedule;
+package com.pnu.dev.radioserviceapi.dto.response.schedule;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

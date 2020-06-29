@@ -2,9 +2,9 @@ package com.pnu.dev.radioserviceapi.service;
 
 import com.pnu.dev.radioserviceapi.dto.form.NewScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.form.UpdateScheduleItemForm;
-import com.pnu.dev.radioserviceapi.dto.schedule.DailySchedule;
-import com.pnu.dev.radioserviceapi.dto.schedule.ScheduleItemDto;
-import com.pnu.dev.radioserviceapi.dto.schedule.WeeklySchedule;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.DailySchedule;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.WeeklySchedule;
 import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.exception.RadioServiceApiException;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-    private Sort SORT_BY_START_TIME = Sort.by("time.startTime");
+    private Sort SORT_BY_START_TIME = Sort.by("time.startTime"); // ToDo Sort do not work the way it supposed to, fix it
 
     private ScheduleItemRepository scheduleItemRepository;
 
@@ -124,8 +124,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     private DailySchedule toDailySchedule(List<ScheduleItem> scheduleItems, DayOfWeek dayOfWeek) { // ToDo move to separate class
 
         return DailySchedule.builder()
-                .dayOfWeekNameEng(dayOfWeek.getValueEng())
-                .dayOfWeekNameUkr(dayOfWeek.getValueUkr())
+                .dayOfWeek(com.pnu.dev.radioserviceapi.dto.response.DayOfWeek.builder()
+                        .nameEng(dayOfWeek.getValueEng())
+                        .nameUkr(dayOfWeek.getValueUkr())
+                        .build())
                 .scheduleItems(
                         scheduleItems.stream()
                                 .filter(scheduleItem -> scheduleItem.getDayOfWeek() == dayOfWeek)

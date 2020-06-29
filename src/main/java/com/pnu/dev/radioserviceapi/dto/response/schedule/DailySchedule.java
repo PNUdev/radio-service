@@ -1,5 +1,6 @@
-package com.pnu.dev.radioserviceapi.dto.schedule;
+package com.pnu.dev.radioserviceapi.dto.response.schedule;
 
+import com.pnu.dev.radioserviceapi.dto.response.DayOfWeek;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 public class DailySchedule {
 
-    private String dayOfWeekNameEng;
-
-    private String dayOfWeekNameUkr;
+    private DayOfWeek dayOfWeek;
 
     private List<ScheduleItemDto> scheduleItems;
 

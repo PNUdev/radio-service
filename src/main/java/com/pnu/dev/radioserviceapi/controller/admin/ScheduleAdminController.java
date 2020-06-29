@@ -2,7 +2,7 @@ package com.pnu.dev.radioserviceapi.controller.admin;
 
 import com.pnu.dev.radioserviceapi.dto.form.NewScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.form.UpdateScheduleItemForm;
-import com.pnu.dev.radioserviceapi.dto.schedule.DailySchedule;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.DailySchedule;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.service.ScheduleService;
@@ -68,7 +68,7 @@ public class ScheduleAdminController {
     }
 
     @PostMapping("/item/new")
-    public String create(@ModelAttribute NewScheduleItemForm newScheduleItemForm) {
+    public String create(@ModelAttribute NewScheduleItemForm newScheduleItemForm) { // ToDo add flash message
 
         scheduleService.createScheduleItem(newScheduleItemForm);
 
@@ -78,7 +78,7 @@ public class ScheduleAdminController {
     @PostMapping("/item/update/{id}")
     public String update(@PathVariable("id") String id,
                          @RequestParam("day") String dayOrWeek,
-                         @ModelAttribute UpdateScheduleItemForm updateScheduleItemForm) {
+                         @ModelAttribute UpdateScheduleItemForm updateScheduleItemForm) { // ToDo add flash message
 
         scheduleService.updateScheduleItem(id, updateScheduleItemForm);
 
@@ -86,7 +86,7 @@ public class ScheduleAdminController {
     }
 
     @PostMapping("/item/delete/{id}")
-    public String delete(@PathVariable("id") String id, @RequestParam("day") String dayOrWeek) {
+    public String delete(@PathVariable("id") String id, @RequestParam("day") String dayOrWeek) { // ToDo add flash message
 
         scheduleService.deleteScheduleItem(id);
 

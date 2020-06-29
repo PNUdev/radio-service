@@ -2,9 +2,9 @@ package com.pnu.dev.radioserviceapi.service;
 
 import com.pnu.dev.radioserviceapi.dto.form.NewScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.form.UpdateScheduleItemForm;
-import com.pnu.dev.radioserviceapi.dto.schedule.DailySchedule;
-import com.pnu.dev.radioserviceapi.dto.schedule.ScheduleItemDto;
-import com.pnu.dev.radioserviceapi.dto.schedule.WeeklySchedule;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.DailySchedule;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.WeeklySchedule;
 
 // ToDo probably methods should be split to two separate classes
 public interface ScheduleService {

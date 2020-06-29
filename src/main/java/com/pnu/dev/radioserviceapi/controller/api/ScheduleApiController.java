@@ -10,5 +10,4 @@ public class ScheduleApiController {
     // ToDo create next endpoints
         // 1. /today - schedule for today
         // 2. /week - schedule for week
-    // ToDo add info about scheduled time to programs api response
 }
