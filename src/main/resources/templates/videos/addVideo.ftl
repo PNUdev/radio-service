@@ -37,17 +37,18 @@
 <script>
 
     const youtubeRegex = /http(?:s?):\/\/(?:www\.)?youtu(?:be\.com\/watch\?v=|\.be\/)([\w\-\_]*)(&(amp;)?‌​[\w\?‌​=]*)?/;
-    let resultDiv = document.getElementById("resultDiv");
-    let errorDiv = document.getElementById("errorMsg");
-    let youtubePlayer = document.getElementById("youtubePlayer");
-    let postLink = document.getElementById("postLink");
+    let resultDiv = $("#resultDiv");
+    let errorDiv = $("#errorMsg");
+    let youtubePlayer = $("#youtubePlayer");
+    let postLink = $("#postLink");
     const notFoundImgWidth = 120;
 
     function findVideo() {
 
         hideResultAndError();
 
-        let link = document.getElementById("linkInput").value;
+        let link = $("#linkInput").val();
+
         let found = link.match(youtubeRegex);
 
         if (found == null) {
@@ -57,34 +58,33 @@
 
         let id = found[1];
         let img = new Image();
-
         img.src = "http://img.youtube.com/vi/" + id + "/mqdefault.jpg";
+
         img.onload = function () {
             if (this.width === notFoundImgWidth) {
                 showError();
             } else {
                 let playerScr = "https://www.youtube.com/embed/" + id;
-                youtubePlayer.setAttribute("src", playerScr)
-                console.log(youtubePlayer.getAttribute("src"));
-                postLink.value = link;
+                youtubePlayer.attr("src", playerScr);
+                postLink.val(link);
                 showResult();
             }
         }
     }
 
     function showResult() {
-        errorDiv.style.visibility = "hidden"
-        resultDiv.style.visibility = "visible"
+        errorDiv.css("visibility", "hidden");
+        resultDiv.css("visibility", "visible");
     }
 
     function showError() {
-        resultDiv.style.visibility = "hidden"
-        errorDiv.style.visibility = "visible"
+        errorDiv.css("visibility", "visible");
+        resultDiv.css("visibility", "hidden");
     }
 
     function hideResultAndError() {
-        resultDiv.style.visibility = "hidden"
-        errorDiv.style.visibility = "hidden"
+        errorDiv.css("visibility", "hidden");
+        resultDiv.css("visibility", "hidden");
     }
 
 
