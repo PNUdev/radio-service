@@ -1,7 +1,7 @@
 package com.pnu.dev.radioserviceapi.controller.api;
 
 import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
-import com.pnu.dev.radioserviceapi.dto.response.VideoDto;
+import com.pnu.dev.radioserviceapi.dto.response.RecommendedVideoDto;
 import com.pnu.dev.radioserviceapi.dto.response.VideosCollectionResponse;
 import com.pnu.dev.radioserviceapi.service.VideoApiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +24,8 @@ public class VideoApiController {
     }
 
     @GetMapping("/recommended")
-    public PageResponse<VideoDto> findRecommended(@PageableDefault(size = 10)
-                                                          Pageable pageable) {
+    public PageResponse<RecommendedVideoDto> findRecommended(@PageableDefault(size = 10)
+                                                                     Pageable pageable) {
         return videoApiService.findRecommended(pageable);
     }
 

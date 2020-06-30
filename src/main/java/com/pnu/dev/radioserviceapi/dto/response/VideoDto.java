@@ -16,9 +16,13 @@ import java.time.LocalDateTime;
 public class VideoDto {
 
     private String id;
+
     private String title;
+
     private String description;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS")
     private LocalDateTime publishedAt;
+
     private LiveBroadcastContent liveBroadcastContent;
 }

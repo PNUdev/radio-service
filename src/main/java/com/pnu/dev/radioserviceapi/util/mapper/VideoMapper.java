@@ -3,6 +3,7 @@ package com.pnu.dev.radioserviceapi.util.mapper;
 import com.pnu.dev.radioserviceapi.client.dto.search.ItemYoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
+import com.pnu.dev.radioserviceapi.dto.response.RecommendedVideoDto;
 import com.pnu.dev.radioserviceapi.dto.response.VideoDto;
 import com.pnu.dev.radioserviceapi.mongo.LiveBroadcastContent;
 import com.pnu.dev.radioserviceapi.mongo.Video;
@@ -41,23 +42,24 @@ public class VideoMapper {
                 .build();
     }
 
-    public PageResponse<VideoDto> videoPageToVideoDtoPage(Page<Video> videoPage) {
+    public PageResponse<RecommendedVideoDto> videoPageToRecommendedVideoPageDto(Page<Video> videoPage) {
 
-        return new PageResponse<VideoDto>().toBuilder()
+        return new PageResponse<RecommendedVideoDto>().toBuilder()
                 .pageNumber(videoPage.getNumber())
                 .totalPages(videoPage.getTotalPages())
-                .content(videoListToVideoDtoList(videoPage.getContent()))
+                .content(videoListToRecommendedVideoDtoList(videoPage.getContent()))
                 .build();
     }
 
-    private List<VideoDto> videoListToVideoDtoList(List<Video> videoList) {
+    private List<RecommendedVideoDto> videoListToRecommendedVideoDtoList(List<Video> videoList) {
 
-        return videoList.stream().map(this::videoToDto).collect(Collectors.toList());
+        return videoList.stream().map(this::videoToRecommendedVideoDto).collect(Collectors.toList());
     }
 
-    private VideoDto videoToDto(Video video) {
 
-        return VideoDto.builder()
+    private RecommendedVideoDto videoToRecommendedVideoDto(Video video) {
+
+        return RecommendedVideoDto.builder()
                 .id(video.getId())
                 .title(video.getTitle())
                 .description(video.getDescription())

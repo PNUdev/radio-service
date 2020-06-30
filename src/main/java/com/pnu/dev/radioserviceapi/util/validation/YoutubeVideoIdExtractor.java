@@ -1,9 +1,12 @@
 package com.pnu.dev.radioserviceapi.util.validation;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+@Component
 public class YoutubeVideoIdExtractor {
 
     private final static String youtubeLinkRegex =

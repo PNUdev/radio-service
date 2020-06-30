@@ -4,6 +4,7 @@ import com.pnu.dev.radioserviceapi.client.YoutubeApiClient;
 import com.pnu.dev.radioserviceapi.client.dto.YoutubeApiResult;
 import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
+import com.pnu.dev.radioserviceapi.dto.response.RecommendedVideoDto;
 import com.pnu.dev.radioserviceapi.dto.response.VideoDto;
 import com.pnu.dev.radioserviceapi.dto.response.VideosCollectionResponse;
 import com.pnu.dev.radioserviceapi.exception.RadioServiceApiException;
@@ -38,16 +39,16 @@ public class VideoApiServiceImpl implements VideoApiService {
     }
 
     @Override
-    public PageResponse<VideoDto> findRecommended(Pageable pageable) {
+    public PageResponse<RecommendedVideoDto> findRecommended(Pageable pageable) {
         pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("priority").ascending());
         Page<Video> videoPage = videoRepository.findAll(pageable);
-        return videoMapper.videoPageToVideoDtoPage(videoPage);
+        return videoMapper.videoPageToRecommendedVideoPageDto(videoPage);
     }
 
     @Override
     public VideosCollectionResponse findRecent() {
 
-        YoutubeApiResult<YoutubeSearchResponse> apiResult = youtubeApiClient.getLastVideos();
+        YoutubeApiResult<YoutubeSearchResponse> apiResult = youtubeApiClient.findRecentVideos();
         if (apiResult.isError()) {
             throw new RadioServiceApiException(apiResult.getErrorMessage());
         }

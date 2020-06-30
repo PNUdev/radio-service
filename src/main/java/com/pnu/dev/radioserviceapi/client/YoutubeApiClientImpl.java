@@ -39,7 +39,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     }
 
     @Override
-    public YoutubeApiResult<YoutubeSearchResponse> getLastVideos() {
+    public YoutubeApiResult<YoutubeSearchResponse> findRecentVideos() {
 
         UriComponents uriRequest;
 
@@ -50,17 +50,13 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
                     .queryParam("channelId", CHANNEL_ID)
                     .queryParam("maxResults", MAX_RESULTS_NUMBER)
                     .build();
-
-        } catch (IllegalArgumentException e) {
-            return YoutubeApiResult.error("Помилка звернення до Youtube API");
-        }
-
-        YoutubeSearchResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeSearchResponse.class);
-        if (responseEntity != null) {
+            YoutubeSearchResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeSearchResponse.class);
             return YoutubeApiResult.success(responseEntity);
-        } else {
+
+        } catch (Exception e) {
             return YoutubeApiResult.error("Помилка відповіді від Youtube API");
         }
+        
     }
 
     @Override
@@ -73,13 +69,9 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
                     .queryParam("id", id)
                     .build();
             YoutubeVideosResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeVideosResponse.class);
-            if (responseEntity != null && responseEntity.getItems().size() == 1) {
-                return YoutubeApiResult.success(responseEntity.getItems().get(0));
-            } else {
-                return YoutubeApiResult.error("Помилка відповіді від Youtube API");
-            }
+            return YoutubeApiResult.success(responseEntity.getItems().get(0));
         } catch (Exception e) {
-            return YoutubeApiResult.error("Помилка звернення до Youtube API");
+            return YoutubeApiResult.error("Помилка відповіді від Youtube API");
         }
 
     }

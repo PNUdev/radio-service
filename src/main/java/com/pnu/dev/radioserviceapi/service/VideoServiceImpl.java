@@ -83,12 +83,10 @@ public class VideoServiceImpl implements VideoService {
 
     private Video findVideoOnYoutube(String link) {
 
-        Optional<String> optionalId = YoutubeVideoIdExtractor.getVideoIdFromLink(link);
-        if (!optionalId.isPresent()) {
+        String id = YoutubeVideoIdExtractor.getVideoIdFromLink(link).orElseThrow(() -> {
             throw new RadioServiceAdminException("Посилання не відповідає Youtube посиланню");
-        }
+        });
 
-        String id = optionalId.get();
         YoutubeApiResult<ItemYoutubeVideosResponse> apiResult = youtubeApiClient.findVideo(id);
 
         if (apiResult.isError()) {
@@ -117,27 +115,28 @@ public class VideoServiceImpl implements VideoService {
 
         int previousPriority = videoFromDb.getPriority();
 
-        if (previousPriority != newPriority) {
-
-            Video updatedVideo = videoFromDb
-                    .toBuilder()
-                    .priority(newPriority)
-                    .build();
-
-
-            if (previousPriority > newPriority) {
-                List<Video> videosToIncrementPriority = videoRepository
-                        .findAllByPriorityBetween(newPriority - 1, previousPriority);
-                incrementPriority(videosToIncrementPriority);
-            }
-            if (previousPriority < newPriority) {
-                List<Video> videosToDecrementPriority = videoRepository
-                        .findAllByPriorityBetween(previousPriority, newPriority + 1);
-                decrementPriority(videosToDecrementPriority);
-            }
-
-            videoRepository.save(updatedVideo);
+        if (previousPriority == newPriority) {
+            return;
         }
+
+        Video updatedVideo = videoFromDb
+                .toBuilder()
+                .priority(newPriority)
+                .build();
+
+
+        if (previousPriority > newPriority) {
+            List<Video> videosToIncrementPriority = videoRepository
+                    .findAllByPriorityBetween(newPriority - 1, previousPriority);
+            incrementPriority(videosToIncrementPriority);
+        }
+        if (previousPriority < newPriority) {
+            List<Video> videosToDecrementPriority = videoRepository
+                    .findAllByPriorityBetween(previousPriority, newPriority + 1);
+            decrementPriority(videosToDecrementPriority);
+        }
+
+        videoRepository.save(updatedVideo);
     }
 
     private Video findVideoByIdOrThrowException(String id) {
@@ -147,18 +146,22 @@ public class VideoServiceImpl implements VideoService {
 
     private void incrementPriority(List<Video> videoListToIncrementPriority) {
 
-        List<Video> updatedVideos = videoListToIncrementPriority
-                .stream()
-                .peek(v -> v.setPriority(v.getPriority() + 1))
+        List<Video> updatedVideos = videoListToIncrementPriority.stream()
+                .map(v -> {
+                    v.setPriority(v.getPriority() + 1);
+                    return v;
+                })
                 .collect(Collectors.toList());
         videoRepository.saveAll(updatedVideos);
     }
 
     private void decrementPriority(List<Video> videoListToDecrementPriority) {
 
-        List<Video> updatedVideos = videoListToDecrementPriority
-                .stream()
-                .peek(v -> v.setPriority(v.getPriority() - 1))
+        List<Video> updatedVideos = videoListToDecrementPriority.stream()
+                .map(v -> {
+                    v.setPriority(v.getPriority() - 1);
+                    return v;
+                })
                 .collect(Collectors.toList());
         videoRepository.saveAll(updatedVideos);
     }

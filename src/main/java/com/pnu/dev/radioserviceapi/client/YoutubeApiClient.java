@@ -6,7 +6,7 @@ import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
 
 public interface YoutubeApiClient {
 
-    YoutubeApiResult<YoutubeSearchResponse> getLastVideos();
+    YoutubeApiResult<YoutubeSearchResponse> findRecentVideos();
 
     YoutubeApiResult<ItemYoutubeVideosResponse> findVideo(String id);
 
