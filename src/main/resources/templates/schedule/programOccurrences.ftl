@@ -28,7 +28,7 @@
             <td>${scheduleItem.time.startTime}</td>
             <td>${scheduleItem.time.endTime}</td>
             <td>
-                <a href="/admin/schedule/day/${scheduleItem.dayOfWeek.nameEng}#${scheduleItem.id}">
+                <a href="/admin/schedule/day/${scheduleItem.dayOfWeek.urlValue}#${scheduleItem.id}">
                     <div class="btn btn-primary">Перейти</div>
                 </a>
             </td>

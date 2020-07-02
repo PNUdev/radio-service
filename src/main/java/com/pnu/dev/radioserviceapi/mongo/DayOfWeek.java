@@ -19,16 +19,16 @@ public enum DayOfWeek {
 
     private String valueUkr;
 
-    private String valueEng;
+    private String urlValue;
 
-    DayOfWeek(String valueUkr, String valueEng) {
+    DayOfWeek(String valueUkr, String urlValue) {
         this.valueUkr = valueUkr;
-        this.valueEng = valueEng;
+        this.urlValue = urlValue;
     }
 
-    public static Optional<DayOfWeek> findByValueEng(String value) {
+    public static Optional<DayOfWeek> findByUrlValue(String value) {
         return Stream.of(DayOfWeek.values())
-                .filter(dayOfWeek -> StringUtils.equals(dayOfWeek.getValueEng(), value))
+                .filter(dayOfWeek -> StringUtils.equals(dayOfWeek.getUrlValue(), value))
                 .findFirst();
     }
 }

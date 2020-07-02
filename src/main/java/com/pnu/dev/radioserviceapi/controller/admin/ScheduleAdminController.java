@@ -43,7 +43,7 @@ public class ScheduleAdminController {
         return "schedule/index";
     }
 
-    @GetMapping("day/{dayOfWeek}")
+    @GetMapping("day/{dayOfWeek}") // ToDo handle anchor somehow to not to make url weird
     public String showForDay(@PathVariable("dayOfWeek") String dayOfWeekValue, Model model) {
 
         DailySchedule dailySchedule = scheduleService.findForDay(dayOfWeekValue);

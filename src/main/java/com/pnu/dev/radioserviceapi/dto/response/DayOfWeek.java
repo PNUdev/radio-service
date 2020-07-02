@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class DayOfWeek {
 
-    private String nameEng;
+    private String urlValue;
 
     private String nameUkr;
 

@@ -53,7 +53,7 @@ public class ProgramMapper {
         return scheduleItems.stream()
                 .map(scheduleItem -> ScheduleOccurrence.builder()
                         .dayOfWeek(DayOfWeek.builder()
-                                .nameEng(scheduleItem.getDayOfWeek().getValueEng())
+                                .urlValue(scheduleItem.getDayOfWeek().getUrlValue())
                                 .nameUkr(scheduleItem.getDayOfWeek().getValueUkr())
                                 .build())
                         .timeRange(TimeRange.builder()

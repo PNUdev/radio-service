@@ -40,7 +40,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public DailySchedule findForDay(String dayOfWeekValue) {
 
-        DayOfWeek dayOfWeek = DayOfWeek.findByValueEng(dayOfWeekValue)
+        DayOfWeek dayOfWeek = DayOfWeek.findByUrlValue(dayOfWeekValue)
                 .orElseThrow(() -> new RadioServiceAdminException("Сторінки не існує"));
 
         List<ScheduleItem> scheduleItems = scheduleItemRepository.findByDayOfWeek(dayOfWeek, SORT_BY_START_TIME);
@@ -86,7 +86,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         // ToDo add validation to dto
         // ToDo add validation of time range (1. start before end; 2. time range is free for the day)
 
-        DayOfWeek dayOfWeek = DayOfWeek.findByValueEng(newScheduleItemForm.getDayOfWeek())
+        DayOfWeek dayOfWeek = DayOfWeek.findByUrlValue(newScheduleItemForm.getDayOfWeek())
                 .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"));
 
         ScheduleItem scheduleItem = ScheduleItem.builder()
@@ -132,7 +132,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         return DailySchedule.builder()
                 .dayOfWeek(com.pnu.dev.radioserviceapi.dto.response.DayOfWeek.builder()
-                        .nameEng(dayOfWeek.getValueEng())
+                        .urlValue(dayOfWeek.getUrlValue())
                         .nameUkr(dayOfWeek.getValueUkr())
                         .build())
                 .scheduleItems(
@@ -161,7 +161,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                         .build())
                 .dayOfWeek(com.pnu.dev.radioserviceapi.dto.response.DayOfWeek.builder()
                         .nameUkr(scheduleItem.getDayOfWeek().getValueUkr())
-                        .nameEng(scheduleItem.getDayOfWeek().getValueEng())
+                        .urlValue(scheduleItem.getDayOfWeek().getUrlValue())
                         .build())
                 .build();
     }
