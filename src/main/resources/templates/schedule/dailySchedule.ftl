@@ -41,11 +41,9 @@
             </td>
             <td>
                 <form action="/admin/schedule/item/update/${scheduledItem.id}" id="${saveFormId}" method="POST">
-                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeek.urlValue}">
                     <button class="btn btn-primary">Зберегти</button>
                 </form>
                 <form action="/admin/schedule/item/delete/${scheduledItem.id}">
-                    <input type="hidden" name="day" value="${dailySchedule.dayOfWeek.urlValue}">
                     <button class="btn btn-danger">Видалити</button>
                 </form>
             </td>

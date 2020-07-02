@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ScheduleOccurrence {
 
-    private DayOfWeek dayOfWeek;
+    private DayOfWeekResponse dayOfWeek;
 
     private TimeRange timeRange;
 

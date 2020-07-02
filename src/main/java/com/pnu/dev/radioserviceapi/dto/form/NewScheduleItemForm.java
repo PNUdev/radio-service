@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class NewScheduleItemForm {
 
-    private String dayOfWeek;
+    private String dayOfWeekUrlValue;
 
     private String programId;
 

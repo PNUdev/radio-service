@@ -1,5 +1,6 @@
 package com.pnu.dev.radioserviceapi.mongo;
 
+import com.pnu.dev.radioserviceapi.dto.response.DayOfWeekResponse;
 import lombok.Getter;
 import org.apache.commons.lang3.StringUtils;
 
@@ -30,5 +31,12 @@ public enum DayOfWeek {
         return Stream.of(DayOfWeek.values())
                 .filter(dayOfWeek -> StringUtils.equals(dayOfWeek.getUrlValue(), value))
                 .findFirst();
+    }
+
+    public DayOfWeekResponse toDayOfWeekResponse() {
+        return DayOfWeekResponse.builder()
+                .urlValue(this.urlValue)
+                .nameUkr(this.valueUkr)
+                .build();
     }
 }

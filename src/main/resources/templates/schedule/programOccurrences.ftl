@@ -3,14 +3,15 @@
 <table class="table my-5">
     <thead class="thead-dark">
     <tr>
-        <th scope="col" colspan="4" class="text-center h3">${programName}</th>
+        <th scope="col" colspan="5" class="text-center h3">${programName}</th>
     </tr>
     </thead>
     <thead class="thead-light">
     <tr>
-        <th scope="col">Коментар</th>
+        <th scope="col">День</th>
         <th scope="col">Початок</th>
         <th scope="col">Кінець</th>
+        <th scope="col">Коментар</th>
         <th></th>
     </tr>
     </thead>
@@ -24,9 +25,10 @@
 
     <#list scheduleItems as scheduleItem >
         <tr>
-            <td>${scheduleItem.comment}</td>
+            <td>${scheduleItem.dayOfWeek.nameUkr}</td>
             <td>${scheduleItem.time.startTime}</td>
             <td>${scheduleItem.time.endTime}</td>
+            <td>${scheduleItem.comment}</td>
             <td>
                 <a href="/admin/schedule/day/${scheduleItem.dayOfWeek.urlValue}#${scheduleItem.id}">
                     <div class="btn btn-primary">Перейти</div>

@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class DayOfWeek {
+public class DayOfWeekResponse {
 
     private String urlValue;
 

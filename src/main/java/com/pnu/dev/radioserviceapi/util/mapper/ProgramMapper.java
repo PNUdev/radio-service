@@ -1,6 +1,5 @@
 package com.pnu.dev.radioserviceapi.util.mapper;
 
-import com.pnu.dev.radioserviceapi.dto.response.DayOfWeek;
 import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.ProgramDto;
 import com.pnu.dev.radioserviceapi.dto.response.ScheduleOccurrence;
@@ -52,10 +51,7 @@ public class ProgramMapper {
 
         return scheduleItems.stream()
                 .map(scheduleItem -> ScheduleOccurrence.builder()
-                        .dayOfWeek(DayOfWeek.builder()
-                                .urlValue(scheduleItem.getDayOfWeek().getUrlValue())
-                                .nameUkr(scheduleItem.getDayOfWeek().getValueUkr())
-                                .build())
+                        .dayOfWeek(scheduleItem.getDayOfWeek().toDayOfWeekResponse())
                         .timeRange(TimeRange.builder()
                                 .startTime(scheduleItem.getTime().getStartTime())
                                 .endTime(scheduleItem.getTime().getEndTime())

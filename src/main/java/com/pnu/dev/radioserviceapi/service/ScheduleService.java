@@ -19,9 +19,9 @@ public interface ScheduleService {
 
     ScheduleItemDto findScheduleItemById(String id);
 
-    void createScheduleItem(NewScheduleItemForm newScheduleItemForm);
+    ScheduleItemDto createScheduleItem(NewScheduleItemForm newScheduleItemForm);
 
-    void updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm);
+    ScheduleItemDto updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm);
 
     void deleteScheduleItem(String id);
 

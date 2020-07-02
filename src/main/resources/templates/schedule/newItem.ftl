@@ -2,12 +2,18 @@
 
 <div class="col-md-7 mt-5 px-5 pb-2 pt-4 rounded bg-light mx-auto">
     <form method="POST">
-        <input type="hidden" value="${dayOfWeek}" name="dayOfWeek">
+        <input type="hidden" value="${dayOfWeek.urlValue}" name="dayOfWeekUrlValue">
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">День тижня</span>
+            </div>
+            <input type="text" class="form-control" value="${dayOfWeek.nameUkr}" disabled>
+        </div>
         <div class="input-group mb-3">
             <select class="select-program col-md-12" name="programId" required>
                 <option value="" disabled selected>Виберіть програму</option>
                 <#list programs as program>
-                <option value="${program.id}">${program.title}</option>
+                    <option value="${program.id}">${program.title}</option>
                 </#list>
             </select>
         </div>

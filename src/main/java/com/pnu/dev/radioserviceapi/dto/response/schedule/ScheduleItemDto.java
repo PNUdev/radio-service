@@ -1,6 +1,6 @@
 package com.pnu.dev.radioserviceapi.dto.response.schedule;
 
-import com.pnu.dev.radioserviceapi.dto.response.DayOfWeek;
+import com.pnu.dev.radioserviceapi.dto.response.DayOfWeekResponse;
 import com.pnu.dev.radioserviceapi.dto.response.TimeRange;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -23,6 +23,6 @@ public class ScheduleItemDto {
 
     private String comment;
 
-    private DayOfWeek dayOfWeek;
+    private DayOfWeekResponse dayOfWeek;
 
 }
