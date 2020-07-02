@@ -2,6 +2,7 @@ package com.pnu.dev.radioserviceapi.dto.form;
 
 import lombok.Data;
 
+// ToDo add validations
 @Data
 public class NewScheduleItemForm {
 

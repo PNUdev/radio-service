@@ -93,9 +93,11 @@ public class ScheduleAdminController {
     @PostMapping("/item/new")
     public String create(@ModelAttribute NewScheduleItemForm newScheduleItemForm) { // ToDo add flash message
 
-        scheduleService.createScheduleItem(newScheduleItemForm);
+        ScheduleItemDto scheduleItem = scheduleService.createScheduleItem(newScheduleItemForm);
 
-        return "redirect:/admin/schedule/day/" + newScheduleItemForm.getDayOfWeekUrlValue();
+        return String.format(
+                "redirect:/admin/schedule/day/%s#%s", newScheduleItemForm.getDayOfWeekUrlValue(), scheduleItem.getId()
+        );
     }
 
     @PostMapping("/item/update/{id}")

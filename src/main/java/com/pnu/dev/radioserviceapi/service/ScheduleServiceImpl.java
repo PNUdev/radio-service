@@ -13,6 +13,7 @@ import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
 import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
+import com.pnu.dev.radioserviceapi.util.validation.TimeRangeChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -31,10 +32,15 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private ProgramRepository programRepository;
 
+    private TimeRangeChecker timeRangeChecker;
+
     @Autowired
-    public ScheduleServiceImpl(ScheduleItemRepository scheduleItemRepository, ProgramRepository programRepository) {
+    public ScheduleServiceImpl(ScheduleItemRepository scheduleItemRepository,
+                               ProgramRepository programRepository,
+                               TimeRangeChecker timeRangeChecker) {
         this.scheduleItemRepository = scheduleItemRepository;
         this.programRepository = programRepository;
+        this.timeRangeChecker = timeRangeChecker;
     }
 
     @Override
@@ -83,17 +89,19 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleItemDto createScheduleItem(NewScheduleItemForm newScheduleItemForm) {
 
-        // ToDo add validation to dto
-        // ToDo add validation of time range (1. start before end; 2. time range is free for the day)
-
         DayOfWeek dayOfWeek = DayOfWeek.findByUrlValue(newScheduleItemForm.getDayOfWeekUrlValue())
                 .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"));
+
+        LocalTime startTime = LocalTime.parse(newScheduleItemForm.getStartTime());
+        LocalTime endTime = LocalTime.parse(newScheduleItemForm.getEndTime());
+
+        timeRangeChecker.checkValidAndFreeForCreate(startTime, endTime, dayOfWeek);
 
         ScheduleItem scheduleItem = ScheduleItem.builder()
                 .programId(newScheduleItemForm.getProgramId())
                 .time(TimeRange.builder()
-                        .startTime(LocalTime.parse(newScheduleItemForm.getStartTime()))
-                        .endTime(LocalTime.parse(newScheduleItemForm.getEndTime()))
+                        .startTime(startTime)
+                        .endTime(endTime)
                         .build())
                 .dayOfWeek(dayOfWeek)
                 .comment(newScheduleItemForm.getComment())
@@ -107,16 +115,18 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public ScheduleItemDto updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm) {
 
-        // ToDo add validation to dto
-        // ToDo add validation of time range (1. start before end; 2. time range is free for the day)
-
         ScheduleItem scheduleItemFromDb = scheduleItemRepository.findById(id)
                 .orElseThrow(() -> new RadioServiceAdminException("Спроба оновити не існуючий запис"));
 
+        LocalTime startTime = LocalTime.parse(updateScheduleItemForm.getStartTime());
+        LocalTime endTime = LocalTime.parse(updateScheduleItemForm.getEndTime());
+
+        timeRangeChecker.checkValidAndFreeForUpdate(startTime, endTime, scheduleItemFromDb.getDayOfWeek(), id);
+
         ScheduleItem updatedScheduleItem = scheduleItemFromDb.toBuilder()
                 .time(TimeRange.builder()
-                        .startTime(LocalTime.parse(updateScheduleItemForm.getStartTime()))
-                        .endTime(LocalTime.parse(updateScheduleItemForm.getEndTime()))
+                        .startTime(startTime)
+                        .endTime(endTime)
                         .build())
                 .comment(updateScheduleItemForm.getComment())
                 .build();
