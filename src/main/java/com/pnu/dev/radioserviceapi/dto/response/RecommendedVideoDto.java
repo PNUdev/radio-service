@@ -16,4 +16,5 @@ public class RecommendedVideoDto {
     private String title;
 
     private String description;
+
 }

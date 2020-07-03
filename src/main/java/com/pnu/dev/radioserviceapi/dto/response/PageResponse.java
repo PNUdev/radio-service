@@ -19,4 +19,5 @@ public class PageResponse<T> {
     private int totalPages;
 
     private List<T> content;
+    
 }

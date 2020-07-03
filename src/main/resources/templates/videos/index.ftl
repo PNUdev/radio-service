@@ -1,6 +1,13 @@
 <#include "../include/header.ftl">
 
 <div class="container">
+
+    <#if message??>
+        <div class="jumbotron my-3">
+            <div class="h4 text-center text-success">${message}</div>
+        </div>
+    </#if>
+
     <div class="py-3">
         <a href="/admin/videos/add">
             <div class="btn btn-primary btn-lg btn-block">Додати відео</div>
@@ -19,7 +26,7 @@
                     <strong>${video.title}</strong>
                 </div>
 
-                <form action="/admin/videos/changePriority/${video.id}" method="post">
+                <form action="/admin/videos/updatePriority/${video.id}" method="post">
                     <div class="form-row form-inline">
                         <span class="my-3 ml-3">Приорітет</span>
                         <select class="form-control inline mx-3" name="newPriority" onchange="this.form.submit()"

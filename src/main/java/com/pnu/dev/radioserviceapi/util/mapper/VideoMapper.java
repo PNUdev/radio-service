@@ -6,7 +6,7 @@ import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.RecommendedVideoDto;
 import com.pnu.dev.radioserviceapi.dto.response.VideoDto;
 import com.pnu.dev.radioserviceapi.mongo.LiveBroadcastContent;
-import com.pnu.dev.radioserviceapi.mongo.Video;
+import com.pnu.dev.radioserviceapi.mongo.RecommendedVideo;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -16,9 +16,9 @@ import java.util.stream.Collectors;
 @Component
 public class VideoMapper {
 
-    public Video itemVideosResponseToVideo(ItemYoutubeVideosResponse itemVideosResponse) {
+    public RecommendedVideo itemVideosResponseToRecommendedVideo(ItemYoutubeVideosResponse itemVideosResponse) {
 
-        return Video.builder()
+        return RecommendedVideo.builder()
                 .id(itemVideosResponse.getId())
                 .title(itemVideosResponse.getSnippet().getTitle())
                 .description(itemVideosResponse.getSnippet().getDescription())
@@ -42,7 +42,7 @@ public class VideoMapper {
                 .build();
     }
 
-    public PageResponse<RecommendedVideoDto> videoPageToRecommendedVideoPageDto(Page<Video> videoPage) {
+    public PageResponse<RecommendedVideoDto> videoPageToRecommendedVideoPageDto(Page<RecommendedVideo> videoPage) {
 
         return new PageResponse<RecommendedVideoDto>().toBuilder()
                 .pageNumber(videoPage.getNumber())
@@ -51,18 +51,18 @@ public class VideoMapper {
                 .build();
     }
 
-    private List<RecommendedVideoDto> videoListToRecommendedVideoDtoList(List<Video> videoList) {
+    private List<RecommendedVideoDto> videoListToRecommendedVideoDtoList(List<RecommendedVideo> recommendedVideoList) {
 
-        return videoList.stream().map(this::videoToRecommendedVideoDto).collect(Collectors.toList());
+        return recommendedVideoList.stream().map(this::videoToRecommendedVideoDto).collect(Collectors.toList());
     }
 
 
-    private RecommendedVideoDto videoToRecommendedVideoDto(Video video) {
+    private RecommendedVideoDto videoToRecommendedVideoDto(RecommendedVideo recommendedVideo) {
 
         return RecommendedVideoDto.builder()
-                .id(video.getId())
-                .title(video.getTitle())
-                .description(video.getDescription())
+                .id(recommendedVideo.getId())
+                .title(recommendedVideo.getTitle())
+                .description(recommendedVideo.getDescription())
                 .build();
     }
 }

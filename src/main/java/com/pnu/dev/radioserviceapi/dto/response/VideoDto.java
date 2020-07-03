@@ -25,4 +25,5 @@ public class VideoDto {
     private LocalDateTime publishedAt;
 
     private LiveBroadcastContent liveBroadcastContent;
+
 }

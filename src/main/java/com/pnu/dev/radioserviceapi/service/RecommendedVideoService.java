@@ -1,12 +1,12 @@
 package com.pnu.dev.radioserviceapi.service;
 
-import com.pnu.dev.radioserviceapi.mongo.Video;
+import com.pnu.dev.radioserviceapi.mongo.RecommendedVideo;
 
 import java.util.List;
 
-public interface VideoService {
+public interface RecommendedVideoService {
 
-    List<Video> findAll();
+    List<RecommendedVideo> findAll();
 
     void deleteById(String id);
 

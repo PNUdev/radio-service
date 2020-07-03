@@ -1,9 +1,9 @@
 package com.pnu.dev.radioserviceapi.client;
 
-import com.pnu.dev.radioserviceapi.client.dto.YoutubeApiResult;
 import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.YoutubeVideosResponse;
+import com.pnu.dev.radioserviceapi.util.OperationResult;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -32,6 +32,8 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     @Value("${youtube.max_results_number}")
     private int MAX_RESULTS_NUMBER;
 
+    private static final String YOUTUBE_API_ERROR = "Помилка звернення до Youtube API";
+
     private final RestTemplate restTemplate;
 
     public YoutubeApiClientImpl() {
@@ -39,7 +41,7 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     }
 
     @Override
-    public YoutubeApiResult<YoutubeSearchResponse> findRecentVideos() {
+    public OperationResult<YoutubeSearchResponse> findRecentVideos() {
 
         UriComponents uriRequest;
 
@@ -51,16 +53,16 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
                     .queryParam("maxResults", MAX_RESULTS_NUMBER)
                     .build();
             YoutubeSearchResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeSearchResponse.class);
-            return YoutubeApiResult.success(responseEntity);
+            return OperationResult.success(responseEntity);
 
         } catch (Exception e) {
-            return YoutubeApiResult.error("Помилка відповіді від Youtube API");
+            return OperationResult.error(YOUTUBE_API_ERROR);
         }
-        
+
     }
 
     @Override
-    public YoutubeApiResult<ItemYoutubeVideosResponse> findVideo(String id) {
+    public OperationResult<ItemYoutubeVideosResponse> findVideo(String id) {
 
         try {
             UriComponents uriRequest = UriComponentsBuilder
@@ -69,12 +71,18 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
                     .queryParam("id", id)
                     .build();
             YoutubeVideosResponse responseEntity = restTemplate.getForObject(uriRequest.toString(), YoutubeVideosResponse.class);
-            return YoutubeApiResult.success(responseEntity.getItems().get(0));
+
+            if (responseEntity == null || responseEntity.getItems().isEmpty()) {
+                return OperationResult.error(YOUTUBE_API_ERROR);
+            }
+            return OperationResult.success(responseEntity.getItems().get(0));
+
         } catch (Exception e) {
-            return YoutubeApiResult.error("Помилка відповіді від Youtube API");
+            return OperationResult.error(YOUTUBE_API_ERROR);
         }
 
     }
+
 }
 
 

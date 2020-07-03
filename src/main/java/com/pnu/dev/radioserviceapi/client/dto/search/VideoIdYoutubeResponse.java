@@ -6,4 +6,5 @@ import lombok.Data;
 public class VideoIdYoutubeResponse {
 
     private String videoId;
+
 }

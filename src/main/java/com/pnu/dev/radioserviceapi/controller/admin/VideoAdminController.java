@@ -1,7 +1,7 @@
 package com.pnu.dev.radioserviceapi.controller.admin;
 
-import com.pnu.dev.radioserviceapi.mongo.Video;
-import com.pnu.dev.radioserviceapi.service.VideoService;
+import com.pnu.dev.radioserviceapi.mongo.RecommendedVideo;
+import com.pnu.dev.radioserviceapi.service.RecommendedVideoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 
@@ -17,17 +18,19 @@ import java.util.List;
 @RequestMapping("/admin/videos")
 public class VideoAdminController {
 
-    private final VideoService videoService;
+    private static final String FLASH_MESSAGE = "message";
+
+    private final RecommendedVideoService recommendedVideoService;
 
     @Autowired
-    public VideoAdminController(VideoService videoService) {
-        this.videoService = videoService;
+    public VideoAdminController(RecommendedVideoService recommendedVideoService) {
+        this.recommendedVideoService = recommendedVideoService;
     }
 
     @GetMapping
     public String findAll(Model model) {
-        List<Video> videos = videoService.findAll();
-        model.addAttribute("videos", videos);
+        List<RecommendedVideo> recommendedVideos = recommendedVideoService.findAll();
+        model.addAttribute("videos", recommendedVideos);
         return "videos/index";
     }
 
@@ -37,20 +40,24 @@ public class VideoAdminController {
     }
 
     @PostMapping("/add")
-    public String addVideo(@ModelAttribute(name = "link") String link) {
-        videoService.create(link);
+    public String addVideo(@ModelAttribute(name = "link") String link, RedirectAttributes redirectAttributes) {
+        recommendedVideoService.create(link);
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Відео було успішно додано");
         return "redirect:/admin/videos";
     }
 
-    @PostMapping("/changePriority/{id}")
-    public String update(@PathVariable("id") String id, @ModelAttribute(name = "newPriority") Integer newPriority) {
-        videoService.updatePriority(id, newPriority);
+    @PostMapping("/updatePriority/{id}")
+    public String update(@PathVariable("id") String id, @ModelAttribute(name = "newPriority") Integer newPriority,
+                         RedirectAttributes redirectAttributes) {
+        recommendedVideoService.updatePriority(id, newPriority);
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Відео було успішно оновлено");
         return "redirect:/admin/videos";
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable("id") String id) {
-        videoService.deleteById(id);
+    public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
+        recommendedVideoService.deleteById(id);
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Відео було успішно видалено");
         return "redirect:/admin/videos";
     }
 

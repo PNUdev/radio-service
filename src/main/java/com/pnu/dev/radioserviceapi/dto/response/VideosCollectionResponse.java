@@ -16,4 +16,5 @@ public class VideosCollectionResponse {
     private List<VideoDto> recent;
 
     private List<VideoDto> streams;
+
 }
