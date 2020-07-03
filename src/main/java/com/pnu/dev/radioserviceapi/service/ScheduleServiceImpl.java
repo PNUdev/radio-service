@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
 
-    private Sort SORT_BY_START_TIME = Sort.by("time.startTime"); // ToDo Sort do not work the way it supposed to, fix it
+    private static final Sort SORT_BY_START_TIME = Sort.by("time.startTime"); // ToDo Sort do not work the way it supposed to, fix it
 
     private ScheduleItemRepository scheduleItemRepository;
 

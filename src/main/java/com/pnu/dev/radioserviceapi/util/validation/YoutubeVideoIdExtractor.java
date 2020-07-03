@@ -9,11 +9,11 @@ import java.util.regex.Pattern;
 @Component
 public class YoutubeVideoIdExtractor {
 
-    private final static String youtubeLinkRegex =
+    private final static String YOUTUBE_LINK_REGEX =
             "http(?:s?):\\/\\/(?:www\\.)?youtu(?:be\\.com\\/watch\\?v=|\\.be\\/)([\\w\\-\\_]*)(&(amp;)?\u200C\u200B[\\w\\?\u200C\u200B=]*)?";
 
-    public static Optional<String> getVideoIdFromLink(String link) {
-        Pattern youtubeLinkPattern = Pattern.compile(youtubeLinkRegex);
+    public Optional<String> getVideoIdFromLink(String link) {
+        Pattern youtubeLinkPattern = Pattern.compile(YOUTUBE_LINK_REGEX);
         Matcher matcher = youtubeLinkPattern.matcher(link);
         if (matcher.find()) {
             return Optional.of(matcher.group(1));

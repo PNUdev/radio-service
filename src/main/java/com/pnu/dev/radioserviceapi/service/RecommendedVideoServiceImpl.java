@@ -26,18 +26,23 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
 
     private final VideoMapper videoMapper;
 
+    private final YoutubeVideoIdExtractor youtubeVideoIdExtractor;
+
 
     @Autowired
     public RecommendedVideoServiceImpl(RecommendedVideoRepository recommendedVideoRepository,
-                                       YoutubeApiClient youtubeApiClient, VideoMapper videoMapper) {
+                                       YoutubeApiClient youtubeApiClient, VideoMapper videoMapper,
+                                       YoutubeVideoIdExtractor youtubeVideoIdExtractor) {
+
         this.recommendedVideoRepository = recommendedVideoRepository;
         this.youtubeApiClient = youtubeApiClient;
         this.videoMapper = videoMapper;
 
+        this.youtubeVideoIdExtractor = youtubeVideoIdExtractor;
     }
 
     @Override
-    public List<RecommendedVideo> findAll() {
+    public List<RecommendedVideo> findAll() { // ToDo this have to be paginated
 
         return recommendedVideoRepository.findAll(Sort.by("priority").ascending());
 
@@ -47,7 +52,7 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
     @Transactional
     public void create(String link) {
 
-        RecommendedVideo videoFromYoutube = findVideoOnYoutube(link);
+        RecommendedVideo videoFromYoutube = findVideoByYoutubeVideoLink(link);
         Optional<RecommendedVideo> recommendedVideoFromDb = recommendedVideoRepository.findById(videoFromYoutube.getId());
 
         //Move video to the top if already exists in db
@@ -86,11 +91,10 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
 
     }
 
-    private RecommendedVideo findVideoOnYoutube(String link) {
+    private RecommendedVideo findVideoByYoutubeVideoLink(String link) {
 
-        String id = YoutubeVideoIdExtractor.getVideoIdFromLink(link).orElseThrow(() -> {
-            throw new RadioServiceAdminException("Посилання не відповідає Youtube посиланню");
-        });
+        String id = youtubeVideoIdExtractor.getVideoIdFromLink(link)
+                .orElseThrow(() -> new RadioServiceAdminException("Невалідне посилання на youtube відео"));
 
         OperationResult<ItemYoutubeVideosResponse> apiResult = youtubeApiClient.findVideo(id);
 

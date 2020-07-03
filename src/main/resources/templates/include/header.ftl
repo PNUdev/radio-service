@@ -12,6 +12,6 @@
     <div>
         <a class="navbar-brand" href="/admin/schedule">Розклад</a>
         <a class="navbar-brand" href="/admin/programs">Програми</a>
-        <a class="navbar-brand" href="/admin/recommendedVideos">Відео</a>
+        <a class="navbar-brand" href="/admin/videos">Відео</a>
     </div>
 </nav>
