@@ -5,3 +5,9 @@ spring:
   data:
     mongodb:
       uri: ${MONGO_DB_URI:mongodb://localhost/radio_service}
+
+
+youtube:
+  api_key: ${YOUTUBE_API_KEY}
+  channel_id: ${YOUTUBE_CHANNEL_ID}
+  max_results_number: 5
