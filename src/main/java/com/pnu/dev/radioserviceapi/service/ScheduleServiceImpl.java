@@ -95,6 +95,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalTime startTime = LocalTime.parse(newScheduleItemForm.getStartTime());
         LocalTime endTime = LocalTime.parse(newScheduleItemForm.getEndTime());
 
+        // ToDo use validation result and add it to flash message
         timeRangeChecker.checkValidAndFreeForCreate(startTime, endTime, dayOfWeek);
 
         ScheduleItem scheduleItem = ScheduleItem.builder()
@@ -121,6 +122,7 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalTime startTime = LocalTime.parse(updateScheduleItemForm.getStartTime());
         LocalTime endTime = LocalTime.parse(updateScheduleItemForm.getEndTime());
 
+        // ToDo use validation result and add it to flash message
         timeRangeChecker.checkValidAndFreeForUpdate(startTime, endTime, scheduleItemFromDb.getDayOfWeek(), id);
 
         ScheduleItem updatedScheduleItem = scheduleItemFromDb.toBuilder()
