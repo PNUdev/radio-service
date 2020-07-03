@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
+
+import static java.util.Objects.nonNull;
 
 @Controller
 @RequestMapping("/admin/schedule")
@@ -44,11 +47,19 @@ public class ScheduleAdminController {
         return "schedule/index";
     }
 
-    @GetMapping("day/{dayOfWeek}") // ToDo handle anchor somehow to not to make url weird
-    public String showForDay(@PathVariable("dayOfWeek") String dayOfWeekValue, Model model) {
+    @GetMapping("day/{dayOfWeek}")
+    public String showForDay(@PathVariable("dayOfWeek") String dayOfWeekValue,
+                             @RequestParam(value = "selectedItemId", required = false) String selectedItemId,
+                             RedirectAttributes redirectAttributes,
+                             Model model) {
 
         DailySchedule dailySchedule = scheduleService.findForDay(dayOfWeekValue);
         model.addAttribute("dailySchedule", dailySchedule);
+
+        if (nonNull(selectedItemId)) {
+            redirectAttributes.addFlashAttribute("selectedItemId", selectedItemId);
+            return "redirect:/admin/schedule/day/" + dayOfWeekValue;
+        }
 
         return "schedule/dailySchedule";
     }
@@ -95,9 +106,8 @@ public class ScheduleAdminController {
 
         ScheduleItemDto scheduleItem = scheduleService.createScheduleItem(newScheduleItemForm);
 
-        return String.format(
-                "redirect:/admin/schedule/day/%s#%s", newScheduleItemForm.getDayOfWeekUrlValue(), scheduleItem.getId()
-        );
+        return String.format("redirect:/admin/schedule/day/%s?selectedItemId=%s",
+                newScheduleItemForm.getDayOfWeekUrlValue(), scheduleItem.getId());
     }
 
     @PostMapping("/item/update/{id}")
@@ -106,7 +116,7 @@ public class ScheduleAdminController {
 
         ScheduleItemDto scheduleItem = scheduleService.updateScheduleItem(id, updateScheduleItemForm);
 
-        return String.format("redirect:/admin/schedule/day/%s#%s",
+        return String.format("redirect:/admin/schedule/day/%s?selectedItemId=%s",
                 scheduleItem.getDayOfWeek().getUrlValue(), scheduleItem.getId());
     }
 

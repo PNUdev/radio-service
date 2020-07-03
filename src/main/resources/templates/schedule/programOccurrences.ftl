@@ -30,7 +30,7 @@
             <td>${scheduleItem.time.endTime}</td>
             <td>${scheduleItem.comment}</td>
             <td>
-                <a href="/admin/schedule/day/${scheduleItem.dayOfWeek.urlValue}#${scheduleItem.id}">
+                <a href="/admin/schedule/day/${scheduleItem.dayOfWeek.urlValue}?selectedItemId=${scheduleItem.id}">
                     <div class="btn btn-primary">Перейти</div>
                 </a>
             </td>

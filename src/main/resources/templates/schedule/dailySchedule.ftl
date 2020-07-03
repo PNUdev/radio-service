@@ -52,17 +52,24 @@
     </tbody>
 </table>
 
-<style>
-    :target {
-        border: 2px solid #D4D4D4;
-        animation: blink 1s
-    }
+<#if selectedItemId?? >
+    <script>
+        $(document).ready(function () {
 
-    @keyframes blink {
-        to {
-            background-color: orange;
-        }
-    }
-</style>
+            const selectedElement = $("#${selectedItemId}");
+            const animationDuration = 1000;
+
+            $('html, body').animate({
+                scrollTop: selectedElement.offset().top
+            }, animationDuration);
+
+            selectedElement.stop().delay(animationDuration + 200).fadeTo(100, 0.3, function () {
+                $(this).fadeTo(500, 1.0);
+            });
+
+        });
+
+    </script>
+</#if>
 
 <#include "../include/footer.ftl">
