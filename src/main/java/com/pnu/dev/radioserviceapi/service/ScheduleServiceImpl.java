@@ -14,6 +14,7 @@ import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
+import com.pnu.dev.radioserviceapi.util.validation.DataValidator;
 import com.pnu.dev.radioserviceapi.util.validation.TimeRangeChecker;
 import com.pnu.dev.radioserviceapi.util.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,14 +35,18 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     private ProgramRepository programRepository;
 
+    private DataValidator dataValidator;
+
     private TimeRangeChecker timeRangeChecker;
 
     @Autowired
     public ScheduleServiceImpl(ScheduleItemRepository scheduleItemRepository,
                                ProgramRepository programRepository,
+                               DataValidator dataValidator,
                                TimeRangeChecker timeRangeChecker) {
         this.scheduleItemRepository = scheduleItemRepository;
         this.programRepository = programRepository;
+        this.dataValidator = dataValidator;
         this.timeRangeChecker = timeRangeChecker;
     }
 
@@ -91,6 +96,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public OperationResult<ScheduleItemDto> createScheduleItem(NewScheduleItemForm newScheduleItemForm) {
 
+        ValidationResult formValidation = dataValidator.validate(newScheduleItemForm);
+
+        if (formValidation.isError()) {
+            throw new RadioServiceAdminException("Обов'язкові поля не заповнені");
+        }
+
         DayOfWeek dayOfWeek = DayOfWeek.findByUrlValue(newScheduleItemForm.getDayOfWeekUrlValue())
                 .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"));
 
@@ -120,7 +131,14 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public OperationResult<ScheduleItemDto> updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm) {
+    public OperationResult<ScheduleItemDto> updateScheduleItem(String id,
+                                                               UpdateScheduleItemForm updateScheduleItemForm) {
+
+        ValidationResult formValidation = dataValidator.validate(updateScheduleItemForm);
+
+        if (formValidation.isError()) {
+            throw new RadioServiceAdminException("Обов'язкові поля не заповнені");
+        }
 
         ScheduleItem scheduleItemFromDb = scheduleItemRepository.findById(id)
                 .orElseThrow(() -> new RadioServiceAdminException("Спроба оновити не існуючий запис"));
