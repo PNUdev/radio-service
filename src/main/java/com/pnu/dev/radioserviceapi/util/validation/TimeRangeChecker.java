@@ -1,6 +1,5 @@
 package com.pnu.dev.radioserviceapi.util.validation;
 
-import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
 import com.pnu.dev.radioserviceapi.mongo.TimeRange;
@@ -26,45 +25,44 @@ public class TimeRangeChecker {
         this.scheduleItemRepository = scheduleItemRepository;
     }
 
-    public void checkValidAndFreeForCreate(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek) {
+    public ValidationResult checkValidAndFreeForCreate(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek) {
 
         Predicate<List<ScheduleItem>> isTimeOccupied = scheduleItemsForDay -> scheduleItemsForDay.stream()
                 .map(ScheduleItem::getTime)
                 .anyMatch(timeRange -> isPeriodsOverlap(timeRange, startTime, endTime));
 
-        checkValidAndFree(startTime, endTime, dayOfWeek, isTimeOccupied);
-
+        return checkValidAndFree(startTime, endTime, dayOfWeek, isTimeOccupied);
     }
 
-    public void checkValidAndFreeForUpdate(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek,
-                                           String scheduleItemId) {
+    public ValidationResult checkValidAndFreeForUpdate(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek,
+                                                       String scheduleItemId) {
 
         Predicate<List<ScheduleItem>> isTimeOccupied = scheduleItemsForDay -> scheduleItemsForDay.stream()
                 .filter(scheduleItem -> !StringUtils.equals(scheduleItem.getId(), scheduleItemId))
                 .map(ScheduleItem::getTime)
                 .anyMatch(timeRange -> isPeriodsOverlap(timeRange, startTime, endTime));
 
-        checkValidAndFree(startTime, endTime, dayOfWeek, isTimeOccupied);
-
+        return checkValidAndFree(startTime, endTime, dayOfWeek, isTimeOccupied);
     }
 
-    private void checkValidAndFree(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek,
-                                   Predicate<List<ScheduleItem>> isTimeOccupied) {
+    private ValidationResult checkValidAndFree(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek,
+                                               Predicate<List<ScheduleItem>> isTimeOccupied) {
 
         if (isNull(startTime) || isNull(endTime)) {
-            throw new RadioServiceAdminException("Час вказано неправильно");
+            return ValidationResult.withError("Час вказано неправильно");
         }
 
         if (!startTime.isBefore(endTime)) {
-            throw new RadioServiceAdminException("Час початку повинен передувати часу закінчення");
+            return ValidationResult.withError("Час початку повинен передувати часу закінчення");
         }
 
         List<ScheduleItem> scheduleItemsForDay = scheduleItemRepository.findByDayOfWeek(dayOfWeek, Sort.unsorted());
 
         if (isTimeOccupied.test(scheduleItemsForDay)) {
-            throw new RadioServiceAdminException("Час зайнятий іншою програмою");
+            return ValidationResult.withError("Час зайнятий іншою програмою");
         }
 
+        return ValidationResult.valid();
     }
 
     private boolean isPeriodsOverlap(TimeRange timeRange, LocalTime startTime, LocalTime endTime) {

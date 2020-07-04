@@ -5,6 +5,7 @@ import com.pnu.dev.radioserviceapi.dto.form.UpdateScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.DailySchedule;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.WeeklySchedule;
+import com.pnu.dev.radioserviceapi.util.OperationResult;
 
 import java.util.List;
 
@@ -19,9 +20,9 @@ public interface ScheduleService {
 
     ScheduleItemDto findScheduleItemById(String id);
 
-    ScheduleItemDto createScheduleItem(NewScheduleItemForm newScheduleItemForm);
+    OperationResult<ScheduleItemDto> createScheduleItem(NewScheduleItemForm newScheduleItemForm);
 
-    ScheduleItemDto updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm);
+    OperationResult<ScheduleItemDto> updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm);
 
     void deleteScheduleItem(String id);
 

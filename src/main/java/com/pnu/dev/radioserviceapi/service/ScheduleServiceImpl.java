@@ -13,7 +13,9 @@ import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
 import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
+import com.pnu.dev.radioserviceapi.util.OperationResult;
 import com.pnu.dev.radioserviceapi.util.validation.TimeRangeChecker;
+import com.pnu.dev.radioserviceapi.util.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -87,7 +89,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleItemDto createScheduleItem(NewScheduleItemForm newScheduleItemForm) {
+    public OperationResult<ScheduleItemDto> createScheduleItem(NewScheduleItemForm newScheduleItemForm) {
 
         DayOfWeek dayOfWeek = DayOfWeek.findByUrlValue(newScheduleItemForm.getDayOfWeekUrlValue())
                 .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"));
@@ -95,8 +97,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalTime startTime = LocalTime.parse(newScheduleItemForm.getStartTime());
         LocalTime endTime = LocalTime.parse(newScheduleItemForm.getEndTime());
 
-        // ToDo use validation result and add it to flash message
-        timeRangeChecker.checkValidAndFreeForCreate(startTime, endTime, dayOfWeek);
+        ValidationResult validationResult = timeRangeChecker
+                .checkValidAndFreeForCreate(startTime, endTime, dayOfWeek);
+
+        if (validationResult.isError()) {
+            return OperationResult.error(validationResult.getErrorMessage());
+        }
 
         ScheduleItem scheduleItem = ScheduleItem.builder()
                 .programId(newScheduleItemForm.getProgramId())
@@ -110,11 +116,11 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         scheduleItemRepository.save(scheduleItem);
 
-        return toScheduleItemDto(scheduleItem);
+        return OperationResult.success(toScheduleItemDto(scheduleItem));
     }
 
     @Override
-    public ScheduleItemDto updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm) {
+    public OperationResult<ScheduleItemDto> updateScheduleItem(String id, UpdateScheduleItemForm updateScheduleItemForm) {
 
         ScheduleItem scheduleItemFromDb = scheduleItemRepository.findById(id)
                 .orElseThrow(() -> new RadioServiceAdminException("Спроба оновити не існуючий запис"));
@@ -122,8 +128,12 @@ public class ScheduleServiceImpl implements ScheduleService {
         LocalTime startTime = LocalTime.parse(updateScheduleItemForm.getStartTime());
         LocalTime endTime = LocalTime.parse(updateScheduleItemForm.getEndTime());
 
-        // ToDo use validation result and add it to flash message
-        timeRangeChecker.checkValidAndFreeForUpdate(startTime, endTime, scheduleItemFromDb.getDayOfWeek(), id);
+        ValidationResult validationResult = timeRangeChecker
+                .checkValidAndFreeForUpdate(startTime, endTime, scheduleItemFromDb.getDayOfWeek(), id);
+
+        if (validationResult.isError()) {
+            return OperationResult.error(validationResult.getErrorMessage());
+        }
 
         ScheduleItem updatedScheduleItem = scheduleItemFromDb.toBuilder()
                 .time(TimeRange.builder()
@@ -135,7 +145,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
         scheduleItemRepository.save(updatedScheduleItem);
 
-        return toScheduleItemDto(updatedScheduleItem);
+        return OperationResult.success(toScheduleItemDto(updatedScheduleItem));
     }
 
     @Override

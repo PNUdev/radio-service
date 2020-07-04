@@ -10,6 +10,7 @@ import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.service.ProgramService;
 import com.pnu.dev.radioserviceapi.service.ScheduleService;
+import com.pnu.dev.radioserviceapi.util.OperationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
+import java.util.function.Function;
 
 import static java.util.Objects.nonNull;
 
@@ -29,8 +33,8 @@ import static java.util.Objects.nonNull;
 @RequestMapping("/admin/schedule")
 public class ScheduleAdminController {
 
-    // 1. update schedule for week (page with 7-day schedule and ability to update it)
-    // schedule item should contain time, program and optional description for single occurrence
+    private static final String FLASH_MESSAGE = "message";
+    public static final String FLASH_ERROR = "error";
 
     private ScheduleService scheduleService;
 
@@ -57,6 +61,15 @@ public class ScheduleAdminController {
         model.addAttribute("dailySchedule", dailySchedule);
 
         if (nonNull(selectedItemId)) {
+
+            if (model.containsAttribute(FLASH_MESSAGE)) {
+                redirectAttributes.addFlashAttribute(FLASH_MESSAGE, model.getAttribute(FLASH_MESSAGE));
+            }
+
+            if (model.containsAttribute(FLASH_ERROR)) {
+                redirectAttributes.addFlashAttribute(FLASH_ERROR, model.getAttribute(FLASH_ERROR));
+            }
+
             redirectAttributes.addFlashAttribute("selectedItemId", selectedItemId);
             return "redirect:/admin/schedule/day/" + dayOfWeekValue;
         }
@@ -102,10 +115,21 @@ public class ScheduleAdminController {
     }
 
     @PostMapping("/item/new")
-    public String create(@ModelAttribute NewScheduleItemForm newScheduleItemForm) { // ToDo add flash message
+    public String create(@ModelAttribute NewScheduleItemForm newScheduleItemForm,
+                         RedirectAttributes redirectAttributes,
+                         HttpServletRequest httpServletRequest) {
 
-        ScheduleItemDto scheduleItem = scheduleService.createScheduleItem(newScheduleItemForm);
+        OperationResult<ScheduleItemDto> scheduleItemOperationResult = scheduleService
+                .createScheduleItem(newScheduleItemForm);
 
+        if (scheduleItemOperationResult.isError()) {
+            redirectAttributes.addFlashAttribute(FLASH_ERROR, scheduleItemOperationResult.getErrorMessage());
+            return redirectToPreviousPage(httpServletRequest);
+        }
+
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно створено");
+
+        ScheduleItemDto scheduleItem = scheduleItemOperationResult.getData();
         return String.format("redirect:/admin/schedule/day/%s?selectedItemId=%s",
                 newScheduleItemForm.getDayOfWeekUrlValue(), scheduleItem.getId());
     }
@@ -113,21 +137,50 @@ public class ScheduleAdminController {
     @PostMapping("/item/update/{id}")
     public String update(@PathVariable("id") String id,
                          @ModelAttribute UpdateScheduleItemForm updateScheduleItemForm,
-                         RedirectAttributes redirectAttributes) { // ToDo add flash message
+                         RedirectAttributes redirectAttributes,
+                         HttpServletRequest httpServletRequest) {
 
-        ScheduleItemDto scheduleItem = scheduleService.updateScheduleItem(id, updateScheduleItemForm);
+        OperationResult<ScheduleItemDto> scheduleItemOperationResult = scheduleService
+                .updateScheduleItem(id, updateScheduleItemForm);
 
+        if (scheduleItemOperationResult.isError()) {
+            redirectAttributes.addFlashAttribute(FLASH_ERROR, scheduleItemOperationResult.getErrorMessage());
+            return redirectToPreviousPage(httpServletRequest, id);
+        }
+
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно оновлено");
+
+        ScheduleItemDto scheduleItem = scheduleItemOperationResult.getData();
         return String.format("redirect:/admin/schedule/day/%s?selectedItemId=%s",
                 scheduleItem.getDayOfWeek().getUrlValue(), scheduleItem.getId());
     }
 
     @PostMapping("/item/delete/{id}")
-    public String delete(@PathVariable("id") String id) { // ToDo add flash message
+    public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
 
         ScheduleItemDto scheduleItem = scheduleService.findScheduleItemById(id);
 
         scheduleService.deleteScheduleItem(id);
 
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно видалено");
+
         return "redirect:/admin/schedule/day/" + scheduleItem.getDayOfWeek().getUrlValue();
+    }
+
+    private String redirectToPreviousPage(HttpServletRequest request, String scheduleItemId) {
+
+        return redirectToPreviousPage(request,
+                requestUrl -> String.format("redirect:%s?selectedItemId=%s", requestUrl, scheduleItemId));
+    }
+
+    private String redirectToPreviousPage(HttpServletRequest request) {
+
+        return redirectToPreviousPage(request, requestUrl -> "redirect:" + requestUrl);
+    }
+
+    private String redirectToPreviousPage(HttpServletRequest request, Function<String, String> buildRedirectUrl) {
+        return Optional.ofNullable(request.getHeader("Referer"))
+                .map(buildRedirectUrl)
+                .orElse("redirect:/admin/schedule");
     }
 }
