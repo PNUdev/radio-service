@@ -50,7 +50,7 @@ public class VideoAdminController {
     public String update(@PathVariable("id") String id, @ModelAttribute(name = "newPriority") Integer newPriority,
                          RedirectAttributes redirectAttributes) {
         recommendedVideoService.updatePriority(id, newPriority);
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Відео було успішно оновлено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Порядок відображення відеозаписів було успішно оновлено");
         return "redirect:/admin/videos";
     }
 

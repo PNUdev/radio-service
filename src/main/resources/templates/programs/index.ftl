@@ -4,11 +4,6 @@
         <h1 class="text-center">Неіснуючий номер сторінки</h1>
         <a href="/admin/programs"><h2 class="text-center">Список програм</h2></a>
     <#else>
-        <#if message??>
-            <div class="jumbotron my-3">
-                <div class="h4 text-center text-success">${message}</div>
-            </div>
-        </#if>
 
         <div class="py-4">
             <a href="/admin/programs/new">
@@ -93,4 +88,5 @@
 
 </div>
 
+<#include "../include/toastr.ftl">
 <#include "../include/footer.ftl">

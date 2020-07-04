@@ -1,13 +1,6 @@
 <#include "../include/header.ftl">
 
 <div class="container">
-
-    <#if message??>
-        <div class="jumbotron my-3">
-            <div class="h4 text-center text-success">${message}</div>
-        </div>
-    </#if>
-
     <div class="py-3">
         <a href="/admin/videos/add">
             <div class="btn btn-primary btn-lg btn-block">Додати відео</div>
@@ -48,4 +41,6 @@
         </div>
     </#list>
 </div>
+
+<#include "../include/toastr.ftl">
 <#include "../include/footer.ftl">

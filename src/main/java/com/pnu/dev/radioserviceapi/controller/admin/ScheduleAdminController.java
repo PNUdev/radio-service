@@ -112,7 +112,8 @@ public class ScheduleAdminController {
 
     @PostMapping("/item/update/{id}")
     public String update(@PathVariable("id") String id,
-                         @ModelAttribute UpdateScheduleItemForm updateScheduleItemForm) { // ToDo add flash message
+                         @ModelAttribute UpdateScheduleItemForm updateScheduleItemForm,
+                         RedirectAttributes redirectAttributes) { // ToDo add flash message
 
         ScheduleItemDto scheduleItem = scheduleService.updateScheduleItem(id, updateScheduleItemForm);
 

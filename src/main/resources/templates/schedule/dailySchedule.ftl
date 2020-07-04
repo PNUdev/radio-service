@@ -54,6 +54,7 @@
 
 <#if selectedItemId?? >
     <script>
+
         $(document).ready(function () {
 
             const selectedElement = $("#${selectedItemId}");
@@ -70,6 +71,8 @@
         });
 
     </script>
+
 </#if>
 
+<#include "../include/toastr.ftl">
 <#include "../include/footer.ftl">
