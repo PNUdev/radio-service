@@ -85,10 +85,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
-    public ScheduleItemDto findScheduleItemById(String id) { // ToDo remove this method if not used
+    public ScheduleItemDto findScheduleItemById(String id) {
 
         ScheduleItem scheduleItem = scheduleItemRepository.findById(id)
-                .orElseThrow(() -> new RadioServiceAdminException("Exception")); // ToDo
+                .orElseThrow(() -> new RadioServiceAdminException("Запис не знайдено у розкладі"));
 
         return toScheduleItemDto(scheduleItem);
     }
