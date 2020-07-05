@@ -26,8 +26,8 @@ public class ProgramApiController {
     }
 
     @GetMapping
-    public PageResponse findAll(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
-                                        Pageable pageable) {
+    public PageResponse<ProgramDto> findAll(@PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
+                                                    Pageable pageable) {
         return programApiService.findAll(pageable);
     }
 
@@ -37,9 +37,10 @@ public class ProgramApiController {
     }
 
     @GetMapping("/search")
-    public PageResponse searchByTitle(@RequestParam("q") String query,
-                                      @PageableDefault(size = 10, sort = "id", direction = Sort.Direction.DESC)
-                                              Pageable pageable) {
+    public PageResponse<ProgramDto> searchByTitle(@RequestParam("q") String query,
+                                                  @PageableDefault(size = 10, sort = "id",
+                                                          direction = Sort.Direction.DESC)
+                                                          Pageable pageable) {
         return programApiService.findByTitleContains(query, pageable);
     }
 

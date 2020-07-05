@@ -4,9 +4,9 @@ import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.ProgramDto;
 import com.pnu.dev.radioserviceapi.dto.response.ScheduleOccurrence;
 import com.pnu.dev.radioserviceapi.dto.response.TimeRange;
+import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
 import com.pnu.dev.radioserviceapi.mongo.Program;
-import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
-import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
+import com.pnu.dev.radioserviceapi.service.ScheduleItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -17,15 +17,15 @@ import java.util.stream.Collectors;
 @Component
 public class ProgramMapper {
 
-    private ScheduleItemRepository scheduleItemRepository;
+    private ScheduleItemService scheduleItemService;
 
     @Autowired
-    public ProgramMapper(ScheduleItemRepository scheduleItemRepository) {
-        this.scheduleItemRepository = scheduleItemRepository;
+    public ProgramMapper(ScheduleItemService scheduleItemService) {
+        this.scheduleItemService = scheduleItemService;
     }
 
-    public PageResponse mapMongoProgramsPageToProgramsPageResponse(Page<Program> mongoProgramsPage) {
-        return PageResponse.builder()
+    public PageResponse<ProgramDto> mapMongoProgramsPageToProgramsPageResponse(Page<Program> mongoProgramsPage) {
+        return PageResponse.<ProgramDto>builder()
                 .pageNumber(mongoProgramsPage.getNumber())
                 .totalPages(mongoProgramsPage.getTotalPages())
                 .content(mongoProgramsPage.getContent().stream()
@@ -36,7 +36,7 @@ public class ProgramMapper {
 
     public ProgramDto mapMongoProgramToProgramDto(Program mongoProgram) {
 
-        List<ScheduleItem> scheduleItems = scheduleItemRepository.findAllByProgramId(mongoProgram.getId());
+        List<ScheduleItemDto> scheduleItems = scheduleItemService.findByProgramId(mongoProgram.getId());
 
         return ProgramDto.builder()
                 .id(mongoProgram.getId())
@@ -47,11 +47,11 @@ public class ProgramMapper {
                 .build();
     }
 
-    private List<ScheduleOccurrence> mapScheduleItemsToScheduleOccurrences(List<ScheduleItem> scheduleItems) {
+    private List<ScheduleOccurrence> mapScheduleItemsToScheduleOccurrences(List<ScheduleItemDto> scheduleItems) {
 
         return scheduleItems.stream()
                 .map(scheduleItem -> ScheduleOccurrence.builder()
-                        .dayOfWeek(scheduleItem.getDayOfWeek().toDayOfWeekResponse())
+                        .dayOfWeek(scheduleItem.getDayOfWeek())
                         .timeRange(TimeRange.builder()
                                 .startTime(scheduleItem.getTime().getStartTime())
                                 .endTime(scheduleItem.getTime().getEndTime())

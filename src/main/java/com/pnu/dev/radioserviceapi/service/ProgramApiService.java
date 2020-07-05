@@ -6,10 +6,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface ProgramApiService {
 
-    PageResponse findAll(Pageable pageable);
+    PageResponse<ProgramDto> findAll(Pageable pageable);
 
     ProgramDto findById(String id);
 
-    PageResponse findByTitleContains(String query, Pageable pageable);
+    PageResponse<ProgramDto> findByTitleContains(String query, Pageable pageable);
 
 }

@@ -25,7 +25,7 @@ public class ProgramApiServiceImpl implements ProgramApiService {
     }
 
     @Override
-    public PageResponse findAll(Pageable pageable) {
+    public PageResponse<ProgramDto> findAll(Pageable pageable) {
         Page<Program> mongoProgramsPage = programRepository.findAll(pageable);
         return programMapper.mapMongoProgramsPageToProgramsPageResponse(mongoProgramsPage);
     }
@@ -39,7 +39,7 @@ public class ProgramApiServiceImpl implements ProgramApiService {
     }
 
     @Override
-    public PageResponse findByTitleContains(String query, Pageable pageable) {
+    public PageResponse<ProgramDto> findByTitleContains(String query, Pageable pageable) {
         Page<Program> mongoProgramsPage = programRepository.findAllByTitleContainsIgnoreCase(query, pageable);
         return programMapper.mapMongoProgramsPageToProgramsPageResponse(mongoProgramsPage);
     }

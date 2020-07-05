@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 @Service
 public class ScheduleItemServiceImpl implements ScheduleItemService {
 
-    private static final Sort SORT_BY_START_TIME = Sort.by("time.startTime"); // ToDo Sort do not work the way it supposed to, fix it
+    private static final Sort SORT_BY_START_TIME = Sort.by(Sort.Direction.ASC, "time.startTime"); // ToDo Sort do not work the way it supposed to, fix it
 
     private ScheduleItemRepository scheduleItemRepository;
 
@@ -73,7 +73,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public List<ScheduleItemDto> findByProgramId(String programId) {
         return toScheduleItemDto(
-                scheduleItemRepository.findAllByProgramId(programId)
+                scheduleItemRepository.findAllByProgramId(programId, SORT_BY_START_TIME)
         );
     }
 
