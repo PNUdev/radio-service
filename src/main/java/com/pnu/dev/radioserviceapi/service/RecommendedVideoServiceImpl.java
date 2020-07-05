@@ -49,6 +49,12 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
     }
 
     @Override
+    public RecommendedVideo findById(String id) {
+        return recommendedVideoRepository.findById(id)
+                .orElseThrow(() -> new RadioServiceAdminException("Відео не знайдено!"));
+    }
+
+    @Override
     @Transactional
     public void create(String link) {
 

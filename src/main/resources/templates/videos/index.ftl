@@ -33,9 +33,9 @@
                     </div>
                 </form>
                 <div class="row float-right">
-                    <form action="/admin/videos/delete/${video.id}" method="post">
-                        <button class="btn btn-danger row mx-4">Видалити</button>
-                    </form>
+                    <a href="/admin/videos/delete/${video.id}">
+                        <div class="btn btn-danger row mx-4">Видалити</div>
+                    </a>
                 </div>
             </div>
         </div>

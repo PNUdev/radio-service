@@ -8,15 +8,15 @@
 
     toastr.options.positionClass = 'toast-top-center';
 
-    <#if message??>
+    <#if flashMessage??>
     $(document).ready(function () {
-        toastr.success("${message}");
+        toastr.success("${flashMessage}");
     });
     </#if>
 
-    <#if error??>
+    <#if flashErrorMessage??>
     $(document).ready(function () {
-        toastr.error("${error}");
+        toastr.error("${flashErrorMessage}");
     });
     </#if>
 

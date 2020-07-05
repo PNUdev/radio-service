@@ -10,6 +10,7 @@ import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.service.ProgramService;
 import com.pnu.dev.radioserviceapi.service.ScheduleService;
+import com.pnu.dev.radioserviceapi.util.HttpUtils;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -33,8 +34,9 @@ import static java.util.Objects.nonNull;
 @RequestMapping("/admin/schedule")
 public class ScheduleAdminController {
 
-    private static final String FLASH_MESSAGE = "message";
-    public static final String FLASH_ERROR = "error";
+    private static final String FLASH_MESSAGE = "flashMessage";
+
+    private static final String FLASH_ERROR = "flashErrorMessage";
 
     private ScheduleService scheduleService;
 
@@ -105,13 +107,14 @@ public class ScheduleAdminController {
     }
 
     @GetMapping("/item/delete/{id}")
-    public String deleteConfirmation(Model model, @PathVariable("id") String id) {
+    public String deleteConfirmation(Model model, @PathVariable("id") String id, HttpServletRequest request) {
 
-        ScheduleItemDto scheduleItem = scheduleService.findScheduleItemById(id);
+        scheduleService.findScheduleItemById(id);
 
-        model.addAttribute("dayOfWeekUrlValue", scheduleItem.getDayOfWeek().getUrlValue());
+        model.addAttribute("message", "Ви впевнені, що справді хочете запис з розкладу?");
+        model.addAttribute("returnBackUrl", HttpUtils.getPreviousPageUrl(request));
 
-        return "schedule/deleteConfirmation"; // ToDo merge deleteConfirmations into one shared template
+        return "common/deleteConfirmation";
     }
 
     @PostMapping("/item/new")
@@ -179,8 +182,10 @@ public class ScheduleAdminController {
     }
 
     private String redirectToPreviousPage(HttpServletRequest request, Function<String, String> buildRedirectUrl) {
-        return Optional.ofNullable(request.getHeader("Referer"))
+        return Optional.ofNullable(HttpUtils.getPreviousPageUrl(request))
                 .map(buildRedirectUrl)
                 .orElse("redirect:/admin/schedule");
     }
+
+
 }

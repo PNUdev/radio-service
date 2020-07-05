@@ -8,6 +8,8 @@ public interface RecommendedVideoService {
 
     List<RecommendedVideo> findAll();
 
+    RecommendedVideo findById(String id);
+
     void deleteById(String id);
 
     void create(String link);
