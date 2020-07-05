@@ -9,6 +9,7 @@ import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.service.ProgramService;
+import com.pnu.dev.radioserviceapi.service.ScheduleItemService;
 import com.pnu.dev.radioserviceapi.service.ScheduleService;
 import com.pnu.dev.radioserviceapi.util.HttpUtils;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
@@ -28,7 +29,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
-import static java.util.Objects.nonNull;
+import static java.util.Objects.isNull;
 
 @Controller
 @RequestMapping("/admin/schedule")
@@ -38,12 +39,18 @@ public class ScheduleAdminController {
 
     private static final String FLASH_ERROR = "flashErrorMessage";
 
+    private ScheduleItemService scheduleItemService;
+
     private ScheduleService scheduleService;
 
     private ProgramService programService;
 
     @Autowired
-    public ScheduleAdminController(ScheduleService scheduleService, ProgramService programService) {
+    public ScheduleAdminController(ScheduleItemService scheduleItemService,
+                                   ScheduleService scheduleService,
+                                   ProgramService programService) {
+
+        this.scheduleItemService = scheduleItemService;
         this.scheduleService = scheduleService;
         this.programService = programService;
     }
@@ -59,24 +66,25 @@ public class ScheduleAdminController {
                              RedirectAttributes redirectAttributes,
                              Model model) {
 
-        DailySchedule dailySchedule = scheduleService.findForDay(dayOfWeekValue);
+        DailySchedule dailySchedule = scheduleService.findForDay(dayOfWeekValue)
+                .orElseThrow(() -> new RadioServiceAdminException("Дня тижня не існує"));
+
         model.addAttribute("dailySchedule", dailySchedule);
 
-        if (nonNull(selectedItemId)) {
-
-            if (model.containsAttribute(FLASH_MESSAGE)) {
-                redirectAttributes.addFlashAttribute(FLASH_MESSAGE, model.getAttribute(FLASH_MESSAGE));
-            }
-
-            if (model.containsAttribute(FLASH_ERROR)) {
-                redirectAttributes.addFlashAttribute(FLASH_ERROR, model.getAttribute(FLASH_ERROR));
-            }
-
-            redirectAttributes.addFlashAttribute("selectedItemId", selectedItemId);
-            return "redirect:/admin/schedule/day/" + dayOfWeekValue;
+        if (isNull(selectedItemId)) {
+            return "schedule/dailySchedule";
         }
 
-        return "schedule/dailySchedule";
+        if (model.containsAttribute(FLASH_MESSAGE)) {
+            redirectAttributes.addFlashAttribute(FLASH_MESSAGE, model.getAttribute(FLASH_MESSAGE));
+        }
+
+        if (model.containsAttribute(FLASH_ERROR)) {
+            redirectAttributes.addFlashAttribute(FLASH_ERROR, model.getAttribute(FLASH_ERROR));
+        }
+
+        redirectAttributes.addFlashAttribute("selectedItemId", selectedItemId);
+        return "redirect:/admin/schedule/day/" + dayOfWeekValue;
     }
 
     @GetMapping("/program/{programId}")
@@ -85,7 +93,7 @@ public class ScheduleAdminController {
         Program program = programService.findById(programId);
         model.addAttribute("programName", program.getTitle());
 
-        List<ScheduleItemDto> scheduleItems = scheduleService.findForProgram(programId);
+        List<ScheduleItemDto> scheduleItems = scheduleItemService.findByProgramId(programId);
         model.addAttribute("scheduleItems", scheduleItems);
 
         return "schedule/programOccurrences";
@@ -109,7 +117,7 @@ public class ScheduleAdminController {
     @GetMapping("/item/delete/{id}")
     public String deleteConfirmation(Model model, @PathVariable("id") String id, HttpServletRequest request) {
 
-        scheduleService.findScheduleItemById(id);
+        scheduleItemService.findById(id);
 
         model.addAttribute("message", "Ви впевнені, що справді хочете запис з розкладу?");
         model.addAttribute("returnBackUrl", HttpUtils.getPreviousPageUrl(request));
@@ -122,8 +130,7 @@ public class ScheduleAdminController {
                          RedirectAttributes redirectAttributes,
                          HttpServletRequest httpServletRequest) {
 
-        OperationResult<ScheduleItemDto> scheduleItemOperationResult = scheduleService
-                .createScheduleItem(newScheduleItemForm);
+        OperationResult<ScheduleItemDto> scheduleItemOperationResult = scheduleItemService.create(newScheduleItemForm);
 
         if (scheduleItemOperationResult.isError()) {
             redirectAttributes.addFlashAttribute(FLASH_ERROR, scheduleItemOperationResult.getErrorMessage());
@@ -143,8 +150,8 @@ public class ScheduleAdminController {
                          RedirectAttributes redirectAttributes,
                          HttpServletRequest httpServletRequest) {
 
-        OperationResult<ScheduleItemDto> scheduleItemOperationResult = scheduleService
-                .updateScheduleItem(id, updateScheduleItemForm);
+        OperationResult<ScheduleItemDto> scheduleItemOperationResult = scheduleItemService
+                .update(id, updateScheduleItemForm);
 
         if (scheduleItemOperationResult.isError()) {
             redirectAttributes.addFlashAttribute(FLASH_ERROR, scheduleItemOperationResult.getErrorMessage());
@@ -161,9 +168,9 @@ public class ScheduleAdminController {
     @PostMapping("/item/delete/{id}")
     public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
 
-        ScheduleItemDto scheduleItem = scheduleService.findScheduleItemById(id);
+        ScheduleItemDto scheduleItem = scheduleItemService.findById(id);
 
-        scheduleService.deleteScheduleItem(id);
+        scheduleItemService.deleteById(id);
 
         redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно видалено");
 

@@ -56,7 +56,7 @@ public class TimeRangeChecker {
             return ValidationResult.withError("Час початку повинен передувати часу закінчення");
         }
 
-        List<ScheduleItem> scheduleItemsForDay = scheduleItemRepository.findByDayOfWeek(dayOfWeek, Sort.unsorted());
+        List<ScheduleItem> scheduleItemsForDay = scheduleItemRepository.findAllByDayOfWeek(dayOfWeek, Sort.unsorted());
 
         if (isTimeOccupied.test(scheduleItemsForDay)) {
             return ValidationResult.withError("Час зайнятий іншою програмою");

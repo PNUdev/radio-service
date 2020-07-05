@@ -18,7 +18,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin/videos")
-public class VideoAdminController {
+public class VideoAdminController { // ToDo add search to index view + to api (with pagination)
 
     private static final String FLASH_MESSAGE = "flashMessage";
 
