@@ -194,5 +194,4 @@ public class ScheduleAdminController {
                 .orElse("redirect:/admin/schedule");
     }
 
-
 }
