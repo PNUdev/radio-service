@@ -3,7 +3,6 @@ package com.pnu.dev.radioserviceapi;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
-import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import org.junit.jupiter.api.Order;
@@ -78,10 +77,8 @@ class DbSetupUtil {
         return IntStream.range(0, 6)
                 .mapToObj(idx -> ScheduleItem.builder()
                         .programId(programId)
-                        .time(TimeRange.builder()
-                                .startTime(LocalTime.of(10 + idx, 33))
-                                .endTime(LocalTime.of(11 + idx, 33))
-                                .build())
+                        .startTime(LocalTime.of(10 + idx, 33))
+                        .endTime(LocalTime.of(11 + idx, 33))
                         .dayOfWeek(dayOfWeek)
                         .comment("Lorem ipsum dolor sit amet, consectetur adipiscing elit, " +
                                 "sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")

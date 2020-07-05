@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalTime;
+
 @Document
 @Data
 @Builder(toBuilder = true)
@@ -19,7 +21,9 @@ public class ScheduleItem {
 
     private String programId;
 
-    private TimeRange time;
+    private LocalTime startTime;
+
+    private LocalTime endTime;
 
     private DayOfWeek dayOfWeek;
 

@@ -7,7 +7,6 @@ import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
-import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class ScheduleItemServiceImpl implements ScheduleItemService {
 
-    private static final Sort SORT_BY_START_TIME = Sort.by(Sort.Direction.ASC, "time.startTime"); // ToDo Sort do not work the way it supposed to, fix it
+    private static final Sort SORT_BY_START_TIME = Sort.by(Sort.Direction.ASC, "startTime"); // ToDo Sort do not work the way it supposed to, fix it
 
     private ScheduleItemRepository scheduleItemRepository;
 
@@ -101,10 +100,8 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
 
         ScheduleItem scheduleItem = ScheduleItem.builder()
                 .programId(newScheduleItemForm.getProgramId())
-                .time(TimeRange.builder()
-                        .startTime(startTime)
-                        .endTime(endTime)
-                        .build())
+                .startTime(startTime)
+                .endTime(endTime)
                 .dayOfWeek(dayOfWeek)
                 .comment(newScheduleItemForm.getComment())
                 .build();
@@ -138,10 +135,8 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         }
 
         ScheduleItem updatedScheduleItem = scheduleItemFromDb.toBuilder()
-                .time(TimeRange.builder()
-                        .startTime(startTime)
-                        .endTime(endTime)
-                        .build())
+                .startTime(startTime)
+                .endTime(endTime)
                 .comment(updateScheduleItemForm.getComment())
                 .build();
 
@@ -172,8 +167,8 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
                 .programLink("/api/v1/programs/" + program.getId())
                 .comment(scheduleItem.getComment())
                 .time(com.pnu.dev.radioserviceapi.dto.response.TimeRange.builder()
-                        .startTime(scheduleItem.getTime().getStartTime())
-                        .endTime(scheduleItem.getTime().getEndTime())
+                        .startTime(scheduleItem.getStartTime())
+                        .endTime(scheduleItem.getEndTime())
                         .build())
                 .dayOfWeek(scheduleItem.getDayOfWeek().toDayOfWeekResponse())
                 .build();

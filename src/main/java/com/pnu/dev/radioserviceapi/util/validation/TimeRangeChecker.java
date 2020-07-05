@@ -2,7 +2,6 @@ package com.pnu.dev.radioserviceapi.util.validation;
 
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
-import com.pnu.dev.radioserviceapi.mongo.TimeRange;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +27,8 @@ public class TimeRangeChecker {
     public ValidationResult checkValidAndFreeForCreate(LocalTime startTime, LocalTime endTime, DayOfWeek dayOfWeek) {
 
         Predicate<List<ScheduleItem>> isTimeOccupied = scheduleItemsForDay -> scheduleItemsForDay.stream()
-                .map(ScheduleItem::getTime)
-                .anyMatch(timeRange -> isPeriodsOverlap(timeRange, startTime, endTime));
+                .anyMatch(scheduleItem ->
+                        isPeriodsOverlap(scheduleItem.getStartTime(), scheduleItem.getEndTime(), startTime, endTime));
 
         return checkValidAndFree(startTime, endTime, dayOfWeek, isTimeOccupied);
     }
@@ -39,8 +38,8 @@ public class TimeRangeChecker {
 
         Predicate<List<ScheduleItem>> isTimeOccupied = scheduleItemsForDay -> scheduleItemsForDay.stream()
                 .filter(scheduleItem -> !StringUtils.equals(scheduleItem.getId(), scheduleItemId))
-                .map(ScheduleItem::getTime)
-                .anyMatch(timeRange -> isPeriodsOverlap(timeRange, startTime, endTime));
+                .anyMatch(scheduleItem ->
+                        isPeriodsOverlap(scheduleItem.getStartTime(), scheduleItem.getEndTime(), startTime, endTime));
 
         return checkValidAndFree(startTime, endTime, dayOfWeek, isTimeOccupied);
     }
@@ -65,12 +64,14 @@ public class TimeRangeChecker {
         return ValidationResult.valid();
     }
 
-    private boolean isPeriodsOverlap(TimeRange timeRange, LocalTime startTime, LocalTime endTime) {
-        return isBetween(timeRange, startTime) || isBetween(timeRange, endTime);
+    private boolean isPeriodsOverlap(LocalTime itemFromDbStartTime, LocalTime itemFromDbEndTime,
+                                     LocalTime startTime, LocalTime endTime) {
+        return isBetween(itemFromDbStartTime, itemFromDbEndTime, startTime)
+                || isBetween(itemFromDbStartTime, itemFromDbEndTime, endTime);
     }
 
-    private boolean isBetween(TimeRange timeRange, LocalTime timeMoment) {
-        return timeMoment.isAfter(timeRange.getStartTime()) && timeMoment.isBefore(timeRange.getEndTime());
+    private boolean isBetween(LocalTime itemFromDbStartTime, LocalTime itemFromDbEndTime, LocalTime timeMoment) {
+        return timeMoment.isAfter(itemFromDbStartTime) && timeMoment.isBefore(itemFromDbEndTime);
     }
 
 }
