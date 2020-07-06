@@ -3,6 +3,7 @@ package com.pnu.dev.radioserviceapi.service;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.DailySchedule;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.WeeklySchedule;
+import com.pnu.dev.radioserviceapi.exception.InternalServiceError;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .toString()
                 .toLowerCase();
 
-        return findForDay(dayOfWeekValue).get();
+        return findForDay(dayOfWeekValue).orElseThrow(() -> new InternalServiceError("Внутрішня помилка сервера"));
     }
 
     @Override
@@ -57,10 +58,6 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .build();
     }
 
-    private DailySchedule toDailySchedule(DayOfWeek dayOfWeek) {
-        return toDailySchedule(scheduleItemService.findByDayOfWeek(dayOfWeek), dayOfWeek);
-    }
-
     private DailySchedule toDailyScheduleFilter(List<ScheduleItemDto> scheduleItems, DayOfWeek dayOfWeek) {
 
         List<ScheduleItemDto> scheduleItemsForDay = scheduleItems.stream()
@@ -69,6 +66,10 @@ public class ScheduleServiceImpl implements ScheduleService {
                 .collect(Collectors.toList());
 
         return toDailySchedule(scheduleItemsForDay, dayOfWeek);
+    }
+
+    private DailySchedule toDailySchedule(DayOfWeek dayOfWeek) {
+        return toDailySchedule(scheduleItemService.findByDayOfWeek(dayOfWeek), dayOfWeek);
     }
 
     private DailySchedule toDailySchedule(List<ScheduleItemDto> scheduleItems, DayOfWeek dayOfWeek) {

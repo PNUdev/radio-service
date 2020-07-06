@@ -70,8 +70,8 @@ public class TimeRangeChecker {
                 || isBetween(itemFromDbStartTime, itemFromDbEndTime, endTime);
     }
 
-    private boolean isBetween(LocalTime itemFromDbStartTime, LocalTime itemFromDbEndTime, LocalTime timeMoment) {
-        return timeMoment.isAfter(itemFromDbStartTime) && timeMoment.isBefore(itemFromDbEndTime);
+    private boolean isBetween(LocalTime startPeriodTime, LocalTime endPeriodTime, LocalTime timeMoment) {
+        return timeMoment.isAfter(startPeriodTime) && timeMoment.isBefore(endPeriodTime);
     }
 
 }

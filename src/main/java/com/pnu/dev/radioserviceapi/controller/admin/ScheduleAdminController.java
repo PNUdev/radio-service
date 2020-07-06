@@ -67,7 +67,7 @@ public class ScheduleAdminController {
                              Model model) {
 
         DailySchedule dailySchedule = scheduleService.findForDay(dayOfWeekValue)
-                .orElseThrow(() -> new RadioServiceAdminException("Дня тижня не існує"));
+                .orElseThrow(() -> new RadioServiceAdminException("Не існуючий день тижня"));
 
         model.addAttribute("dailySchedule", dailySchedule);
 
@@ -117,7 +117,7 @@ public class ScheduleAdminController {
     @GetMapping("/item/delete/{id}")
     public String deleteConfirmation(Model model, @PathVariable("id") String id, HttpServletRequest request) {
 
-        scheduleItemService.findById(id);
+        findByIdOrThrowException(id);
 
         model.addAttribute("message", "Ви впевнені, що справді хочете запис з розкладу?");
         model.addAttribute("returnBackUrl", HttpUtils.getPreviousPageUrl(request));
@@ -168,13 +168,18 @@ public class ScheduleAdminController {
     @PostMapping("/item/delete/{id}")
     public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
 
-        ScheduleItemDto scheduleItem = scheduleItemService.findById(id);
+        ScheduleItemDto scheduleItem = findByIdOrThrowException(id);
 
         scheduleItemService.deleteById(id);
 
         redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно видалено");
 
         return "redirect:/admin/schedule/day/" + scheduleItem.getDayOfWeek().getUrlValue();
+    }
+
+    private ScheduleItemDto findByIdOrThrowException(@PathVariable("id") String id) {
+        return scheduleItemService.findById(id)
+                .orElseThrow(() -> new RadioServiceAdminException("Запис не знайдено у розкладі"));
     }
 
     private String redirectToPreviousPage(HttpServletRequest request, String scheduleItemId) {

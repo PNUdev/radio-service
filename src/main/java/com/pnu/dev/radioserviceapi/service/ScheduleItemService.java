@@ -7,10 +7,11 @@ import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ScheduleItemService {
 
-    ScheduleItemDto findById(String id);
+    Optional<ScheduleItemDto> findById(String id);
 
     List<ScheduleItemDto> findAll();
 

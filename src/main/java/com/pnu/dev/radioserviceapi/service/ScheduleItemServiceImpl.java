@@ -3,7 +3,7 @@ package com.pnu.dev.radioserviceapi.service;
 import com.pnu.dev.radioserviceapi.dto.form.NewScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.form.UpdateScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
-import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
+import com.pnu.dev.radioserviceapi.exception.InternalServiceError;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +40,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
                                    ProgramRepository programRepository,
                                    DataValidator dataValidator,
                                    TimeRangeChecker timeRangeChecker) {
+
         this.scheduleItemRepository = scheduleItemRepository;
         this.programRepository = programRepository;
         this.dataValidator = dataValidator;
@@ -46,16 +48,14 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     }
 
     @Override
-    public ScheduleItemDto findById(String id) {
+    public Optional<ScheduleItemDto> findById(String id) {
 
-        ScheduleItem scheduleItem = scheduleItemRepository.findById(id)
-                .orElseThrow(() -> new RadioServiceAdminException("Запис не знайдено у розкладі"));
-
-        return toScheduleItemDto(scheduleItem);
+        return scheduleItemRepository.findById(id).map(this::toScheduleItemDto);
     }
 
     @Override
     public List<ScheduleItemDto> findAll() {
+
         return toScheduleItemDto(
                 scheduleItemRepository.findAll(SORT_BY_START_TIME)
         );
@@ -71,6 +71,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
 
     @Override
     public List<ScheduleItemDto> findByProgramId(String programId) {
+
         return toScheduleItemDto(
                 scheduleItemRepository.findAllByProgramId(programId, SORT_BY_START_TIME)
         );
@@ -82,17 +83,20 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         ValidationResult formValidation = dataValidator.validate(newScheduleItemForm);
 
         if (formValidation.isError()) {
-            throw new RadioServiceAdminException("Обов'язкові поля не заповнені");
+            OperationResult.error("Обов'язкові поля не заповнені");
         }
 
-        DayOfWeek dayOfWeek = DayOfWeek.findByUrlValue(newScheduleItemForm.getDayOfWeekUrlValue())
-                .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"));
+        Optional<DayOfWeek> dayOfWeek = DayOfWeek.findByUrlValue(newScheduleItemForm.getDayOfWeekUrlValue());
+
+        if (!dayOfWeek.isPresent()) {
+            return OperationResult.error("Неіснуючий день тижня");
+        }
 
         LocalTime startTime = LocalTime.parse(newScheduleItemForm.getStartTime());
         LocalTime endTime = LocalTime.parse(newScheduleItemForm.getEndTime());
 
         ValidationResult validationResult = timeRangeChecker
-                .checkValidAndFreeForCreate(startTime, endTime, dayOfWeek);
+                .checkValidAndFreeForCreate(startTime, endTime, dayOfWeek.get());
 
         if (validationResult.isError()) {
             return OperationResult.error(validationResult.getErrorMessage());
@@ -102,7 +106,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
                 .programId(newScheduleItemForm.getProgramId())
                 .startTime(startTime)
                 .endTime(endTime)
-                .dayOfWeek(dayOfWeek)
+                .dayOfWeek(dayOfWeek.get())
                 .comment(newScheduleItemForm.getComment())
                 .build();
 
@@ -118,11 +122,16 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         ValidationResult formValidation = dataValidator.validate(updateScheduleItemForm);
 
         if (formValidation.isError()) {
-            throw new RadioServiceAdminException("Обов'язкові поля не заповнені");
+            OperationResult.error("Обов'язкові поля не заповнені");
         }
 
-        ScheduleItem scheduleItemFromDb = scheduleItemRepository.findById(id)
-                .orElseThrow(() -> new RadioServiceAdminException("Спроба оновити не існуючий запис"));
+        Optional<ScheduleItem> scheduleItemFromDbOptional = scheduleItemRepository.findById(id);
+
+        if (!scheduleItemFromDbOptional.isPresent()) {
+            return OperationResult.error("Спроба оновити не існуючий запис");
+        }
+
+        ScheduleItem scheduleItemFromDb = scheduleItemFromDbOptional.get();
 
         LocalTime startTime = LocalTime.parse(updateScheduleItemForm.getStartTime());
         LocalTime endTime = LocalTime.parse(updateScheduleItemForm.getEndTime());
@@ -158,8 +167,8 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
 
     private ScheduleItemDto toScheduleItemDto(ScheduleItem scheduleItem) {
 
-        // little bit error prone place, because we expect, that program with this id will be present in db
-        Program program = programRepository.findById(scheduleItem.getProgramId()).get();
+        Program program = programRepository.findById(scheduleItem.getProgramId())
+                .orElseThrow(() -> new InternalServiceError("Неузгодженість даних: програми не існує"));
 
         return ScheduleItemDto.builder()
                 .id(scheduleItem.getId())
