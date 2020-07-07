@@ -3,13 +3,11 @@ package com.pnu.dev.radioserviceapi.service;
 import com.pnu.dev.radioserviceapi.dto.form.NewScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.form.UpdateScheduleItemForm;
 import com.pnu.dev.radioserviceapi.dto.response.schedule.ScheduleItemDto;
-import com.pnu.dev.radioserviceapi.exception.InternalServiceError;
 import com.pnu.dev.radioserviceapi.mongo.DayOfWeek;
-import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
-import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
+import com.pnu.dev.radioserviceapi.util.mapper.ScheduleItemToScheduleItemDtoMapper;
 import com.pnu.dev.radioserviceapi.util.validation.DataValidator;
 import com.pnu.dev.radioserviceapi.util.validation.TimeRangeChecker;
 import com.pnu.dev.radioserviceapi.util.validation.ValidationResult;
@@ -20,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class ScheduleItemServiceImpl implements ScheduleItemService {
@@ -29,7 +26,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
 
     private ScheduleItemRepository scheduleItemRepository;
 
-    private ProgramRepository programRepository;
+    private ScheduleItemToScheduleItemDtoMapper scheduleItemToScheduleItemDtoMapper;
 
     private DataValidator dataValidator;
 
@@ -37,12 +34,12 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
 
     @Autowired
     public ScheduleItemServiceImpl(ScheduleItemRepository scheduleItemRepository,
-                                   ProgramRepository programRepository,
+                                   ScheduleItemToScheduleItemDtoMapper scheduleItemToScheduleItemDtoMapper,
                                    DataValidator dataValidator,
                                    TimeRangeChecker timeRangeChecker) {
 
         this.scheduleItemRepository = scheduleItemRepository;
-        this.programRepository = programRepository;
+        this.scheduleItemToScheduleItemDtoMapper = scheduleItemToScheduleItemDtoMapper;
         this.dataValidator = dataValidator;
         this.timeRangeChecker = timeRangeChecker;
     }
@@ -50,13 +47,13 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public Optional<ScheduleItemDto> findById(String id) {
 
-        return scheduleItemRepository.findById(id).map(this::toScheduleItemDto);
+        return scheduleItemRepository.findById(id).map(scheduleItemToScheduleItemDtoMapper::map);
     }
 
     @Override
     public List<ScheduleItemDto> findAll() {
 
-        return toScheduleItemDto(
+        return scheduleItemToScheduleItemDtoMapper.map(
                 scheduleItemRepository.findAll(SORT_BY_START_TIME)
         );
     }
@@ -64,7 +61,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public List<ScheduleItemDto> findByDayOfWeek(DayOfWeek dayOfWeek) {
 
-        return toScheduleItemDto(
+        return scheduleItemToScheduleItemDtoMapper.map(
                 scheduleItemRepository.findAllByDayOfWeek(dayOfWeek, SORT_BY_START_TIME)
         );
     }
@@ -72,7 +69,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public List<ScheduleItemDto> findByProgramId(String programId) {
 
-        return toScheduleItemDto(
+        return scheduleItemToScheduleItemDtoMapper.map(
                 scheduleItemRepository.findAllByProgramId(programId, SORT_BY_START_TIME)
         );
     }
@@ -83,7 +80,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         ValidationResult formValidation = dataValidator.validate(newScheduleItemForm);
 
         if (formValidation.isError()) {
-            OperationResult.error("Обов'язкові поля не заповнені");
+            return OperationResult.error("Обов'язкові поля не заповнені");
         }
 
         Optional<DayOfWeek> dayOfWeek = DayOfWeek.findByUrlValue(newScheduleItemForm.getDayOfWeekUrlValue());
@@ -112,7 +109,9 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
 
         scheduleItemRepository.save(scheduleItem);
 
-        return OperationResult.success(toScheduleItemDto(scheduleItem));
+        return OperationResult.success(
+                scheduleItemToScheduleItemDtoMapper.map(scheduleItem)
+        );
     }
 
     @Override
@@ -122,13 +121,13 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         ValidationResult formValidation = dataValidator.validate(updateScheduleItemForm);
 
         if (formValidation.isError()) {
-            OperationResult.error("Обов'язкові поля не заповнені");
+            return OperationResult.error("Обов'язкові поля не заповнені");
         }
 
         Optional<ScheduleItem> scheduleItemFromDbOptional = scheduleItemRepository.findById(id);
 
         if (!scheduleItemFromDbOptional.isPresent()) {
-            return OperationResult.error("Спроба оновити не існуючий запис");
+            return OperationResult.error("Спроба оновити неіснуючий запис");
         }
 
         ScheduleItem scheduleItemFromDb = scheduleItemFromDbOptional.get();
@@ -151,7 +150,9 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
 
         scheduleItemRepository.save(updatedScheduleItem);
 
-        return OperationResult.success(toScheduleItemDto(updatedScheduleItem));
+        return OperationResult.success(
+                scheduleItemToScheduleItemDtoMapper.map(updatedScheduleItem)
+        );
     }
 
     @Override
@@ -159,27 +160,4 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         scheduleItemRepository.deleteById(id);
     }
 
-    private List<ScheduleItemDto> toScheduleItemDto(List<ScheduleItem> scheduleItems) {
-        return scheduleItems.stream()
-                .map(this::toScheduleItemDto)
-                .collect(Collectors.toList());
-    }
-
-    private ScheduleItemDto toScheduleItemDto(ScheduleItem scheduleItem) {
-
-        Program program = programRepository.findById(scheduleItem.getProgramId())
-                .orElseThrow(() -> new InternalServiceError("Неузгодженість даних: програми не існує"));
-
-        return ScheduleItemDto.builder()
-                .id(scheduleItem.getId())
-                .programName(program.getTitle())
-                .programLink("/api/v1/programs/" + program.getId())
-                .comment(scheduleItem.getComment())
-                .time(com.pnu.dev.radioserviceapi.dto.response.TimeRange.builder()
-                        .startTime(scheduleItem.getStartTime())
-                        .endTime(scheduleItem.getEndTime())
-                        .build())
-                .dayOfWeek(scheduleItem.getDayOfWeek().toDayOfWeekResponse())
-                .build();
-    }
 }
