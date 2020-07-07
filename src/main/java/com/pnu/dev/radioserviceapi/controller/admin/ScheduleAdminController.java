@@ -60,14 +60,14 @@ public class ScheduleAdminController {
         return "schedule/index";
     }
 
-    @GetMapping("day/{dayOfWeek}")
+    @GetMapping("/day/{dayOfWeek}")
     public String showForDay(@PathVariable("dayOfWeek") String dayOfWeekValue,
                              @RequestParam(value = "selectedItemId", required = false) String selectedItemId,
                              RedirectAttributes redirectAttributes,
                              Model model) {
 
         DailySchedule dailySchedule = scheduleService.findForDay(dayOfWeekValue)
-                .orElseThrow(() -> new RadioServiceAdminException("Не існуючий день тижня"));
+                .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"));
 
         model.addAttribute("dailySchedule", dailySchedule);
 
@@ -106,7 +106,7 @@ public class ScheduleAdminController {
         model.addAttribute("programs", programs);
 
         DayOfWeekResponse dayOfWeek = DayOfWeek.findByUrlValue(dayOfWeekUrlValue)
-                .orElseThrow(() -> new RadioServiceAdminException("Не існуючий день тижня"))
+                .orElseThrow(() -> new RadioServiceAdminException("Неіснуючий день тижня"))
                 .toDayOfWeekResponse();
 
         model.addAttribute("dayOfWeek", dayOfWeek);
@@ -119,7 +119,7 @@ public class ScheduleAdminController {
 
         findByIdOrThrowException(id);
 
-        model.addAttribute("message", "Ви впевнені, що справді хочете запис з розкладу?");
+        model.addAttribute("message", "Ви впевнені, що справді хочете видалити запис з розкладу?");
         model.addAttribute("returnBackUrl", HttpUtils.getPreviousPageUrl(request));
 
         return "common/deleteConfirmation";
