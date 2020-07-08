@@ -1,7 +1,7 @@
 package com.pnu.dev.radioserviceapi.service;
 
+import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.ProgramDto;
-import com.pnu.dev.radioserviceapi.dto.response.ProgramsPageResponse;
 import com.pnu.dev.radioserviceapi.exception.RadioServiceApiException;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
@@ -25,7 +25,7 @@ public class ProgramApiServiceImpl implements ProgramApiService {
     }
 
     @Override
-    public ProgramsPageResponse findAll(Pageable pageable) {
+    public PageResponse<ProgramDto> findAll(Pageable pageable) {
         Page<Program> mongoProgramsPage = programRepository.findAll(pageable);
         return programMapper.mapMongoProgramsPageToProgramsPageResponse(mongoProgramsPage);
     }
@@ -39,7 +39,7 @@ public class ProgramApiServiceImpl implements ProgramApiService {
     }
 
     @Override
-    public ProgramsPageResponse findByTitleContains(String query, Pageable pageable) {
+    public PageResponse<ProgramDto> findByTitleContains(String query, Pageable pageable) {
         Page<Program> mongoProgramsPage = programRepository.findAllByTitleContainsIgnoreCase(query, pageable);
         return programMapper.mapMongoProgramsPageToProgramsPageResponse(mongoProgramsPage);
     }

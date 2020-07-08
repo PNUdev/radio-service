@@ -5,18 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProgramsPageResponse {
+public class DayOfWeekResponse {
 
-    private int pageNumber;
+    private String urlValue;
 
-    private int totalPages;
-
-    private List<ProgramDto> programs;
+    private String nameUkr;
 
 }

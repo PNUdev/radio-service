@@ -3,6 +3,7 @@ package com.pnu.dev.radioserviceapi.controller.admin;
 import com.pnu.dev.radioserviceapi.dto.form.ProgramForm;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.service.ProgramService;
+import com.pnu.dev.radioserviceapi.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -19,11 +20,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+
 @Controller
 @RequestMapping("/admin/programs")
 public class ProgramAdminController {
 
-    private static final String FLASH_MESSAGE = "message";
+    private static final String FLASH_MESSAGE = "flashMessage";
 
     private ProgramService programService;
 
@@ -64,11 +67,16 @@ public class ProgramAdminController {
     }
 
     @GetMapping("/delete/{id}")
-    public String deleteConfirmation(Model model, @PathVariable("id") String id) {
-        Program program = programService.findById(id);
+    public String deleteConfirmation(Model model, @PathVariable("id") String id, HttpServletRequest request) {
 
-        model.addAttribute("program", program);
-        return "programs/deleteConfirmation";
+        programService.findById(id);
+
+        model.addAttribute("message", "Ви впевнені, що справді хочете видалити програму " +
+                "(буде також видалено всі записи з розкладу, пов'язані з цією програмою)?");
+
+        model.addAttribute("returnBackUrl", HttpUtils.getPreviousPageUrl(request));
+
+        return "common/deleteConfirmation";
     }
 
     @PostMapping("/new")

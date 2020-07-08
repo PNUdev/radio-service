@@ -4,23 +4,32 @@ import com.pnu.dev.radioserviceapi.dto.form.ProgramForm;
 import com.pnu.dev.radioserviceapi.exception.RadioServiceAdminException;
 import com.pnu.dev.radioserviceapi.mongo.Program;
 import com.pnu.dev.radioserviceapi.repository.ProgramRepository;
+import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import com.pnu.dev.radioserviceapi.util.validation.DataValidator;
 import com.pnu.dev.radioserviceapi.util.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 public class ProgramServiceImpl implements ProgramService {
 
     private ProgramRepository programRepository;
 
+    private ScheduleItemRepository scheduleItemRepository;
+
     private DataValidator dataValidator;
 
     @Autowired
-    public ProgramServiceImpl(ProgramRepository programRepository, DataValidator dataValidator) {
+    public ProgramServiceImpl(ProgramRepository programRepository,
+                              ScheduleItemRepository scheduleItemRepository,
+                              DataValidator dataValidator) {
         this.programRepository = programRepository;
+        this.scheduleItemRepository = scheduleItemRepository;
         this.dataValidator = dataValidator;
     }
 
@@ -30,13 +39,22 @@ public class ProgramServiceImpl implements ProgramService {
     }
 
     @Override
+    public List<Program> findAll() {
+        return programRepository.findAll();
+    }
+
+    @Override
     public Program findById(String id) {
         return programRepository.findById(id)
                 .orElseThrow(() -> new RadioServiceAdminException("Програму не знайдено!"));
     }
 
     @Override
+    @Transactional
     public void deleteById(String id) {
+
+        scheduleItemRepository.deleteAllByProgramId(id);
+
         programRepository.deleteById(id);
     }
 

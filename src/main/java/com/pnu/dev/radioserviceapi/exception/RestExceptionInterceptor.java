@@ -9,10 +9,19 @@ public class RestExceptionInterceptor {
     @ExceptionHandler(Exception.class)
     public ErrorResponse generalError() {
         return ErrorResponse.builder()
-                .message("Internal service error")
+                .message("Внутрішня помилка сервера")
                 .status(500)
                 .build();
     }
+
+    @ExceptionHandler(InternalServiceError.class)
+    public ErrorResponse internalServiceError(InternalServiceError internalServiceError) {
+        return ErrorResponse.builder()
+                .message(internalServiceError.getMessage())
+                .status(500)
+                .build();
+    }
+
 
     @ExceptionHandler(RadioServiceApiException.class)
     public ErrorResponse serviceApiException(RadioServiceApiException serviceException) {

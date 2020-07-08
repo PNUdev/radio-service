@@ -4,11 +4,6 @@
         <h1 class="text-center">Неіснуючий номер сторінки</h1>
         <a href="/admin/programs"><h2 class="text-center">Список програм</h2></a>
     <#else>
-        <#if message??>
-            <div class="jumbotron my-3">
-                <div class="h4 text-center text-success">${message}</div>
-            </div>
-        </#if>
 
         <div class="py-4">
             <a href="/admin/programs/new">
@@ -48,8 +43,11 @@
                         <div>
                             <div class="p">${program.description}</div>
                         </div>
-                        <div class="ml-auto pt-3">
-                            <a href="/admin/programs/edit/${program.id}">
+                        <div class="ml-auto pt-3 d-flex flex-column justify-content-between">
+                            <a href="/admin/schedule/program/${program.id}" class="pt-3">
+                                Показати записи у розкладі
+                            </a>
+                            <a href="/admin/programs/edit/${program.id}" class="pt-3">
                                 <div class="btn btn-primary">Редагувати</div>
                             </a>
                         </div>
@@ -90,4 +88,5 @@
 
 </div>
 
+<#include "../include/toastr.ftl">
 <#include "../include/footer.ftl">

@@ -1,13 +1,6 @@
 <#include "../include/header.ftl">
 
 <div class="container">
-
-    <#if message??>
-        <div class="jumbotron my-3">
-            <div class="h4 text-center text-success">${message}</div>
-        </div>
-    </#if>
-
     <div class="py-3">
         <a href="/admin/videos/add">
             <div class="btn btn-primary btn-lg btn-block">Додати відео</div>
@@ -40,12 +33,14 @@
                     </div>
                 </form>
                 <div class="row float-right">
-                    <form action="/admin/videos/delete/${video.id}" method="post">
-                        <button class="btn btn-danger row mx-4">Видалити</button>
-                    </form>
+                    <a href="/admin/videos/delete/${video.id}">
+                        <div class="btn btn-danger row mx-4">Видалити</div>
+                    </a>
                 </div>
             </div>
         </div>
     </#list>
 </div>
+
+<#include "../include/toastr.ftl">
 <#include "../include/footer.ftl">
