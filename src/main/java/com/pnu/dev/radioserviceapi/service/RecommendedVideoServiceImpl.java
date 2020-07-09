@@ -9,7 +9,8 @@ import com.pnu.dev.radioserviceapi.util.OperationResult;
 import com.pnu.dev.radioserviceapi.util.mapper.VideoMapper;
 import com.pnu.dev.radioserviceapi.util.validation.YoutubeVideoIdExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -42,10 +43,15 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
     }
 
     @Override
-    public List<RecommendedVideo> findAll() { // ToDo this have to be paginated
+    public Page<RecommendedVideo> findAll(Pageable pageable) {
 
-        return recommendedVideoRepository.findAll(Sort.by("priority").ascending());
+        return recommendedVideoRepository.findAll(pageable);
+    }
 
+    @Override
+    public Page<RecommendedVideo> findAllByTitleContains(String query, Pageable pageable) {
+
+        return recommendedVideoRepository.findAllByTitleContainsIgnoreCase(query, pageable);
     }
 
     @Override
@@ -78,7 +84,6 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
 
             recommendedVideoRepository.save(videoFromYoutube);
             incrementPriority(videosToIncrementPriority);
-
         }
 
     }
@@ -95,6 +100,11 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
         recommendedVideoRepository.deleteById(id);
         decrementPriority(videosToDecrementPriority);
 
+    }
+
+    @Override
+    public long getVideosNumber() {
+        return recommendedVideoRepository.count();
     }
 
     private RecommendedVideo findVideoByYoutubeVideoLink(String link) {

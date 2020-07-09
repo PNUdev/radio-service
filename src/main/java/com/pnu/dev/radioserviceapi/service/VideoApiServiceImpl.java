@@ -1,7 +1,6 @@
 package com.pnu.dev.radioserviceapi.service;
 
 import com.pnu.dev.radioserviceapi.client.YoutubeApiClient;
-import com.pnu.dev.radioserviceapi.util.OperationResult;
 import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.dto.response.PageResponse;
 import com.pnu.dev.radioserviceapi.dto.response.RecommendedVideoDto;
@@ -11,6 +10,7 @@ import com.pnu.dev.radioserviceapi.exception.RadioServiceApiException;
 import com.pnu.dev.radioserviceapi.mongo.LiveBroadcastContent;
 import com.pnu.dev.radioserviceapi.mongo.RecommendedVideo;
 import com.pnu.dev.radioserviceapi.repository.RecommendedVideoRepository;
+import com.pnu.dev.radioserviceapi.util.OperationResult;
 import com.pnu.dev.radioserviceapi.util.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -24,6 +24,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class VideoApiServiceImpl implements VideoApiService {
+
+    private static final Sort SORT_BY_PRIORITY = Sort.by("priority").ascending();
 
     private final YoutubeApiClient youtubeApiClient;
 
@@ -40,8 +42,15 @@ public class VideoApiServiceImpl implements VideoApiService {
 
     @Override
     public PageResponse<RecommendedVideoDto> findRecommended(Pageable pageable) {
-        pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by("priority").ascending());
+        pageable = setSort(pageable, SORT_BY_PRIORITY);
         Page<RecommendedVideo> videoPage = recommendedVideoRepository.findAll(pageable);
+        return videoMapper.videoPageToRecommendedVideoPageDto(videoPage);
+    }
+
+    @Override
+    public PageResponse<RecommendedVideoDto> findRecommendedByTitleContains(String query, Pageable pageable) {
+        pageable = setSort(pageable, SORT_BY_PRIORITY);
+        Page<RecommendedVideo> videoPage = recommendedVideoRepository.findAllByTitleContainsIgnoreCase(query, pageable);
         return videoMapper.videoPageToRecommendedVideoPageDto(videoPage);
     }
 
@@ -54,18 +63,22 @@ public class VideoApiServiceImpl implements VideoApiService {
         }
         List<VideoDto> videoDtoList = videoMapper.itemSearchResponseListToVideoDtoList(apiResult.getData().getItems());
         List<VideoDto> recent = videoDtoList.parallelStream()
-                        .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.COMPLETED)
-                                || v.getLiveBroadcastContent().equals(LiveBroadcastContent.NONE))
-                        .collect(Collectors.toList());
+                .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.COMPLETED)
+                        || v.getLiveBroadcastContent().equals(LiveBroadcastContent.NONE))
+                .collect(Collectors.toList());
 
         List<VideoDto> streams = videoDtoList.parallelStream()
-                        .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.UPCOMING)
-                                || v.getLiveBroadcastContent().equals(LiveBroadcastContent.LIVE))
-                        .collect(Collectors.toList());
+                .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.UPCOMING)
+                        || v.getLiveBroadcastContent().equals(LiveBroadcastContent.LIVE))
+                .collect(Collectors.toList());
 
         return VideosCollectionResponse.builder()
                 .recent(recent)
                 .streams(streams)
                 .build();
+    }
+
+    private Pageable setSort(Pageable pageable, Sort sort) {
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
     }
 }

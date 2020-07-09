@@ -3,7 +3,12 @@ package com.pnu.dev.radioserviceapi.controller.admin;
 import com.pnu.dev.radioserviceapi.mongo.RecommendedVideo;
 import com.pnu.dev.radioserviceapi.service.RecommendedVideoService;
 import com.pnu.dev.radioserviceapi.util.HttpUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,14 +16,14 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin/videos")
-public class VideoAdminController { // ToDo add search to index view + to api (with pagination)
+public class VideoAdminController {
 
     private static final String FLASH_MESSAGE = "flashMessage";
 
@@ -30,9 +35,21 @@ public class VideoAdminController { // ToDo add search to index view + to api (w
     }
 
     @GetMapping
-    public String findAll(Model model) {
-        List<RecommendedVideo> recommendedVideos = recommendedVideoService.findAll();
-        model.addAttribute("videos", recommendedVideos);
+    public String findAll(Model model,
+                          @RequestParam(value = "q", required = false) String query,
+                          @PageableDefault(size = 5, sort = "priority", direction = Sort.Direction.ASC)
+                                  Pageable pageable) {
+
+        Page<RecommendedVideo> programsPage;
+
+        if (StringUtils.isNoneBlank(query)) {
+            programsPage = recommendedVideoService.findAllByTitleContains(query, pageable);
+            model.addAttribute("searchKeyword", query);
+        } else {
+            programsPage = recommendedVideoService.findAll(pageable);
+        }
+        model.addAttribute("maxPriority", recommendedVideoService.getVideosNumber());
+        model.addAttribute("videosPage", programsPage);
         return "videos/index";
     }
 

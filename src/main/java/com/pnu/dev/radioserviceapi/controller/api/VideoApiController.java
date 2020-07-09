@@ -10,6 +10,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,10 +31,16 @@ public class VideoApiController {
         return videoApiService.findRecommended(pageable);
     }
 
+    @GetMapping("/recommended/search")
+    public PageResponse<RecommendedVideoDto> findRecommendedByTitleContains(@RequestParam("q") String query,
+                                                                            @PageableDefault(size = 10)
+                                                                                    Pageable pageable) {
+        return videoApiService.findRecommendedByTitleContains(query, pageable);
+    }
+
     @GetMapping("/recent")
     public VideosCollectionResponse findRecent() {
         return videoApiService.findRecent();
     }
-
 
 }
