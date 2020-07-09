@@ -7,19 +7,29 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
-    <title>Admin</title>
+    <title>Login</title>
 </head>
 <body>
-<nav class="navbar navbar-dark bg-info">
-    <div>
-        <a class="navbar-brand" href="/admin/schedule">Розклад</a>
-        <a class="navbar-brand" href="/admin/programs">Програми</a>
-        <a class="navbar-brand" href="/admin/videos">Відео</a>
-    </div>
-    <div class="d-inline">
-        <form method="POST" action="/logout" class="m-0 p-0">
+
+<div class="w-100 h-100 d-flex align-items-center justify-content-center">
+    <div class="col-md-8">
+        <form method="POST" action="/login" class="form-signin">
+            <h2 class="form-heading text-center p-3">Вхід</h2>
+            <div class="form-group">
+                <input name="username" type="text" class="form-control m-3" placeholder="Ім'я користувача"
+                       autofocus="true"/>
+                <input name="password" type="password" class="form-control m-3" placeholder="Пароль"/>
+                <div class="form-row justify-content-center">
+                    <button class="btn btn-primary p-3 w-50" type="submit">Увійти</button>
+                </div>
+            </div>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-            <button type="submit" class="btn-lg btn-light">Вийти</button>
         </form>
     </div>
-</nav>
+</div>
+
+<#include "../include/toastr.ftl">
+
+</body>
+</html>
+
