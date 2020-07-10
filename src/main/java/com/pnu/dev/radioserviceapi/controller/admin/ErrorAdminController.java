@@ -20,4 +20,5 @@ public class ErrorAdminController implements ErrorController {
     public String getErrorPath() {
         return "/error";
     }
+
 }

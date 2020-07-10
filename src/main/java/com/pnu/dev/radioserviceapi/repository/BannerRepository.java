@@ -9,4 +9,5 @@ import java.util.List;
 public interface BannerRepository extends MongoRepository<Banner, BannerType> {
 
     List<Banner> findAllByShowTrue();
+
 }
