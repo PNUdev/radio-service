@@ -8,6 +8,7 @@
             <form action="/admin/schedule/item/new">
                 <input type="hidden" name="day" value="${dailySchedule.dayOfWeek.urlValue}">
                 <button class="btn btn-lg btn-primary float-right mr-3">Додати</button>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             </form>
         </th>
     </tr>
@@ -42,9 +43,11 @@
             <td>
                 <form action="/admin/schedule/item/update/${scheduledItem.id}" id="${saveFormId}" method="POST">
                     <button class="btn btn-primary">Зберегти</button>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
                 <form action="/admin/schedule/item/delete/${scheduledItem.id}">
                     <button class="btn btn-danger">Видалити</button>
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 </form>
             </td>
         </tr>

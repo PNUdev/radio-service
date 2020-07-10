@@ -38,6 +38,7 @@
                     <button class="btn btn-primary">Додати програму</button>
                 </#if>
             </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
 
     </div>

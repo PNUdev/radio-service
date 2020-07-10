@@ -12,6 +12,7 @@
         <div class="row m-3 justify-content-center align-items-center">
             <button type="button" onclick="findVideo()" class="btn btn-primary row">Знайти відео</button>
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 </div>
 
@@ -28,6 +29,7 @@
         <form method="post" action="/admin/videos/add">
             <input id="postLink" type="hidden" name="link" value="">
             <button class="btn btn-primary row m-4">Додати це відео</button>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
     </div>
 </div>

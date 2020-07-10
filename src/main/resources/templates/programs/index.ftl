@@ -21,6 +21,7 @@
                     <button class="btn btn-primary form-control my-2">Шукати</button>
                 </div>
             </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         </form>
 
         <div>

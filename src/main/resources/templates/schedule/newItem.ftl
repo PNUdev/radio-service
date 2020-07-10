@@ -42,6 +42,7 @@
         <div class="my-4">
             <button class="btn btn-primary">Додати</button>
         </div>
+        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
     </form>
 
 </div>
