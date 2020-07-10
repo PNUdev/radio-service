@@ -14,6 +14,7 @@
                        name="show" ${banner.show?string('checked','')}>
                 <label class="custom-control-label" for="primary-banner-checkbox">Показувати банер</label>
             </div>
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
             <button class="btn btn-primary">Зберегти</button>
         </div>
     </form>

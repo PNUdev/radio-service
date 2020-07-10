@@ -26,15 +26,7 @@ public class BannerServiceImpl implements BannerService {
                 .orElseThrow(() -> new RadioServiceAdminException("Невідомий тип банера"));
 
         return bannerRepository.findById(bannerType)
-                .orElseGet(() -> {
-                    Banner banner = Banner.builder()
-                            .bannerType(bannerType)
-                            .markdown(StringUtils.EMPTY)
-                            .build();
-
-                    bannerRepository.save(banner);
-                    return banner;
-                });
+                .orElseGet(() -> createAndSaveEmptyBanner(bannerType));
     }
 
     @Override
@@ -48,6 +40,16 @@ public class BannerServiceImpl implements BannerService {
                 .build();
 
         bannerRepository.save(updatedBanner);
+    }
+
+    private Banner createAndSaveEmptyBanner(BannerType bannerType) {
+        Banner banner = Banner.builder()
+                .bannerType(bannerType)
+                .markdown(StringUtils.EMPTY)
+                .build();
+
+        bannerRepository.save(banner);
+        return banner;
     }
 
 }

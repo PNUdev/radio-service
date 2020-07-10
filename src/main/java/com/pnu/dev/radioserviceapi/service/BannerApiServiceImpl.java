@@ -20,8 +20,7 @@ public class BannerApiServiceImpl implements BannerApiService {
 
     @Override
     public Map<String, String> findBannersToShow() {
-        return bannerRepository.findAll().stream()
-                .filter(Banner::isShow)
+        return bannerRepository.findAllByShowTrue().stream()
                 .collect(Collectors.toMap(this::getBannerTypeValue, Banner::getMarkdown));
     }
 

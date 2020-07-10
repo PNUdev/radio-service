@@ -14,5 +14,5 @@ youtube:
 
 
 admin_user:
-  username: ${USERNAME}
-  password: ${PASSWORD}
+  username: ${ADMIN_USERNAME:admin}
+  password: ${ADMIN_PASSWORD:admin}
