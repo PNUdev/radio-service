@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import static java.util.Objects.nonNull;
 
 @Controller
-public class UserController {
+public class AuthController {
 
     private static final String FLASH_MESSAGE = "flashMessage";
 

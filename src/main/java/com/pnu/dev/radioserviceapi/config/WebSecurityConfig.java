@@ -13,10 +13,10 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
-    @Value("${user.username}")
+    @Value("${admin_user.username}")
     private String USERNAME;
 
-    @Value("${user.password}")
+    @Value("${admin_user.password}")
     private String PASSWORD;
 
     @Override
@@ -25,7 +25,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 //Admin security
                 .authorizeRequests()
                 .antMatchers("/admin/**")
-                .authenticated()
+                .hasRole("ADMIN")
                 .and()
                 .formLogin()
                 .loginPage("/login")

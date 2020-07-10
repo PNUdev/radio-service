@@ -13,6 +13,6 @@ youtube:
   max_results_number: 5
 
 
-user:
+admin_user:
   username: ${USERNAME}
   password: ${PASSWORD}
