@@ -52,7 +52,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public List<ScheduleItemDto> findAll() {
 
-        return sortByStartTimeAndMapToScheduleItemDto(
+        return sortByStartTimeAndMapToScheduleItemDtos(
                 scheduleItemRepository.findAll()
         );
     }
@@ -60,7 +60,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public List<ScheduleItemDto> findByDayOfWeek(DayOfWeek dayOfWeek) {
 
-        return sortByStartTimeAndMapToScheduleItemDto(
+        return sortByStartTimeAndMapToScheduleItemDtos(
                 scheduleItemRepository.findAllByDayOfWeek(dayOfWeek)
         );
     }
@@ -68,7 +68,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public List<ScheduleItemDto> findByProgramId(String programId) {
 
-        return sortByStartTimeAndMapToScheduleItemDto(
+        return sortByStartTimeAndMapToScheduleItemDtos(
                 scheduleItemRepository.findAllByProgramId(programId)
         );
     }
@@ -159,7 +159,7 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
         scheduleItemRepository.deleteById(id);
     }
 
-    private List<ScheduleItemDto> sortByStartTimeAndMapToScheduleItemDto(List<ScheduleItem> scheduleItems) {
+    private List<ScheduleItemDto> sortByStartTimeAndMapToScheduleItemDtos(List<ScheduleItem> scheduleItems) {
         List<ScheduleItem> sortedScheduleItems = scheduleItems.stream()
                 .sorted(Comparator.comparing(ScheduleItem::getStartTime))
                 .collect(Collectors.toList());
