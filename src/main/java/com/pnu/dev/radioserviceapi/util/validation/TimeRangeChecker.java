@@ -5,7 +5,6 @@ import com.pnu.dev.radioserviceapi.mongo.ScheduleItem;
 import com.pnu.dev.radioserviceapi.repository.ScheduleItemRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalTime;
@@ -55,7 +54,7 @@ public class TimeRangeChecker {
             return ValidationResult.withError("Час початку повинен передувати часу закінчення");
         }
 
-        List<ScheduleItem> scheduleItemsForDay = scheduleItemRepository.findAllByDayOfWeek(dayOfWeek, Sort.unsorted());
+        List<ScheduleItem> scheduleItemsForDay = scheduleItemRepository.findAllByDayOfWeek(dayOfWeek);
 
         if (isTimeOccupied.test(scheduleItemsForDay)) {
             return ValidationResult.withError("Час зайнятий іншою програмою");
