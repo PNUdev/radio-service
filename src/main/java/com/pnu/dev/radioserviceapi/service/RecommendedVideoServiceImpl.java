@@ -10,7 +10,9 @@ import com.pnu.dev.radioserviceapi.util.mapper.VideoMapper;
 import com.pnu.dev.radioserviceapi.util.validation.YoutubeVideoIdExtractor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 
 @Service
 public class RecommendedVideoServiceImpl implements RecommendedVideoService {
+
+    private static final Sort SORT_BY_PRIORITY = Sort.by("priority").ascending();
 
     private final RecommendedVideoRepository recommendedVideoRepository;
 
@@ -44,13 +48,13 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
 
     @Override
     public Page<RecommendedVideo> findAll(Pageable pageable) {
-
+        pageable = setSort(pageable, SORT_BY_PRIORITY);
         return recommendedVideoRepository.findAll(pageable);
     }
 
     @Override
     public Page<RecommendedVideo> findAllByTitleContains(String query, Pageable pageable) {
-
+        pageable = setSort(pageable, SORT_BY_PRIORITY);
         return recommendedVideoRepository.findAllByTitleContainsIgnoreCase(query, pageable);
     }
 
@@ -196,4 +200,9 @@ public class RecommendedVideoServiceImpl implements RecommendedVideoService {
         recommendedVideoRepository.saveAll(updatedRecommendedVideos);
 
     }
+
+    private Pageable setSort(Pageable pageable, Sort sort) {
+        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+    }
+
 }
