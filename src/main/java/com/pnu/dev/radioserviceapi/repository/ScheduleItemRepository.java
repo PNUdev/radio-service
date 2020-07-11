@@ -9,9 +9,9 @@ import java.util.List;
 
 public interface ScheduleItemRepository extends MongoRepository<ScheduleItem, String> {
 
-    List<ScheduleItem> findAllByDayOfWeek(DayOfWeek dayOfWeek, Sort sort);
+    List<ScheduleItem> findAllByDayOfWeek(DayOfWeek dayOfWeek);
 
-    List<ScheduleItem> findAllByProgramId(String programId, Sort sort);
+    List<ScheduleItem> findAllByProgramId(String programId);
 
     void deleteAllByProgramId(String programId);
 

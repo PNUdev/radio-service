@@ -12,17 +12,16 @@ import com.pnu.dev.radioserviceapi.util.validation.DataValidator;
 import com.pnu.dev.radioserviceapi.util.validation.TimeRangeChecker;
 import com.pnu.dev.radioserviceapi.util.validation.ValidationResult;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ScheduleItemServiceImpl implements ScheduleItemService {
-
-    private static final Sort SORT_BY_START_TIME = Sort.by(Sort.Direction.ASC, "startTime");
 
     private ScheduleItemRepository scheduleItemRepository;
 
@@ -53,24 +52,24 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public List<ScheduleItemDto> findAll() {
 
-        return scheduleItemToScheduleItemDtoMapper.map(
-                scheduleItemRepository.findAll(SORT_BY_START_TIME)
+        return sortByStartTimeAndMapToScheduleItemDtos(
+                scheduleItemRepository.findAll()
         );
     }
 
     @Override
     public List<ScheduleItemDto> findByDayOfWeek(DayOfWeek dayOfWeek) {
 
-        return scheduleItemToScheduleItemDtoMapper.map(
-                scheduleItemRepository.findAllByDayOfWeek(dayOfWeek, SORT_BY_START_TIME)
+        return sortByStartTimeAndMapToScheduleItemDtos(
+                scheduleItemRepository.findAllByDayOfWeek(dayOfWeek)
         );
     }
 
     @Override
     public List<ScheduleItemDto> findByProgramId(String programId) {
 
-        return scheduleItemToScheduleItemDtoMapper.map(
-                scheduleItemRepository.findAllByProgramId(programId, SORT_BY_START_TIME)
+        return sortByStartTimeAndMapToScheduleItemDtos(
+                scheduleItemRepository.findAllByProgramId(programId)
         );
     }
 
@@ -158,6 +157,14 @@ public class ScheduleItemServiceImpl implements ScheduleItemService {
     @Override
     public void deleteById(String id) {
         scheduleItemRepository.deleteById(id);
+    }
+
+    private List<ScheduleItemDto> sortByStartTimeAndMapToScheduleItemDtos(List<ScheduleItem> scheduleItems) {
+        List<ScheduleItem> sortedScheduleItems = scheduleItems.stream()
+                .sorted(Comparator.comparing(ScheduleItem::getStartTime))
+                .collect(Collectors.toList());
+
+        return scheduleItemToScheduleItemDtoMapper.map(sortedScheduleItems);
     }
 
 }
