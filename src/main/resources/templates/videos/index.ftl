@@ -51,6 +51,7 @@
                                 </#list>
                             </select>
                         </div>
+                        <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                     </form>
                     <div class="row float-right">
                         <a href="/admin/videos/delete/${video.id}">
@@ -59,6 +60,7 @@
                     </div>
                 </div>
             </div>
+
         </#list>
     </div>
     <#if videosPage.number == 0 && !videosPage.content?has_content>

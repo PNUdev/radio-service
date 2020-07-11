@@ -7,6 +7,7 @@
                 <div class="btn btn-outline-primary mx-4">Ні, відмінити дію</div>
             </a>
             <form method="POST">
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
                 <button class="btn btn-outline-danger mx-4">Так, видалити!</button>
             </form>
         </div>
