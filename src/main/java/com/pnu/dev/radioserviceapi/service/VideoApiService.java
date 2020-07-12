@@ -9,5 +9,7 @@ public interface VideoApiService {
 
     PageResponse<RecommendedVideoDto> findRecommended(Pageable pageable);
 
+    PageResponse<RecommendedVideoDto> findRecommendedByTitleContains(String query, Pageable pageable);
+
     VideosCollectionResponse findRecent();
 }

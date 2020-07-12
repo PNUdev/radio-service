@@ -1,12 +1,14 @@
 package com.pnu.dev.radioserviceapi.service;
 
 import com.pnu.dev.radioserviceapi.mongo.RecommendedVideo;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface RecommendedVideoService {
 
-    List<RecommendedVideo> findAll();
+    Page<RecommendedVideo> findAll(Pageable pageable);
+
+    Page<RecommendedVideo> findAllByTitleContains(String query, Pageable pageable);
 
     RecommendedVideo findById(String id);
 
@@ -15,5 +17,7 @@ public interface RecommendedVideoService {
     void create(String link);
 
     void updatePriority(String id, Integer newPriority);
+
+    long getVideosNumber();
 
 }
