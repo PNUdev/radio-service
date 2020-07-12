@@ -14,9 +14,7 @@ import com.pnu.dev.radioserviceapi.util.OperationResult;
 import com.pnu.dev.radioserviceapi.util.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,8 +22,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class VideoApiServiceImpl implements VideoApiService {
-
-    private static final Sort SORT_BY_PRIORITY = Sort.by("priority").ascending();
 
     private final YoutubeApiClient youtubeApiClient;
 
@@ -42,14 +38,12 @@ public class VideoApiServiceImpl implements VideoApiService {
 
     @Override
     public PageResponse<RecommendedVideoDto> findRecommended(Pageable pageable) {
-        pageable = setSort(pageable, SORT_BY_PRIORITY);
         Page<RecommendedVideo> videoPage = recommendedVideoRepository.findAll(pageable);
         return videoMapper.videoPageToRecommendedVideoPageDto(videoPage);
     }
 
     @Override
     public PageResponse<RecommendedVideoDto> findRecommendedByTitleContains(String query, Pageable pageable) {
-        pageable = setSort(pageable, SORT_BY_PRIORITY);
         Page<RecommendedVideo> videoPage = recommendedVideoRepository.findAllByTitleContainsIgnoreCase(query, pageable);
         return videoMapper.videoPageToRecommendedVideoPageDto(videoPage);
     }
@@ -78,7 +72,4 @@ public class VideoApiServiceImpl implements VideoApiService {
                 .build();
     }
 
-    private Pageable setSort(Pageable pageable, Sort sort) {
-        return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
-    }
 }

@@ -6,6 +6,7 @@ import com.pnu.dev.radioserviceapi.dto.response.VideosCollectionResponse;
 import com.pnu.dev.radioserviceapi.service.VideoApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +27,16 @@ public class VideoApiController {
     }
 
     @GetMapping("/recommended")
-    public PageResponse<RecommendedVideoDto> findRecommended(@PageableDefault(size = 10)
-                                                                     Pageable pageable) {
+    public PageResponse<RecommendedVideoDto> findRecommended(@PageableDefault(size = 5, sort = "priority",
+            direction = Sort.Direction.ASC) Pageable pageable) {
         return videoApiService.findRecommended(pageable);
     }
 
     @GetMapping("/recommended/search")
     public PageResponse<RecommendedVideoDto> findRecommendedByTitleContains(@RequestParam("q") String query,
-                                                                            @PageableDefault(size = 10)
+                                                                            @PageableDefault(size = 5,
+                                                                                    sort = "priority",
+                                                                                    direction = Sort.Direction.ASC)
                                                                                     Pageable pageable) {
         return videoApiService.findRecommendedByTitleContains(query, pageable);
     }

@@ -42,7 +42,7 @@ public class VideoAdminController {
 
         Page<RecommendedVideo> programsPage;
 
-        if (StringUtils.isNoneBlank(query)) {
+        if (StringUtils.isNotBlank(query)) {
             programsPage = recommendedVideoService.findAllByTitleContains(query, pageable);
             model.addAttribute("searchKeyword", query);
         } else {
