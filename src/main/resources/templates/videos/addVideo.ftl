@@ -26,7 +26,7 @@
         </iframe>
     </div>
     <div class="row justify-content-center text-center">
-        <form method="post" action="/admin/videos/add">
+        <form method="post">
             <input id="postLink" type="hidden" name="link" value="">
             <button class="btn btn-primary row m-4">Додати це відео</button>
             <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>

@@ -2,7 +2,7 @@
 
 <div class="container">
     <div class="py-4">
-        <a href="/admin/videos/add">
+        <a href="/admin/videos/new">
             <div class="btn btn-primary btn-lg btn-block">Додати відео</div>
         </a>
     </div>

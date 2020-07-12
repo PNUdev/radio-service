@@ -53,8 +53,8 @@ public class VideoAdminController {
         return "videos/index";
     }
 
-    @GetMapping("/add")
-    public String findVideoOnYoutube() {
+    @GetMapping("/new")
+    public String addRecommendedVideo() {
         return "videos/addVideo";
     }
 
@@ -70,8 +70,8 @@ public class VideoAdminController {
         return "common/deleteConfirmation";
     }
 
-    @PostMapping("/add")
-    public String addVideo(@ModelAttribute(name = "link") String link, RedirectAttributes redirectAttributes) {
+    @PostMapping("/new")
+    public String create(@ModelAttribute(name = "link") String link, RedirectAttributes redirectAttributes) {
         recommendedVideoService.create(link);
         redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Відео було успішно додано");
         return "redirect:/admin/videos";
