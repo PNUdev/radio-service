@@ -6,17 +6,21 @@
             <div class="btn btn-primary btn-lg btn-block">Додати відео</div>
         </a>
     </div>
-    <form action="/admin/videos">
-        <div class="form-row my-3">
-            <div class="col-md-4">
-                <input class="form-control py-1 lime-border my-2" name="q" type="text" placeholder="Пошук"
-                       aria-label="Пошук">
+
+    <#if videosPage.content?has_content>
+        <form action="/admin/videos">
+            <div class="form-row my-3">
+                <div class="col-md-4">
+                    <input class="form-control py-1 lime-border my-2" name="q" type="text" placeholder="Пошук"
+                           aria-label="Пошук">
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary form-control my-2">Шукати</button>
+                </div>
             </div>
-            <div class="col-auto">
-                <button class="btn btn-primary form-control my-2">Шукати</button>
-            </div>
-        </div>
-    </form>
+        </form>
+    </#if>
+
     <div>
         <#if searchKeyword?? >
             <div class="row mt-5 d-flex justify-content-around">
@@ -64,11 +68,13 @@
         </#list>
     </div>
     <#if videosPage.number == 0 && !videosPage.content?has_content>
-        <#if searchKeyword?? >
-            <h1 class="text-center mt-5">Результатів не знайдено</h1>
-        <#else >
-            <h1 class="text-center">Список рекомендованих відео пустий</h1>
-        </#if>
+        <h1 class="text-center mt-5">
+            <#if searchKeyword?? >
+                Результатів не знайдено
+            <#else >
+                Список рекомендованих відео пустий
+            </#if>
+        </h1>
     <#else>
         <nav>
             <#assign searchQueryParam = searchKeyword???then('&q=${searchKeyword}', '') >

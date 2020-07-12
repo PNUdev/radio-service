@@ -11,18 +11,20 @@
             </a>
         </div>
 
-        <form action="/admin/programs">
-            <div class="form-row my-3">
-                <div class="col-md-4">
-                    <input class="form-control py-1 lime-border my-2" name="q" type="text" placeholder="Пошук"
-                           aria-label="Пошук">
+        <#if programsPage.content?has_content>
+            <form action="/admin/programs">
+                <div class="form-row my-3">
+                    <div class="col-md-4">
+                        <input class="form-control py-1 lime-border my-2" name="q" type="text" placeholder="Пошук"
+                               aria-label="Пошук">
+                    </div>
+                    <div class="col-auto">
+                        <button class="btn btn-primary form-control my-2">Шукати</button>
+                    </div>
                 </div>
-                <div class="col-auto">
-                    <button class="btn btn-primary form-control my-2">Шукати</button>
-                </div>
-            </div>
-            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
-        </form>
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            </form>
+        </#if>
 
         <div>
             <#if searchKeyword?? >
@@ -57,11 +59,13 @@
             </#list>
         </div>
         <#if programsPage.number == 0 && !programsPage.content?has_content>
-            <#if searchKeyword?? >
-                <h1 class="text-center mt-5">Результатів не знайдено</h1>
-            <#else >
-                <h1 class="text-center">Список програм пустий</h1>
-            </#if>
+            <h1 class="text-center mt-5">
+                <#if searchKeyword?? >
+                    Результатів не знайдено
+                <#else >
+                    Список програм пустий
+                </#if>
+            </h1>
         <#else>
             <nav>
                 <#assign searchQueryParam = searchKeyword???then('&q=${searchKeyword}', '') >
