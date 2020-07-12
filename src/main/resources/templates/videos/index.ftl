@@ -1,7 +1,7 @@
 <#include "../include/header.ftl">
 
 <div class="container">
-    <div class="py-3">
+    <div class="py-4">
         <a href="/admin/videos/add">
             <div class="btn btn-primary btn-lg btn-block">Додати відео</div>
         </a>
