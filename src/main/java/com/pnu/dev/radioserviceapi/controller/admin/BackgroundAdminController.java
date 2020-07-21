@@ -33,7 +33,6 @@ public class BackgroundAdminController {
         return "backgrounds/index";
     }
 
-
     @PostMapping
     public String update(@ModelAttribute BackgroundImageHrefs backgroundImageHrefs,
                          RedirectAttributes redirectAttributes) {
