@@ -22,11 +22,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.pnu.dev.radioserviceapi.util.FlashMessageConstants.FLASH_MESSAGE_SUCCESS;
+
 @Controller
 @RequestMapping("/admin/programs")
 public class ProgramAdminController {
-
-    private static final String FLASH_MESSAGE = "flashMessage";
 
     private ProgramService programService;
 
@@ -82,7 +82,7 @@ public class ProgramAdminController {
     @PostMapping("/new")
     public String create(@ModelAttribute ProgramForm programForm, RedirectAttributes redirectAttributes) {
         programService.create(programForm);
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Програму було успішно створено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Програму було успішно створено");
         return "redirect:/admin/programs";
     }
 
@@ -90,14 +90,14 @@ public class ProgramAdminController {
     public String update(@PathVariable("id") String id,
                          @ModelAttribute ProgramForm programForm, RedirectAttributes redirectAttributes) {
         programService.update(id, programForm);
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Програму було успішно оновлено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Програму було успішно оновлено");
         return "redirect:/admin/programs";
     }
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         programService.deleteById(id);
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Програму було успішно видалено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Програму було успішно видалено");
         return "redirect:/admin/programs";
     }
 

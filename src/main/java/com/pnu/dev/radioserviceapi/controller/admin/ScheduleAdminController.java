@@ -29,15 +29,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 
+import static com.pnu.dev.radioserviceapi.util.FlashMessageConstants.FLASH_MESSAGE_ERROR;
+import static com.pnu.dev.radioserviceapi.util.FlashMessageConstants.FLASH_MESSAGE_SUCCESS;
 import static java.util.Objects.isNull;
 
 @Controller
 @RequestMapping("/admin/schedule")
 public class ScheduleAdminController {
-
-    private static final String FLASH_MESSAGE = "flashMessage";
-
-    private static final String FLASH_ERROR = "flashErrorMessage";
 
     private ScheduleItemService scheduleItemService;
 
@@ -75,12 +73,12 @@ public class ScheduleAdminController {
             return "schedule/dailySchedule";
         }
 
-        if (model.containsAttribute(FLASH_MESSAGE)) {
-            redirectAttributes.addFlashAttribute(FLASH_MESSAGE, model.getAttribute(FLASH_MESSAGE));
+        if (model.containsAttribute(FLASH_MESSAGE_SUCCESS)) {
+            redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, model.getAttribute(FLASH_MESSAGE_SUCCESS));
         }
 
-        if (model.containsAttribute(FLASH_ERROR)) {
-            redirectAttributes.addFlashAttribute(FLASH_ERROR, model.getAttribute(FLASH_ERROR));
+        if (model.containsAttribute(FLASH_MESSAGE_ERROR)) {
+            redirectAttributes.addFlashAttribute(FLASH_MESSAGE_ERROR, model.getAttribute(FLASH_MESSAGE_ERROR));
         }
 
         redirectAttributes.addFlashAttribute("selectedItemId", selectedItemId);
@@ -133,11 +131,11 @@ public class ScheduleAdminController {
         OperationResult<ScheduleItemDto> scheduleItemOperationResult = scheduleItemService.create(newScheduleItemForm);
 
         if (scheduleItemOperationResult.isError()) {
-            redirectAttributes.addFlashAttribute(FLASH_ERROR, scheduleItemOperationResult.getErrorMessage());
+            redirectAttributes.addFlashAttribute(FLASH_MESSAGE_ERROR, scheduleItemOperationResult.getErrorMessage());
             return redirectToPreviousPage(httpServletRequest);
         }
 
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно створено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Запис було успішно створено");
 
         ScheduleItemDto scheduleItem = scheduleItemOperationResult.getData();
         return String.format("redirect:/admin/schedule/day/%s?selectedItemId=%s",
@@ -154,11 +152,11 @@ public class ScheduleAdminController {
                 .update(id, updateScheduleItemForm);
 
         if (scheduleItemOperationResult.isError()) {
-            redirectAttributes.addFlashAttribute(FLASH_ERROR, scheduleItemOperationResult.getErrorMessage());
+            redirectAttributes.addFlashAttribute(FLASH_MESSAGE_ERROR, scheduleItemOperationResult.getErrorMessage());
             return redirectToPreviousPage(httpServletRequest, id);
         }
 
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно оновлено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Запис було успішно оновлено");
 
         ScheduleItemDto scheduleItem = scheduleItemOperationResult.getData();
         return String.format("redirect:/admin/schedule/day/%s?selectedItemId=%s",
@@ -172,7 +170,7 @@ public class ScheduleAdminController {
 
         scheduleItemService.deleteById(id);
 
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Запис було успішно видалено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Запис було успішно видалено");
 
         return "redirect:/admin/schedule/day/" + scheduleItem.getDayOfWeek().getUrlValue();
     }

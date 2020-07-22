@@ -21,11 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static com.pnu.dev.radioserviceapi.util.FlashMessageConstants.FLASH_MESSAGE_SUCCESS;
+
 @Controller
 @RequestMapping("/admin/videos")
 public class VideoAdminController {
-
-    private static final String FLASH_MESSAGE = "flashMessage";
 
     private final RecommendedVideoService recommendedVideoService;
 
@@ -73,7 +73,7 @@ public class VideoAdminController {
     @PostMapping("/new")
     public String create(@ModelAttribute(name = "link") String link, RedirectAttributes redirectAttributes) {
         recommendedVideoService.create(link);
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Відео було успішно додано");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Відео було успішно додано");
         return "redirect:/admin/videos";
     }
 
@@ -81,14 +81,14 @@ public class VideoAdminController {
     public String update(@PathVariable("id") String id, @ModelAttribute(name = "newPriority") Integer newPriority,
                          RedirectAttributes redirectAttributes) {
         recommendedVideoService.updatePriority(id, newPriority);
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Порядок відображення відеозаписів було успішно оновлено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Порядок відображення відеозаписів було успішно оновлено");
         return "redirect:/admin/videos";
     }
 
     @PostMapping("/delete/{id}")
     public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         recommendedVideoService.deleteById(id);
-        redirectAttributes.addFlashAttribute(FLASH_MESSAGE, "Відео було успішно видалено");
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Відео було успішно видалено");
         return "redirect:/admin/videos";
     }
 

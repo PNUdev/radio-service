@@ -10,6 +10,7 @@
         <a class="navbar-brand" href="/admin/programs">Програми</a>
         <a class="navbar-brand" href="/admin/videos">Відео</a>
         <a class="navbar-brand" href="/admin/banners">Банери</a>
+        <a class="navbar-brand" href="/admin/backgrounds">Фон</a>
     </div>
     <div class="d-inline">
         <form method="POST" action="/logout" class="m-0 p-0">

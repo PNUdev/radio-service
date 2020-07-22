@@ -11,15 +11,15 @@
 
     toastr.options.positionClass = 'toast-top-center';
 
-    <#if flashMessage??>
+    <#if flashMessageSuccess??>
     $(document).ready(function () {
-        toastr.success("${flashMessage}");
+        toastr.success("${flashMessageSuccess}");
     });
     </#if>
 
-    <#if flashErrorMessage??>
+    <#if flashMessageError??>
     $(document).ready(function () {
-        toastr.error("${flashErrorMessage}");
+        toastr.error("${flashMessageError}");
     });
     </#if>
 
