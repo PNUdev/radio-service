@@ -1,0 +1,58 @@
+@import "../../../colors";
+
+$rhap_theme-color: white;
+$rhap_background-color: none;//rgba(60,0,0,0.8);
+$rhap_bar-color: $orange;
+
+// Needs to be included here in order to override defautl variables
+@import 'react-h5-audio-player/src/styles.scss';
+
+// PLAYER OVERRIDES
+.rhap_additional-controls { display: none; }
+.rhap_container {
+  border-bottom-left-radius: 30px;
+  outline: none;
+}
+.rhap_main-controls {
+  button {
+    outline: none;
+
+    svg path {
+      border-radius: 50%;
+      border: 1px solid greenyellow;
+    }
+  }
+}
+.rhap_volume-controls {
+  justify-content: flex-start;
+
+  .rhap_volume-button { outline: none; }
+  .rhap_volume-bar-area { outline: none; }
+}
+
+
+// PLAYER STYLES
+
+.player {
+  border-bottom-left-radius: 30px;
+
+  img.share-link {
+    height: 20px;
+    cursor: pointer;
+  }
+
+  .share-popup {
+    img { height: 30px; }
+    a { color: $orange; }
+
+    .copy-link { cursor: pointer; }
+  }
+}
+
+// SHARE POPUP OVERRIDES
+.popup-content {
+  border-radius: 5px;
+  border-bottom-right-radius: 0px;
+  width: 100px !important;
+  transition: all .5s;
+}
