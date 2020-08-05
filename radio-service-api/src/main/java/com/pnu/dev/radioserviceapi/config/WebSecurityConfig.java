@@ -26,7 +26,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
         httpSecurity
                 .cors()
                 .and()
-                //Admin security
+                // Admin security
                 .authorizeRequests()
                 .antMatchers("/admin/**")
                 .hasRole("ADMIN")
@@ -38,10 +38,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter implements W
                 .and()
                 .logout()
                 .permitAll()
-                //API security
+                // Public
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/**")
+                .antMatchers("/**")
                 .permitAll();
     }
 
