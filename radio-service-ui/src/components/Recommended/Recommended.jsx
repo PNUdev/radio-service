@@ -18,7 +18,7 @@ class Recommended extends React.Component {
   constructor(props) {
     super(props);
 
-    this.fetchVideos(RECOMENDED_URL, true)
+    this.fetchVideos(RECOMENDED_URL, 0, true)
     this.fetchNext = this.fetchNext.bind(this);
     this.fetchVideos = this.fetchVideos.bind(this);
   }
@@ -44,7 +44,7 @@ class Recommended extends React.Component {
 
   fetchNext(page) {
     console.log('fetching')
-    this.fetchVideos(RECOMENDED_URL, page)
+    this.fetchVideos(RECOMENDED_URL, page, false)
   }
 
   render() {

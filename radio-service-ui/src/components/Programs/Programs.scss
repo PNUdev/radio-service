@@ -1,14 +1,18 @@
 @import "../../colors";
 
-.recommended-container {
+.programs-container {
   margin-bottom: 20px;
 
-  .video-card {
+  .program-card {
     background: white;
     color: black;
     border-radius: 20px;
 
     h3.title { border-bottom: 2px solid $orange }
-    iframe { min-width: 560px; }
+    img { width: 560px; }
+    .occurences {
+      color: gray;
+      font-size: 14px;
+    }
   }
 }
