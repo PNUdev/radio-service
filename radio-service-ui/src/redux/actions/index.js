@@ -9,3 +9,4 @@ export const setSchedule      = schedule => ({ type: 'SCHEDULE/SET_SCHEDULE', sc
 export const setTooltips      = tooltips => ({ type: 'SCHEDULE/SET_TOOLTIPS', tooltips })
 export const setTodayPrograms = programs => ({ type: 'RADIO/SET_TODAY_PROGRAMS', programs });
 export const setPrograms    = (programs, currentPage, totalPages)    => ({ type: 'PROGRAMS/SET_PROGRAMS', programs, currentPage, totalPages });
+export const setEmbeddedPrograms = programs => ({ type: 'SHEDULE/SET_PROGRAMS', programs })

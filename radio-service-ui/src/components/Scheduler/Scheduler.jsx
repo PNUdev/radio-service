@@ -16,8 +16,6 @@ const SCHEDULE_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/sched
 const SITE_URL = 'https://radio-service-api-stage.herokuapp.com'
 const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
 
-let tooltips = {}
-
 class Scheduler extends React.Component {
   constructor(props) {
     super(props);
@@ -28,11 +26,6 @@ class Scheduler extends React.Component {
     this.fetchSchedule = this.fetchSchedule.bind(this);
     this.fetchPrograms = this.fetchPrograms.bind(this);
   }
-
-  // componentDidUpdate() {
-  //   // !this.props.programs &&
-  //   this.props.schedule && this.fetchPrograms();
-  // }
 
   fetchBackground() {
     this.props.turnLoadingOn();
@@ -49,23 +42,13 @@ class Scheduler extends React.Component {
   }
 
   fetchPrograms() {
+    const items = Object.keys(this.props.schedule)
+      .map(day => this.props.schedule[day].scheduleItems)
+      .flat();
 
-    const programs = Object.keys(this.props.schedule).map(day => {
-      this.props.schedule[day].scheduleItems.map(item => {
-        axios.get(SITE_URL + item.programLink)
-        .then(response => {
-          console.log(response)
-          programs['id_' + response.data.id] = {
-            description: response.data.description,
-            imageUrl: response.data.imageUrl,
-            scheduleOccurrences: response.data.scheduleOccurrences,
-          }
-          console.log(programs)
-        })
-      })
-    })
-    // console.log(programs)
-    // console.log(Object.keys(programs))
+    const programs = items.map(item => axios.get(SITE_URL + item.programLink))
+
+    this.props.setEmbeddedPrograms(Promise.allSettled(programs))
   }
 
   fetchSchedule = () => {
@@ -88,32 +71,32 @@ class Scheduler extends React.Component {
 
     const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
-    const dayNamesShort = {
-      'Понеділок': 'пн',
-      'Вівторок': 'вт',
-      'Середа': 'ср',
-      'Четвер': 'чт',
-      "П'ятниця": 'пт',
-      'Субота': 'сб',
-      'Неділя': 'нд',
-    }
+    // const dayNamesShort = {
+    //   'Понеділок': 'пн',
+    //   'Вівторок': 'вт',
+    //   'Середа': 'ср',
+    //   'Четвер': 'чт',
+    //   "П'ятниця": 'пт',
+    //   'Субота': 'сб',
+    //   'Неділя': 'нд',
+    // }
 
-    const renderOccurrence = (occurence, last=false) => {
-      return(
-        <div className="occurence" key={occurence.dayOfWeek.nameUkr}>
-          <span className="day">{dayNamesShort[occurence.dayOfWeek.nameUkr]}</span>
-          <span className="time">
-            ({occurence.timeRange.startTime} - {occurence.timeRange.endTime}){!last && "," + String.fromCharCode(160)}
-          </span>
-        </div>
-      )
-    }
+    // const renderOccurrence = (occurence, last=false) => {
+    //   return(
+    //     <div className="occurence" key={occurence.dayOfWeek.nameUkr}>
+    //       <span className="day">{dayNamesShort[occurence.dayOfWeek.nameUkr]}</span>
+    //       <span className="time">
+    //         ({occurence.timeRange.startTime} - {occurence.timeRange.endTime}){!last && "," + String.fromCharCode(160)}
+    //       </span>
+    //     </div>
+    //   )
+    // }
 
     const renderProgramTooltip = programLink => {
+      const program = axios.get(SITE_URL + programLink).then(response => response.data)
       return (
         <div className="tooltip-wrapper d-flex">
-
-          {/* {
+          {
             program &&
             <>
               <img src={program.imageUrl} alt=""/>
@@ -122,14 +105,14 @@ class Scheduler extends React.Component {
                   {program.description > 50 ? (program.description.substr(0, 50) + '...') : program.description}
                 </div>
                 <div className="occurences ml-2 d-flex">
-                  {
+                  {/* {
                     program.scheduleOccurrences &&
                     program.scheduleOccurrences.map(occurence => renderOccurrence(occurence, (program.scheduleOccurrences.indexOf(occurence) == program.scheduleOccurrences.length - 1)))
-                  }
+                  } */}
                 </div>
               </div>
             </>
-          } */}
+          }
         </div>
       )
     }
@@ -199,12 +182,14 @@ const mapStateToProps = state => {
     schedule: state.schedule.schedule,
     tooltips: state.schedule.tooltips,
     loading: state.shared.loading,
-    }
+    programs: state.schedule.programs,
+  }
 };
 
 const mapDispatchToProps = dispatch => ({
-  setSchedule:       schedule => dispatch(actions.setSchedule(schedule)),
-  setTooltips:       tooltips => dispatch(actions.setTooltips(tooltips)),
+  setSchedule: schedule => dispatch(actions.setSchedule(schedule)),
+  setTooltips: tooltips => dispatch(actions.setTooltips(tooltips)),
+  setEmbeddedPrograms: programs => dispatch(actions.setEmbeddedPrograms(programs)),
   turnLoadingOn:  () => dispatch(actions.turnLoadingOn()),
   turnLoadingOff: () => dispatch(actions.turnLoadingOff()),
 
@@ -213,6 +198,8 @@ const mapDispatchToProps = dispatch => ({
 Scheduler.propTypes = {
   schedule: PropTypes.object,
   tooltips: PropTypes.object,
+  programs: PropTypes.object,
+
   loading: PropTypes.bool,
 }
 

@@ -19,9 +19,8 @@ class Programs extends React.Component {
     super(props);
 
     this.fetchBackground();
-    this.fetchPrograms(PROGRAMS_URL, 0, true);
+    this.fetchPrograms();
 
-    this.fetchNext = this.fetchNext.bind(this);
     this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchPrograms = this.fetchPrograms.bind(this);
   }
@@ -40,10 +39,8 @@ class Programs extends React.Component {
     });
   }
 
-  fetchPrograms(url, currentPage = 0, initial=false) {
-    initial && this.props.turnLoadingOn();
-
-    axios.get(url + "?page=" + currentPage)
+  fetchPrograms() {
+    axios.get(PROGRAMS_URL + "?page=" + 0)
     .then((response) => {
       this.props.turnLoadingOff();
 
@@ -54,14 +51,9 @@ class Programs extends React.Component {
       );
     })
     .catch((errors) => {
-      initial && this.props.turnLoadingOff();
+      this.props.turnLoadingOff();
       console.error(errors)
     });
-  }
-
-  fetchNext(page) {
-    console.log('fetching')
-    this.fetchPrograms(PROGRAMS_URL, page, false)
   }
 
   render() {
@@ -115,14 +107,14 @@ class Programs extends React.Component {
 
     return (
       <div className="programs-container">
-        <InfiniteScroll
+        {/* <InfiniteScroll
           pageStart={0}
           loadMore={this.fetchNext}
           hasMore={totalPages > currentPage + 1}
           loader={<PaginationLoader key={currentPage} />}
-        >
+        > */}
           { programs.length > 0 && programs.map(program => renderProgram(program)) }
-        </InfiniteScroll>
+        {/* </InfiniteScroll> */}
       </div>
     )
   }

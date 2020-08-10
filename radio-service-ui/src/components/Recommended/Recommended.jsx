@@ -20,6 +20,7 @@ class Recommended extends React.Component {
     super(props);
 
     this.fetchBackground();
+    this.fetchVideos();
 
     this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchVideos = this.fetchVideos.bind(this);
@@ -40,28 +41,21 @@ class Recommended extends React.Component {
   }
 
   fetchVideos() {
-    console.log(this.props.currentPage)
     this.props.turnLoadingOn();
 
     axios.get(RECOMENDED_URL + this.props.currentPage)
-    .then((response) => {
+    .then(response => {
       this.props.turnLoadingOff();
-      let videos = this.props.recommended;
+      // const videos = [...this.props.recommended, ...response.data.content];
 
-      response.data.content.map(video => videos.push(video));
-
-      if(response.data.pageNumber !== response.data.totalPages - 1) {
-        console.log('setting...')
-        this.props.setRecommended(videos, this.props.currentPage + 1)
-        console.log(this.props.currentPage)
-      } else {
-        this.props.setHasMore(false);
-      }
+      // console.log(response.data.pageNumber, response.data.totalPages)
+      // if(response.data.pageNumber < response.data.totalPages) {
+        this.props.setRecommended(response.data.content, this.props.currentPage)
+      // }
+      // if(response.data.pageNumber  >= response.data.totalPages-1) {
+      //   this.props.setHasMore(false);
+      // }
     })
-    .catch((errors) => {
-      this.props.turnLoadingOff();
-      console.error(errors)
-    });
   }
 
   render() {
@@ -86,16 +80,16 @@ class Recommended extends React.Component {
 
     return (
       <div className="recommended-container">
-        <InfiniteScroll
+        {/* <InfiniteScroll
           pageStart={0}
           loadMore={this.fetchVideos}
-          hasMore={this.props.hasMore}
+          hasMore={hasMore}
           loader={<PaginationLoader key={currentPage} />}
           useWindow={true}
-          // getScrollParent={() => this.props.scrollParentRef}
-        >
+          getScrollParent={() => this.props.scrollParentRef}
+        > */}
           { recommended.length > 0 && recommended.map(video => renderVideo(video)) }
-        </InfiniteScroll>
+        {/* </InfiniteScroll> */}
       </div>
     )
   }
