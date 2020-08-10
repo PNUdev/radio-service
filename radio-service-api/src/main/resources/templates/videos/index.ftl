@@ -2,6 +2,12 @@
 
 <div class="container">
     <div class="py-4">
+        <form method="POST" action="/admin/videos/clear-recent-videos-cache">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+            <button class="btn btn-primary btn-lg btn-block">Очистити нещодавніх відео кеш</button>
+        </form>
+    </div>
+    <div class="pb-4">
         <a href="/admin/videos/new">
             <div class="btn btn-primary btn-lg btn-block">Додати відео</div>
         </a>

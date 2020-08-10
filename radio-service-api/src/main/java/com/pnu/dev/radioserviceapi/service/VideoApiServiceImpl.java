@@ -20,6 +20,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.nonNull;
+
 @Service
 public class VideoApiServiceImpl implements VideoApiService {
 
@@ -29,11 +31,18 @@ public class VideoApiServiceImpl implements VideoApiService {
 
     private final VideoMapper videoMapper;
 
+    private final YoutubeCacheService youtubeCacheService;
+
     @Autowired
-    public VideoApiServiceImpl(YoutubeApiClient youtubeApiClient, RecommendedVideoRepository recommendedVideoRepository, VideoMapper videoMapper) {
+    public VideoApiServiceImpl(YoutubeApiClient youtubeApiClient,
+                               RecommendedVideoRepository recommendedVideoRepository,
+                               VideoMapper videoMapper,
+                               YoutubeCacheService youtubeCacheService) {
+
         this.youtubeApiClient = youtubeApiClient;
         this.recommendedVideoRepository = recommendedVideoRepository;
         this.videoMapper = videoMapper;
+        this.youtubeCacheService = youtubeCacheService;
     }
 
     @Override
@@ -51,11 +60,18 @@ public class VideoApiServiceImpl implements VideoApiService {
     @Override
     public VideosCollectionResponse findRecent() {
 
+        VideosCollectionResponse recentVideosCollectionFromCache = youtubeCacheService.getRecentVideos();
+
+        if (nonNull(recentVideosCollectionFromCache)) {
+            return recentVideosCollectionFromCache;
+        }
+
         OperationResult<YoutubeSearchResponse> apiResult = youtubeApiClient.findRecentVideos();
         if (apiResult.isError()) {
             throw new RadioServiceApiException(apiResult.getErrorMessage());
         }
         List<VideoDto> videoDtoList = videoMapper.itemSearchResponseListToVideoDtoList(apiResult.getData().getItems());
+
         List<VideoDto> recent = videoDtoList.parallelStream()
                 .filter(v -> v.getLiveBroadcastContent().equals(LiveBroadcastContent.COMPLETED)
                         || v.getLiveBroadcastContent().equals(LiveBroadcastContent.NONE))
@@ -66,10 +82,14 @@ public class VideoApiServiceImpl implements VideoApiService {
                         || v.getLiveBroadcastContent().equals(LiveBroadcastContent.LIVE))
                 .collect(Collectors.toList());
 
-        return VideosCollectionResponse.builder()
+        VideosCollectionResponse recentVideosCollectionFromYoutube = VideosCollectionResponse.builder()
                 .recent(recent)
                 .streams(streams)
                 .build();
+
+        youtubeCacheService.setRecentVideos(recentVideosCollectionFromYoutube);
+
+        return recentVideosCollectionFromYoutube;
     }
 
 }
