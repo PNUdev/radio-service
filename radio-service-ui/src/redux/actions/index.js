@@ -1,5 +1,7 @@
 export const turnLoadingOn  = () => ({ type: 'SHARED/TURN_ON_LOADER' })
 export const turnLoadingOff = () => ({ type: 'SHARED/TURN_OFF_LOADER' })
+export const toggleHamburger = () => ({ type: 'SHARED/TOGGLE_HAMBURGER' })
+export const turnOffHamburger = () => ({ type: 'SHARED/TURN_OFF_HAMBURGER' })
 
 export const setRecommended = (recommended, currentPage) => ({ type: 'VIDEOS/SET_RECOMMENDED', recommended, currentPage });
 export const setHasMore     = hasMore     => ({ type: 'VIDEOS/SET_HAS_MORE', hasMore })

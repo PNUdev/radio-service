@@ -6,7 +6,6 @@ html { box-sizing: border-box }
 
 .wrapper {
   height: 100vh;
-  background-color: $grey;
   background: linear-gradient(90deg, rgba(24,141,154,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
 
   .content {
@@ -86,7 +85,7 @@ html { box-sizing: border-box }
   .wrapper {
     position: relative;
     width: 100%;
-    background: black;
+    background: linear-gradient(90deg, rgb(32, 34, 36) 0%, rgb(0, 0, 0) 100%);
 
     .hamburger {
       height: 50px;

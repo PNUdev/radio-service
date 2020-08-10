@@ -25,6 +25,14 @@ class Programs extends React.Component {
     this.fetchPrograms = this.fetchPrograms.bind(this);
   }
 
+  componentDidMount(){
+    if(this.props.open){
+      document.getElementById('menu').style.width = '0%';
+      document.body.style.overflow = 'visible';
+      this.props.turnOffHamburger();
+    }
+  }
+
   fetchBackground() {
     this.props.turnLoadingOn();
 
@@ -124,21 +132,24 @@ const mapStateToProps = state => {
   return {
     currentPage: state.programs.currentPage,
     totalPages:  state.programs.totalPages,
-    programs:    state.programs.programs
+    programs:    state.programs.programs,
+    open: state.shared.open,
+
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   setPrograms: (programs, currentPage, totalPages) => dispatch(actions.setPrograms(programs, currentPage, totalPages)),
   turnLoadingOn:  () => dispatch(actions.turnLoadingOn()),
   turnLoadingOff: () => dispatch(actions.turnLoadingOff()),
-
 });
 
 Programs.propTypes = {
   currentPage: PropTypes.number,
   totalPages:  PropTypes.number,
   programs:    PropTypes.array,
+  open: PropTypes.bool,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Programs);

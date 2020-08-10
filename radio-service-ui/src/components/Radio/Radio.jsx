@@ -26,6 +26,14 @@ class Radio extends React.Component {
     this.fetchTodayPrograms = this.fetchTodayPrograms.bind(this);
   }
 
+  componentDidMount(){
+    if(this.props.open){
+      document.getElementById('menu').style.width = '0%';
+      document.body.style.overflow = 'visible';
+      this.props.turnOffHamburger();
+    }
+  }
+
   fetchBackground() {
     this.props.turnLoadingOn();
 
@@ -106,10 +114,12 @@ class Radio extends React.Component {
 const mapStateToProps = state => {
   return {
     programs: state.radio.programs,
+    open: state.shared.open,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   setTodayPrograms: programs => dispatch(actions.setTodayPrograms(programs)),
   turnLoadingOn:   () => dispatch(actions.turnLoadingOn()),
   turnLoadingOff:  () => dispatch(actions.turnLoadingOff()),
@@ -117,6 +127,7 @@ const mapDispatchToProps = dispatch => ({
 
 Radio.propTypes = {
   programs: PropTypes.array,
+  open: PropTypes.bool,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Radio);

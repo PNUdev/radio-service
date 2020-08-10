@@ -27,6 +27,14 @@ class Scheduler extends React.Component {
     this.fetchPrograms = this.fetchPrograms.bind(this);
   }
 
+  componentDidMount(){
+    if(this.props.open){
+      document.getElementById('menu').style.width = '0%';
+      document.body.style.overflow = 'visible';
+      this.props.turnOffHamburger();
+    }
+  }
+
   fetchBackground() {
     this.props.turnLoadingOn();
 
@@ -185,10 +193,12 @@ const mapStateToProps = state => {
     tooltips: state.schedule.tooltips,
     loading: state.shared.loading,
     programs: state.schedule.programs,
+    open: state.shared.open,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   setSchedule: schedule => dispatch(actions.setSchedule(schedule)),
   setTooltips: tooltips => dispatch(actions.setTooltips(tooltips)),
   setEmbeddedPrograms: programs => dispatch(actions.setEmbeddedPrograms(programs)),
@@ -203,6 +213,7 @@ Scheduler.propTypes = {
   programs: PropTypes.object,
 
   loading: PropTypes.bool,
+  open: PropTypes.bool,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Scheduler);

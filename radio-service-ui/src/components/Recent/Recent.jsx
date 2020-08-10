@@ -23,6 +23,14 @@ class Recent extends React.Component {
     this.fetchVideos = this.fetchVideos.bind(this);
   }
 
+  componentDidMount(){
+    if(this.props.open){
+      document.getElementById('menu').style.width = '0%';
+      document.body.style.overflow = 'visible';
+      this.props.turnOffHamburger();
+    }
+  }
+
   fetchBackground() {
     this.props.turnLoadingOn();
 
@@ -83,18 +91,22 @@ class Recent extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    recent:      state.videos.recent,
+    recent: state.videos.recent,
+    open: state.shared.open,
+
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   setRecent:      recent => dispatch(actions.setRecent(recent)),
   turnLoadingOn:  ()     => dispatch(actions.turnLoadingOn()),
   turnLoadingOff: ()     => dispatch(actions.turnLoadingOff()),
 });
 
 Recent.propTypes = {
-  recent:      PropTypes.array,
+  recent: PropTypes.array,
+  open: PropTypes.bool,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recent);

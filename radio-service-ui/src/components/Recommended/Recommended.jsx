@@ -26,6 +26,14 @@ class Recommended extends React.Component {
     this.fetchVideos = this.fetchVideos.bind(this);
   }
 
+  componentDidMount(){
+    if(this.props.open){
+      document.getElementById('menu').style.width = '0%';
+      document.body.style.overflow = 'visible';
+      this.props.turnOffHamburger();
+    }
+  }
+
   fetchBackground() {
     this.props.turnLoadingOn();
 
@@ -101,10 +109,13 @@ const mapStateToProps = state => {
     currentPage: state.videos.currentPage,
     recommended: state.videos.recommended,
     hasMore:     state.videos.hasMore,
+    open: state.shared.open,
+
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   setRecommended: (recommended, currentPage) => dispatch(actions.setRecommended(recommended, currentPage)),
   setHasMore:     bool                       => dispatch(actions.setHasMore(bool)),
   turnLoadingOn:  ()                         => dispatch(actions.turnLoadingOn()),
@@ -115,6 +126,7 @@ Recommended.propTypes = {
   currentPage: PropTypes.number,
   recommended: PropTypes.array,
   hasMore:     PropTypes.bool,
+  open: PropTypes.bool,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recommended);

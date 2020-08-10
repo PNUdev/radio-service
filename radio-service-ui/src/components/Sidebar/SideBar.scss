@@ -30,7 +30,9 @@
 
       &.active {
         color: $orange;
-        background: $dark-grey;
+        // background: $dark-grey;
+        background: linear-gradient(90deg, rgb(32, 34, 36) 0%, rgb(0, 0, 0) 100%);
+
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
         border-left: 4px solid $orange;

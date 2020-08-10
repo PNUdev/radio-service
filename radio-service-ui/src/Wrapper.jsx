@@ -11,7 +11,6 @@ import {
 } from "react-router-dom";
 
 import { connect } from 'react-redux';
-import $ from 'jquery';
 
 import HamburgerMenu from 'react-hamburger-menu'
 
@@ -29,33 +28,26 @@ class Wrapper extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = { open: false }
     this.handleClick = this.handleClick.bind(this)
-
-    let links = document.getElementsByClassName('header-link');
-
-    for (var i=0; i < links.length; i++) {
-      links[i].onclick = function(){
-        alert('hi')
-        this.setState({open: false})
-        document.getElementById('menu').style.width = '0%';
-        document.body.style.overflow = 'visible';
-      }
-    };
   }
 
   handleClick() {
-    const menu = document.getElementById('menu')
+    this.props.toggleHamburger();
+    this.forceUpdate();
 
-    this.setState({open: !this.state.open}, () => {
-      if(this.state.open) {
-        document.body.style.overflow = 'hidden';
-        menu.style.width = '100%';
-      } else {
-        menu.style.width = '0%';
-        document.body.style.overflow = 'visible';
-      }
-    });
+    if(this.props.open) {
+      document.getElementById('menu').style.width = '0%';
+      document.body.style.overflow = 'visible';
+    }
+  }
+
+  componentDidUpdate() {
+    const menu = document.getElementById('menu');
+
+    if(this.props.open) {
+      document.body.style.overflow = 'hidden';
+      menu.style.width = '100%';
+    }
   }
 
   render() {
@@ -77,7 +69,7 @@ class Wrapper extends React.Component {
 
           <div className="hamburger d-lg-none p-2">
             <HamburgerMenu
-              isOpen={this.state.open}
+              isOpen={this.props.open}
               menuClicked={this.handleClick}
               color='white'
             />
@@ -108,17 +100,20 @@ class Wrapper extends React.Component {
 
 const mapStateToProps = state => {
   return {
-    loading:     state.shared.loading,
+    loading: state.shared.loading,
+    open: state.shared.open,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-  turnLoadingOn:  ()          => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff: ()          => dispatch(actions.turnLoadingOff()),
+  toggleHamburger: () => dispatch(actions.toggleHamburger()),
+  turnLoadingOn:   () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:  () => dispatch(actions.turnLoadingOff()),
 });
 
 Wrapper.propTypes = {
-  loading:     PropTypes.bool,
+  loading: PropTypes.bool,
+  open: PropTypes.bool,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wrapper);
