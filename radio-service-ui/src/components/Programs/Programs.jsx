@@ -10,8 +10,8 @@ import PaginationLoader from '../PaginationLoader';
 import * as actions from '../../redux/actions';
 import './Programs.scss'
 
-const PROGRAMS_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/programs'
-const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
+const PROGRAMS_URL = process.env.REACT_APP_SITE_URL + '/api/v1/programs'
+const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 const DESCRIPTION_LENGTH = 1000;
 
 class Programs extends React.Component {
@@ -105,7 +105,7 @@ class Programs extends React.Component {
             </div>
           </h3>
 
-          <div className="d-flex flex-column flex-lg-row">
+          <div className="d-flex flex-column program-body">
             <img src={program.imageUrl} alt="" className="mb-2 mb-lg-0 image-fluid"/>
             <div className="description ml-2">{program.description.substring(0, DESCRIPTION_LENGTH)}</div>
           </div>

@@ -3,7 +3,7 @@ import React from 'react'
 import AudioPlayer from 'react-h5-audio-player';
 
 import './RadioPlayer.scss'
-const STREAM_URL = "http://82.145.41.107:8431/stream?1556707127413.mp3";
+const STREAM_URL = process.env.REACT_APP_STREAM_URL;
 
 class Radio extends React.Component {
   constructor(props) {

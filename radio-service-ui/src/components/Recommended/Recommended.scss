@@ -13,6 +13,26 @@
   }
 }
 
+@media screen and (min-width: 1440px) {
+  .recommended-container {
+    .video-card {
+      .video {
+        flex-direction: row !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .recommended-container {
+    .video-card {
+      .description {
+        margin-top: 20px;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 992px) {
   .recommended-container {
     .video-card {

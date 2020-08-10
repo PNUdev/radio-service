@@ -18,6 +18,30 @@
   }
 }
 
+@media screen and (min-width: 1440px) {
+  .programs-container {
+    .program-card {
+      .program-body {
+        flex-direction: row !important;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .programs-container {
+    .program-card {
+      .description {
+        margin-top: 20px;
+      }
+
+      img {
+        width: 100% !important;
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 992px) {
   .programs-container {
     .program-card {

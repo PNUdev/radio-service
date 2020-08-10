@@ -12,8 +12,8 @@ import clock from '../../images/clock.png'
 
 import './Radio.scss'
 
-const TODAY_PROGRAM_LINK = 'https://radio-service-api-stage.herokuapp.com/api/v1/schedule/today'
-const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
+const TODAY_PROGRAM_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/schedule/today'
+const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 
 class Radio extends React.Component {
   constructor(props) {

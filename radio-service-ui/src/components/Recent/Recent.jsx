@@ -8,9 +8,9 @@ import * as actions from '../../redux/actions';
 
 import './Recent.scss'
 
-const RECENT_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/videos/recent'
+const RECENT_URL = process.env.REACT_APP_SITE_URL + '/api/v1/videos/recent'
 const DESCRIPTION_LENGTH = 1000;
-const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
+const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 
 class Recent extends React.Component {
   constructor(props) {
@@ -67,7 +67,7 @@ class Recent extends React.Component {
       return (
         <div className="video-card mb-4 p-3" key={video.id}>
           <h3 className="title mb-3 pb-2">{video.title}</h3>
-          <div className="d-flex flex-column flex-lg-row">
+          <div className="d-flex flex-column video">
             <iframe width="560"
                     height="315"
                     src={"https://www.youtube.com/embed/" + video.id}
@@ -75,6 +75,7 @@ class Recent extends React.Component {
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                     className="youtube-video"></iframe>
+
             <div className="description ml-2">{video.description.substring(0, DESCRIPTION_LENGTH)}</div>
           </div>
         </div>

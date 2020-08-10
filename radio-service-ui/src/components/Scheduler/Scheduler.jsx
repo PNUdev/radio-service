@@ -12,9 +12,9 @@ import './Scheduler.scss';
 import clock from '../../images/clock.png'
 import program_image from '../../images/menu-items/programs-active.png';
 
-const SCHEDULE_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/schedule/week'
-const SITE_URL = 'https://radio-service-api-stage.herokuapp.com'
-const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
+const SCHEDULE_URL = process.env.REACT_APP_SITE_URL + '/api/v1/schedule/week'
+const SITE_URL = process.env.REACT_APP_SITE_URL
+const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 
 class Scheduler extends React.Component {
   constructor(props) {
