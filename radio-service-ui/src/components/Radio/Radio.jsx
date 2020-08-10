@@ -74,7 +74,7 @@ class Radio extends React.Component {
             <h1 className="text-center mb-3">Розклад на сьогодні</h1>
             <div className="time-table">
               <div className="program-container">
-                { programs.length > 0 && programs.map(item => {
+                { programs && programs.length > 0 && programs.map(item => {
                   return(
                     <div className="d-flex program flex-column flex-lg-row" key={item.id}>
                       <div className="duration d-flex flex-row flex-lg-column">
