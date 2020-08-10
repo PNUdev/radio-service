@@ -55,3 +55,29 @@
     .no-programs { padding: 20px; }
   }
 }
+
+@media screen and (max-width: 992px) {
+  .scheduler-day-card {
+    .time-table {
+      .program {
+        .duration {
+          width: 100%;
+
+          .from {
+            border-bottom: none;
+            border-right: 1px solid black;
+          }
+          .to {
+            border-right: none;
+          }
+          .from, .to {
+            display: flex;
+            justify-content: center;
+            border-bottom: 1px solid black;
+            width: 50%;
+          }
+        }
+      }
+    }
+  }
+}

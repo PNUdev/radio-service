@@ -127,8 +127,8 @@ class Scheduler extends React.Component {
 
             {day["scheduleItems"].map(item => {
               return(
-                <div className="d-flex program" key={item.id}>
-                  <div className="duration">
+                <div className="d-flex program flex-column flex-lg-row" key={item.id}>
+                  <div className="duration  d-flex flex-row flex-lg-column">
                     <div className="from h-50 p-3">
                       <img src={clock} alt=""/>
                       {item.time.startTime}
@@ -144,10 +144,12 @@ class Scheduler extends React.Component {
                     <div className="d-flex align-items-center">
                       <h3 className="d-flex">{item.programName}</h3>
 
-                      <div data-tip="React-tooltip" className="program-tooltip d-flex justify-content-center align-items-center ml-2">
-                        <img src={program_image} alt=""/>
-                      </div>
 
+                      <div className="d-none d-lg-block">
+                        <div data-tip="React-tooltip" className="program-tooltip d-flex justify-content-center align-items-center ml-2">
+                          <img src={program_image} alt=""/>
+                        </div>
+                      </div>
                       <ReactTooltip place="top" type="dark" effect="solid">
                         {renderProgramTooltip(item.programLink)}
                       </ReactTooltip>

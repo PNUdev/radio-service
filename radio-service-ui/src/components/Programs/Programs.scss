@@ -10,9 +10,20 @@
 
     h3.title { border-bottom: 2px solid $orange }
     img { width: 560px; }
+
     .occurences {
       color: gray;
       font-size: 14px;
+    }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .programs-container {
+    .program-card {
+      img {
+        width: 100% !important;
+      }
     }
   }
 }

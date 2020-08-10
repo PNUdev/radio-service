@@ -11,6 +11,9 @@ import {
 } from "react-router-dom";
 
 import { connect } from 'react-redux';
+import $ from 'jquery';
+
+import HamburgerMenu from 'react-hamburger-menu'
 
 import SideBar     from './components/Sidebar';
 import Radio       from "./components/Radio";
@@ -25,6 +28,34 @@ import './Wrapper.scss';
 class Wrapper extends React.Component {
   constructor(props) {
     super(props)
+
+    this.state = { open: false }
+    this.handleClick = this.handleClick.bind(this)
+
+    let links = document.getElementsByClassName('header-link');
+
+    for (var i=0; i < links.length; i++) {
+      links[i].onclick = function(){
+        alert('hi')
+        this.setState({open: false})
+        document.getElementById('menu').style.width = '0%';
+        document.body.style.overflow = 'visible';
+      }
+    };
+  }
+
+  handleClick() {
+    const menu = document.getElementById('menu')
+
+    this.setState({open: !this.state.open}, () => {
+      if(this.state.open) {
+        document.body.style.overflow = 'hidden';
+        menu.style.width = '100%';
+      } else {
+        menu.style.width = '0%';
+        document.body.style.overflow = 'visible';
+      }
+    });
   }
 
   render() {
@@ -39,9 +70,17 @@ class Wrapper extends React.Component {
 
     return (
       <Router>
-        <div className="wrapper d-flex ">
-          <div className="sidebar">
+        <div className="wrapper d-flex flex-column flex-lg-row ">
+          <div id="menu" className="sidebar">
             <SideBar />
+          </div>
+
+          <div className="hamburger d-lg-none p-2">
+            <HamburgerMenu
+              isOpen={this.state.open}
+              menuClicked={this.handleClick}
+              color='white'
+            />
           </div>
 
           <div id="content" className="content" style={bg_styles}>

@@ -46,41 +46,7 @@ class Radio extends React.Component {
     axios.get(TODAY_PROGRAM_LINK)
     .then((response) => {
       this.props.turnLoadingOff();
-
-      let scheduleItems = {
-        "scheduleItems": [
-          {
-              "id": "5f174527b9fccf3bded8d924",
-              "programName": "Lorem ipsum dolor",
-              "programLink": "/api/v1/programs/5f174489b9fccf3bded8d920",
-              "time": {
-                  "startTime": "13:45",
-                  "endTime": "14:46"
-              },
-              "comment": "",
-              "dayOfWeek": {
-                  "urlValue": "monday",
-                  "nameUkr": "Понеділок"
-              }
-          },
-          {
-              "id": "5f174500b9fccf3bded8d923",
-              "programName": "Моя програма",
-              "programLink": "/api/v1/programs/5f16f1df5a96ee04f906fd91",
-              "time": {
-                  "startTime": "22:41",
-                  "endTime": "22:42"
-              },
-              "comment": "",
-              "dayOfWeek": {
-                  "urlValue": "monday",
-                  "nameUkr": "Понеділок"
-              }
-          }
-      ]
-      }
-      this.props.setTodayPrograms(scheduleItems['scheduleItems']);
-      // this.props.setTodayPrograms(response.data.scheduleItems);
+      this.props.setTodayPrograms(response.data.scheduleItems);
     })
     .catch((errors) => {
       this.props.turnLoadingOff();
@@ -102,8 +68,8 @@ class Radio extends React.Component {
               <div className="program-container">
                 { programs.length > 0 && programs.map(item => {
                   return(
-                    <div className="d-flex program" key={item.id}>
-                      <div className="duration">
+                    <div className="d-flex program flex-column flex-lg-row" key={item.id}>
+                      <div className="duration d-flex flex-row flex-lg-column">
                         <div className="from h-50 p-3">
                           <img src={clock} alt=""/>
                           {item.time.startTime}

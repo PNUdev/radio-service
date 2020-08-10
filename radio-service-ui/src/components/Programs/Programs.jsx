@@ -97,8 +97,8 @@ class Programs extends React.Component {
             </div>
           </h3>
 
-          <div className="d-flex">
-            <img src={program.imageUrl} alt=""/>
+          <div className="d-flex flex-column flex-lg-row">
+            <img src={program.imageUrl} alt="" className="mb-2 mb-lg-0 image-fluid"/>
             <div className="description ml-2">{program.description.substring(0, DESCRIPTION_LENGTH)}</div>
           </div>
         </div>

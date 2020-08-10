@@ -81,3 +81,36 @@ html { box-sizing: border-box }
     transform:rotate(360deg);
   }
 }
+
+@media screen and (max-width: 992px) {
+  .wrapper {
+    position: relative;
+    width: 100%;
+    background: black;
+
+    .hamburger {
+      height: 50px;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      overflow: hidden;
+    }
+
+    .content {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .sidebar {
+      width: 0%;
+      z-index: 10;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, rgb(19, 175, 192) 0%, rgb(9, 92, 109) 100%);
+      overflow-x: hidden;
+      transition: 0.3s;
+    }
+  }
+}

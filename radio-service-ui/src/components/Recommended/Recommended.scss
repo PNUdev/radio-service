@@ -12,3 +12,14 @@
     iframe { min-width: 560px; }
   }
 }
+
+@media screen and (max-width: 992px) {
+  .recommended-container {
+    .video-card {
+      iframe.youtube-video {
+        min-width: auto;
+        width: 100% !important;
+      }
+    }
+  }
+}
