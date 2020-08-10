@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link, NavLink, useLocation } from "react-router-dom";
 
-import logo from '../../images/pnu-logo.png';
+
+import logo from '../../images/logo.png';
 
 import radio from '../../images/menu-items/radio.png';
 import broadcast from '../../images/menu-items/broadcast.png';
@@ -25,49 +26,52 @@ const SideBar = () => {
   const currentPath = useLocation().pathname;
 
   return(
-    <div className="sidebar-content pt-5">
+    <div className="sidebar-content pt-lg-5">
       <header>
         <div className="logo-wrapper d-flex justify-content-center">
-          <Link to="/radio">
+          <Link to="/radio" className="header-link">
             <img src={logo} alt="" className="logo"/>
           </Link>
         </div>
 
         <div className="socials d-flex justify-content-center mt-3">
-          <a href="https://www.facebook.com/profile.php?id=100006156246012" target='_blank'>
+          <a className="header-link" href="https://www.facebook.com/ShpaltaIF" target='_blank'>
+            <img src={facebook} alt="" className="mr-3"/>
+          </a>
+          <a className="header-link" href="https://instagram.com/shpalta.if" target='_blank'>
+            <img src={instagram} alt="" className="mr-3"/>
+          </a>
+          <a className="header-link" href="https://www.youtube.com/channel/UCPTybYwJGc9-WuKTP2fVuZg" target='_blank'>
+            <img src={youtube} alt="" className="mr-3"/>
+          </a>
+          <a className="header-link" href="https://www.facebook.com/groups/StudRadioIF" target='_blank'>
             <img src={facebook} alt=""/>
-          </a>
-          <a href="https://www.instagram.com/vasyl_mutskaniuk/" target='_blank'>
-            <img src={instagram} alt="" className="mx-3"/>
-          </a>
-          <a href="https://www.youtube.com/channel/UCy677jxqQGAvbxPrMHEF4iA/" target='_blank'>
-            <img src={youtube} alt=""/>
           </a>
         </div>
       </header>
 
       <nav className="mt-4">
-        <NavLink to="/radio" className="d-flex align-items-center radio">
+        <NavLink to="/radio" className="header-link d-flex align-items-center radio">
           <img src={currentPath === '/radio' ? radioActive : radio} alt="" className="mr-2"/>
           Радіо
         </NavLink>
 
-        <NavLink to="recent" className="d-flex align-items-center recent">
+        <NavLink to="recent" className="header-link d-flex align-items-center recent">
           <img src={currentPath === '/recent' ? broadcastActive : broadcast} alt="" className="mr-2"/>
           Нещодавні відео
         </NavLink>
 
-        <NavLink to="scheduler" className="d-flex align-items-center scheduler">
-          <img src={currentPath === '/scheduler' ? schedulerActive : scheduler} alt="" className="mr-2"/>
+        <NavLink to="schedule" className="header-link d-flex align-items-center scheduler">
+          <img src={currentPath === '/schedule' ? schedulerActive : scheduler} alt="" className="mr-2"/>
           Розклад
         </NavLink>
 
-        <NavLink to="recommended" className="d-flex align-items-center recommended">
+        <NavLink to="recommended" className="header-link d-flex align-items-center recommended">
           <img src={currentPath === '/recommended' ? videoActive : video} alt="" className="mr-2"/>
           Рекомендовані відео
         </NavLink>
 
-        <NavLink to="programs" className="d-flex align-items-center programs">
+        <NavLink to="programs" className="header-link d-flex align-items-center programs">
           <img src={currentPath === '/programs' ? programsActive : programs} alt="" className="mr-2"/>
           Програми
         </NavLink>

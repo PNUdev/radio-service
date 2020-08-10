@@ -1,13 +1,14 @@
 const initialState = {
   recommended: [],
-  recent: [],
   currentPage: 0,
-  totalPages: 0,
+  hasMore: true,
+  recent: [],
 }
 
-const videoReducer = (state = initialState, { type, recent, recommended, currentPage, totalPages } ) => {
+const videoReducer = (state = initialState, { type, recent, recommended, currentPage, hasMore } ) => {
   switch(type) {
-    case 'VIDEOS/SET_RECOMMENDED': return { ...state, recommended, currentPage, totalPages };
+    case 'VIDEOS/SET_RECOMMENDED': return { ...state, recommended, currentPage };
+    case 'VIDEOS/SET_HAS_MORE': return { ...state, hasMore };
     case 'VIDEOS/SET_RECENT': return { ...state, recent };
 
     default: return state;

@@ -1,35 +1,27 @@
 @import "../../colors";
 
-.recent-container {
+.programs-container {
   margin-bottom: 20px;
 
-  .video-card {
+  .program-card {
     background: white;
     color: black;
     border-radius: 20px;
 
     h3.title { border-bottom: 2px solid $orange }
-    iframe {
-      min-width: 560px;
-    }
-  }
-}
+    img { width: 560px; }
 
-@media screen and (max-width: 992px) {
-  .recent-container {
-    .video-card {
-      iframe.youtube-video {
-        min-width: auto;
-        width: 100% !important;
-      }
+    .occurences {
+      color: gray;
+      font-size: 14px;
     }
   }
 }
 
 @media screen and (min-width: 1440px) {
-  .recommended-container {
-    .video-card {
-      .video {
+  .programs-container {
+    .program-card {
+      .program-body {
         flex-direction: row !important;
       }
     }
@@ -37,20 +29,23 @@
 }
 
 @media screen and (max-width: 1440px) {
-  .recommended-container {
-    .video-card {
+  .programs-container {
+    .program-card {
       .description {
         margin-top: 20px;
+      }
+
+      img {
+        width: 100% !important;
       }
     }
   }
 }
 
 @media screen and (max-width: 992px) {
-  .recommended-container {
-    .video-card {
-      iframe.youtube-video {
-        min-width: auto;
+  .programs-container {
+    .program-card {
+      img {
         width: 100% !important;
       }
     }

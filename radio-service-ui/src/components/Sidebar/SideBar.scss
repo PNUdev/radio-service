@@ -30,7 +30,9 @@
 
       &.active {
         color: $orange;
-        background: $dark-grey;
+        // background: $dark-grey;
+        background: linear-gradient(90deg, rgb(32, 34, 36) 0%, rgb(0, 0, 0) 100%);
+
         border-top-left-radius: 10px;
         border-bottom-left-radius: 10px;
         border-left: 4px solid $orange;
@@ -39,3 +41,18 @@
   }
 }
 
+@media screen and (max-width: 992px) {
+  .sidebar-content {
+    width: auto;
+    display: flex;
+    // justify-content: start;
+    padding: 30px 15px 0;
+    flex-direction: column;
+
+    nav a.active {
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      border-right: 4px solid $orange;
+    }
+  }
+}

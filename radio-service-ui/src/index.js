@@ -12,6 +12,9 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 
+require('dotenv').config({ path: '../.env' });
+console.log(process.env);
+
 ReactDOM.render(
   <React.StrictMode>
     <App />
