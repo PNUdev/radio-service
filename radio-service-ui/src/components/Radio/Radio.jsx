@@ -71,7 +71,9 @@ class Radio extends React.Component {
           <RadioPlayer />
 
           <div className="scheduler-day-card mb-3">
-            <h1 className="text-center mb-3">Розклад на сьогодні</h1>
+            <h1 className="text-center mb-3">
+              {programs.length == 0 ?'Розклад на сьогоднішній день відсутній' : 'Розклад на сьогодні'}
+            </h1>
             <div className="time-table">
               <div className="program-container">
                 { programs.length > 0 && programs.map(item => {
