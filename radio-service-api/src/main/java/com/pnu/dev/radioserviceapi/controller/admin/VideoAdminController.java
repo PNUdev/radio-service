@@ -2,6 +2,7 @@ package com.pnu.dev.radioserviceapi.controller.admin;
 
 import com.pnu.dev.radioserviceapi.mongo.RecommendedVideo;
 import com.pnu.dev.radioserviceapi.service.RecommendedVideoService;
+import com.pnu.dev.radioserviceapi.service.YoutubeCacheService;
 import com.pnu.dev.radioserviceapi.util.HttpUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,14 @@ public class VideoAdminController {
 
     private final RecommendedVideoService recommendedVideoService;
 
+    private final YoutubeCacheService youtubeCacheService;
+
     @Autowired
-    public VideoAdminController(RecommendedVideoService recommendedVideoService) {
+    public VideoAdminController(RecommendedVideoService recommendedVideoService,
+                                YoutubeCacheService youtubeCacheService) {
+
         this.recommendedVideoService = recommendedVideoService;
+        this.youtubeCacheService = youtubeCacheService;
     }
 
     @GetMapping
@@ -89,6 +95,13 @@ public class VideoAdminController {
     public String delete(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         recommendedVideoService.deleteById(id);
         redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Відео було успішно видалено");
+        return "redirect:/admin/videos";
+    }
+
+    @PostMapping("/clear-recent-videos-cache")
+    public String clearRecentVideosCache(RedirectAttributes redirectAttributes) {
+        youtubeCacheService.clearCache();
+        redirectAttributes.addFlashAttribute(FLASH_MESSAGE_SUCCESS, "Кеш було очищено");
         return "redirect:/admin/videos";
     }
 
