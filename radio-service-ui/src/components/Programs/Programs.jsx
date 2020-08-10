@@ -121,7 +121,7 @@ class Programs extends React.Component {
           hasMore={totalPages > currentPage + 1}
           loader={<PaginationLoader key={currentPage} />}
         > */}
-          { programs.length > 0 && programs.map(program => renderProgram(program)) }
+          { programs && programs.length > 0 && programs.map(program => renderProgram(program)) }
         {/* </InfiniteScroll> */}
       </div>
     )

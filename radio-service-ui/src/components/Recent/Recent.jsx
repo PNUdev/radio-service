@@ -84,7 +84,7 @@ class Recent extends React.Component {
 
     return (
       <div className="recent-container">
-        {recent.length > 0 && recent.map(video => renderVideo(video))}
+        {recent && recent.length > 0 && recent.map(video => renderVideo(video))}
       </div>
     )
   }

@@ -98,7 +98,7 @@ class Recommended extends React.Component {
           useWindow={true}
           getScrollParent={() => this.props.scrollParentRef}
         > */}
-          { recommended.length > 0 && recommended.map(video => renderVideo(video)) }
+          { recommended && recommended.length > 0 && recommended.map(video => renderVideo(video)) }
         {/* </InfiniteScroll> */}
       </div>
     )

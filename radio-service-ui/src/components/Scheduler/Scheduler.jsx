@@ -178,7 +178,7 @@ class Scheduler extends React.Component {
 
     return (
       <div className="scheduler-page">
-        {!loading &&
+        {!loading && schedule &&
           Object.keys(schedule).length > 0 &&
           daysOfWeek.map(key => renderScheduleDay(key, schedule[key]))
         }
