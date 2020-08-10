@@ -11,15 +11,33 @@ import * as actions from '../../redux/actions';
 import './Programs.scss'
 
 const PROGRAMS_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/programs'
+const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
 const DESCRIPTION_LENGTH = 1000;
 
 class Programs extends React.Component {
   constructor(props) {
     super(props);
 
-    this.fetchPrograms(PROGRAMS_URL, 0, true)
+    this.fetchBackground();
+    this.fetchPrograms(PROGRAMS_URL, 0, true);
+
     this.fetchNext = this.fetchNext.bind(this);
+    this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchPrograms = this.fetchPrograms.bind(this);
+  }
+
+  fetchBackground() {
+    this.props.turnLoadingOn();
+
+    axios.get(BG_URL)
+    .then((response) => {
+      this.props.turnLoadingOff();
+      document.getElementById('content').style.backgroundImage = "url('" + response.data.programsPage + "')";
+    })
+    .catch((errors) => {
+      this.props.turnLoadingOff();
+      console.error(errors)
+    });
   }
 
   fetchPrograms(url, currentPage = 0, initial=false) {
@@ -82,14 +100,14 @@ class Programs extends React.Component {
             <div className="d-flex occurences">
               {
                 occurences.length > 0 &&
-                occurences.map(occurence => renderOccurrence(occurence, (occurences.indexOf(occurence) == occurences.length -1)))
+                occurences.map(occurence => renderOccurrence(occurence, (occurences.indexOf(occurence) === occurences.length -1)))
               }
             </div>
           </h3>
 
           <div className="d-flex">
             <img src={program.imageUrl} alt=""/>
-            <div className="description ml-2">{program.description}</div>
+            <div className="description ml-2">{program.description.substring(0, DESCRIPTION_LENGTH)}</div>
           </div>
         </div>
       )
@@ -97,7 +115,6 @@ class Programs extends React.Component {
 
     return (
       <div className="programs-container">
-        {console.log(currentPage, totalPages)}
         <InfiniteScroll
           pageStart={0}
           loadMore={this.fetchNext}

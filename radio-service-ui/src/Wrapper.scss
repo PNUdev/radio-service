@@ -7,36 +7,7 @@ html { box-sizing: border-box }
 .wrapper {
   height: 100vh;
   background-color: $grey;
-
-  // червоний
-  // background: linear-gradient(90deg, rgba(154,44,24,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
-
-  // оранжевий
-  // background: linear-gradient(90deg, rgba(154,92,24,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
-
-  // синьо жовтий
-  // background: linear-gradient(90deg, rgba(154,143,24,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
-
-  // світло зелений
-  // background: linear-gradient(90deg, rgba(24,154,114,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
-
-  // бірюзовий
   background: linear-gradient(90deg, rgba(24,141,154,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
-
-  // фіолетовий
-  // background: linear-gradient(90deg, rgba(119,24,154,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
-
-  // малиновий
-  // background: linear-gradient(90deg, rgba(139,10,55,1) 0%, rgba(100,6,31,1) 35%, rgba(0,212,255,1) 100%);
-
-  // темно синій
-  // background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
-
-  // світло синій
-  // background: linear-gradient(90deg, rgba(10,66,139,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
-
-  //  темний
-  // background: linear-gradient(90deg, rgba(55,53,53,1) 0%, rgba(58,58,58,1) 9%, rgba(14,14,14,1) 100%);
 
   .content {
     width: 100%;
@@ -49,9 +20,7 @@ html { box-sizing: border-box }
     .bg-wrapper {
       padding: 20px;
       width: 100%;
-      height: 100%;
-      border-top-left-radius: 30px;
-      border-bottom-left-radius: 30px;
+      min-height: 100%;
       background: rgba(0, 0, 0, 0.8);
     }
   }

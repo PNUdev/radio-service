@@ -1,5 +1,57 @@
+@import '../../colors';
+
 .radio-container {
   position: relative;
 
   .player-container { width: 100%; }
+}
+
+
+.scheduler-day-card {
+  padding: 20px;
+  background: white;
+  border-radius: 30px;
+
+  h1 { color: $orange; }
+
+  .time-table {
+    border: 2px solid black;
+    border-radius: 30px;
+
+    .program {
+      border-bottom: 2px solid black;
+
+      .program-tooltip {
+        border: 2px dashed rgb(107, 107, 107);
+        border-radius: 50%;
+        padding: 6px;
+        height: 30px;
+        width: 30px;
+
+        img {
+          width: 18px;
+          height: 18px;
+        }
+      }
+
+      .duration {
+        color: gray;
+        width: 120px;
+
+        img {
+          width: 25px;
+          height: 25px;
+          margin-right: 10px;
+        }
+
+        .from { border-bottom: 1px solid black; }
+        .from, .to { border-right: 1px solid black; }
+      }
+
+      .description { font-size: 20px; }
+    }
+
+    .program:last-child { border-bottom: none; }
+    .no-programs { padding: 20px; }
+  }
 }

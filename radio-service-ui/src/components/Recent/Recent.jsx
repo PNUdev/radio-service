@@ -10,13 +10,31 @@ import './Recent.scss'
 
 const RECENT_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/videos/recent'
 const DESCRIPTION_LENGTH = 1000;
+const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
 
 class Recent extends React.Component {
   constructor(props) {
     super(props);
 
-    this.fetchVideos(RECENT_URL)
+    this.fetchBackground();
+    this.fetchVideos(RECENT_URL);
+
+    this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchVideos = this.fetchVideos.bind(this);
+  }
+
+  fetchBackground() {
+    this.props.turnLoadingOn();
+
+    axios.get(BG_URL)
+    .then((response) => {
+      this.props.turnLoadingOff();
+      document.getElementById('content').style.backgroundImage = "url('" + response.data.recentVideosPage + "')";
+    })
+    .catch((errors) => {
+      this.props.turnLoadingOff();
+      console.error(errors)
+    });
   }
 
   fetchVideos() {
@@ -64,20 +82,17 @@ class Recent extends React.Component {
 const mapStateToProps = state => {
   return {
     recent:      state.videos.recent,
-    bg:          state.shared.bg,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
   setRecent:      recent => dispatch(actions.setRecent(recent)),
-  // setBg:          bg                                => dispatch(actions.setBg(bg)),
   turnLoadingOn:  ()     => dispatch(actions.turnLoadingOn()),
   turnLoadingOff: ()     => dispatch(actions.turnLoadingOff()),
 });
 
 Recent.propTypes = {
   recent:      PropTypes.array,
-  // bg:          PropTypes.string,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recent);

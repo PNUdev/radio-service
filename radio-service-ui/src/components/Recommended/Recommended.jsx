@@ -11,44 +11,61 @@ import * as actions from '../../redux/actions';
 
 import './Recommended.scss'
 
-const RECOMENDED_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/videos/recommended'
+const RECOMENDED_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/videos/recommended?page='
 const DESCRIPTION_LENGTH = 1000;
+const BG_URL = 'https://radio-service-api-stage.herokuapp.com/api/v1/backgrounds'
 
 class Recommended extends React.Component {
   constructor(props) {
     super(props);
 
-    this.fetchVideos(RECOMENDED_URL, 0, true)
-    this.fetchNext = this.fetchNext.bind(this);
+    this.fetchBackground();
+
+    this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchVideos = this.fetchVideos.bind(this);
   }
 
-  fetchVideos(url, currentPage = 0, initial=false) {
-    initial && this.props.turnLoadingOn();
+  fetchBackground() {
+    this.props.turnLoadingOn();
 
-    axios.get(url + "?page=" + currentPage)
+    axios.get(BG_URL)
     .then((response) => {
       this.props.turnLoadingOff();
-
-      this.props.setRecommended(
-        response.data.content,
-        response.data.pageNumber,
-        response.data.totalPages,
-      );
+      document.getElementById('content').style.backgroundImage = "url('" + response.data.recommendedVideosPage + "')";
     })
     .catch((errors) => {
-      initial && this.props.turnLoadingOff();
+      this.props.turnLoadingOff();
       console.error(errors)
     });
   }
 
-  fetchNext(page) {
-    console.log('fetching')
-    this.fetchVideos(RECOMENDED_URL, page, false)
+  fetchVideos() {
+    console.log(this.props.currentPage)
+    this.props.turnLoadingOn();
+
+    axios.get(RECOMENDED_URL + this.props.currentPage)
+    .then((response) => {
+      this.props.turnLoadingOff();
+      let videos = this.props.recommended;
+
+      response.data.content.map(video => videos.push(video));
+
+      if(response.data.pageNumber !== response.data.totalPages - 1) {
+        console.log('setting...')
+        this.props.setRecommended(videos, this.props.currentPage + 1)
+        console.log(this.props.currentPage)
+      } else {
+        this.props.setHasMore(false);
+      }
+    })
+    .catch((errors) => {
+      this.props.turnLoadingOff();
+      console.error(errors)
+    });
   }
 
   render() {
-    const { recommended, currentPage, totalPages, } = this.props;
+    const { recommended, currentPage, hasMore } = this.props;
 
     const renderVideo = video => {
       return (
@@ -71,9 +88,11 @@ class Recommended extends React.Component {
       <div className="recommended-container">
         <InfiniteScroll
           pageStart={0}
-          loadMore={this.fetchNext}
-          hasMore={totalPages > currentPage + 1}
+          loadMore={this.fetchVideos}
+          hasMore={this.props.hasMore}
           loader={<PaginationLoader key={currentPage} />}
+          useWindow={true}
+          // getScrollParent={() => this.props.scrollParentRef}
         >
           { recommended.length > 0 && recommended.map(video => renderVideo(video)) }
         </InfiniteScroll>
@@ -85,24 +104,22 @@ class Recommended extends React.Component {
 const mapStateToProps = state => {
   return {
     currentPage: state.videos.currentPage,
-    totalPages:  state.videos.totalPages,
     recommended: state.videos.recommended,
-    bg:          state.shared.bg,
+    hasMore:     state.videos.hasMore,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-  setRecommended: (recommended, currentPage, totalPages) => dispatch(actions.setRecommended(recommended, currentPage, totalPages)),
-  // setBg:          bg                                => dispatch(actions.setBg(bg)),
-  turnLoadingOn:  ()                                     => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff: ()                                     => dispatch(actions.turnLoadingOff()),
+  setRecommended: (recommended, currentPage) => dispatch(actions.setRecommended(recommended, currentPage)),
+  setHasMore:     bool                       => dispatch(actions.setHasMore(bool)),
+  turnLoadingOn:  ()                         => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff: ()                         => dispatch(actions.turnLoadingOff()),
 });
 
 Recommended.propTypes = {
   currentPage: PropTypes.number,
-  totalPages:  PropTypes.number,
-  recommended:      PropTypes.array,
-  // bg:          PropTypes.string,
+  recommended: PropTypes.array,
+  hasMore:     PropTypes.bool,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recommended);

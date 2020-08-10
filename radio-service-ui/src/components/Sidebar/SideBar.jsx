@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, NavLink, useLocation } from "react-router-dom";
 
-import logo from '../../images/pnu-logo.png';
+import logo from '../../images/logo.png';
 
 import radio from '../../images/menu-items/radio.png';
 import broadcast from '../../images/menu-items/broadcast.png';
@@ -57,8 +57,8 @@ const SideBar = () => {
           Нещодавні відео
         </NavLink>
 
-        <NavLink to="scheduler" className="d-flex align-items-center scheduler">
-          <img src={currentPath === '/scheduler' ? schedulerActive : scheduler} alt="" className="mr-2"/>
+        <NavLink to="schedule" className="d-flex align-items-center scheduler">
+          <img src={currentPath === '/schedule' ? schedulerActive : scheduler} alt="" className="mr-2"/>
           Розклад
         </NavLink>
 
