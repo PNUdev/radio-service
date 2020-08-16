@@ -4,12 +4,11 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import * as actions from '../../redux/actions';
+import * as actions from '../../../redux/actions';
 
-import './Recent.scss'
+import Video from '../Video';
 
 const RECENT_URL = process.env.REACT_APP_SITE_URL + '/api/v1/videos/recent'
-const DESCRIPTION_LENGTH = 1000;
 const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 
 class Recent extends React.Component {
@@ -23,10 +22,11 @@ class Recent extends React.Component {
     this.fetchVideos = this.fetchVideos.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     if(this.props.open){
       document.getElementById('menu').style.width = '0%';
       document.body.style.overflow = 'visible';
+      document.querySelector('.toggle').classList.remove('active');
       this.props.turnOffHamburger();
     }
   }
@@ -51,7 +51,6 @@ class Recent extends React.Component {
     axios.get(RECENT_URL)
     .then((response) => {
       this.props.turnLoadingOff();
-      console.log(response.data)
       this.props.setRecent(response.data.recent);
     })
     .catch((errors) => {
@@ -61,30 +60,11 @@ class Recent extends React.Component {
   }
 
   render() {
-    const { recent, } = this.props;
-
-    const renderVideo = video => {
-      return (
-        <div className="video-card mb-4 p-3" key={video.id}>
-          <h3 className="title mb-3 pb-2">{video.title}</h3>
-          <div className="d-flex flex-column video">
-            <iframe width="560"
-                    height="315"
-                    src={"https://www.youtube.com/embed/" + video.id}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="youtube-video"></iframe>
-
-            <div className="description ml-2">{video.description.substring(0, DESCRIPTION_LENGTH)}</div>
-          </div>
-        </div>
-      )
-    };
+    const { recent } = this.props;
 
     return (
       <div className="recent-container">
-        {recent && recent.length > 0 && recent.map(video => renderVideo(video))}
+        {recent && recent.length > 0 && recent.map(video => <Video video={video} key={video.id} />)}
       </div>
     )
   }
@@ -93,21 +73,26 @@ class Recent extends React.Component {
 const mapStateToProps = state => {
   return {
     recent: state.videos.recent,
-    open: state.shared.open,
+    open:   state.shared.open,
 
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   setRecent:      recent => dispatch(actions.setRecent(recent)),
-  turnLoadingOn:  ()     => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff: ()     => dispatch(actions.turnLoadingOff()),
+
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
+  turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:   () => dispatch(actions.turnLoadingOff()),
 });
 
 Recent.propTypes = {
   recent: PropTypes.array,
-  open: PropTypes.bool,
+  open:   PropTypes.bool,
+
+  turnOffHamburger: PropTypes.func,
+  turnLoadingOff:   PropTypes.func,
+  turnLoadingOn:    PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recent);

@@ -12,9 +12,9 @@ import './Scheduler.scss';
 import clock from '../../images/clock.png'
 import program_image from '../../images/menu-items/programs-active.png';
 
-const SCHEDULE_URL = process.env.REACT_APP_SITE_URL + '/api/v1/schedule/week'
-const SITE_URL = process.env.REACT_APP_SITE_URL
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
+const SITE_URL     = process.env.REACT_APP_SITE_URL
+const SCHEDULE_URL = SITE_URL + '/api/v1/schedule/week'
+const BG_URL       = SITE_URL + '/api/v1/backgrounds'
 
 class Scheduler extends React.Component {
   constructor(props) {
@@ -27,10 +27,11 @@ class Scheduler extends React.Component {
     this.fetchPrograms = this.fetchPrograms.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     if(this.props.open){
       document.getElementById('menu').style.width = '0%';
       document.body.style.overflow = 'visible';
+      document.querySelector('.toggle').classList.remove('active');
       this.props.turnOffHamburger();
     }
   }
@@ -102,16 +103,19 @@ class Scheduler extends React.Component {
 
     const renderProgramTooltip = programLink => {
       const program = axios.get(SITE_URL + programLink).then(response => response.data)
+
       return (
         <div className="tooltip-wrapper d-flex">
           {
             program &&
             <>
               <img src={program.imageUrl} alt=""/>
+
               <div className="d-flex-flex-column">
                 <div className="description ml-2">
                   {program.description > 50 ? (program.description.substr(0, 50) + '...') : program.description}
                 </div>
+
                 <div className="occurences ml-2 d-flex">
                   {/* {
                     program.scheduleOccurrences &&
@@ -161,6 +165,7 @@ class Scheduler extends React.Component {
                               <img src={program_image} alt=""/>
                             </div>
                           </div>
+
                           <ReactTooltip place="top" type="dark" effect="solid">
                             {renderProgramTooltip(item.programLink)}
                           </ReactTooltip>
@@ -196,19 +201,21 @@ const mapStateToProps = state => {
   return {
     schedule: state.schedule.schedule,
     tooltips: state.schedule.tooltips,
-    loading: state.shared.loading,
     programs: state.schedule.programs,
-    open: state.shared.open,
+
+    loading: state.shared.loading,
+    open:    state.shared.open,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
-  setSchedule: schedule => dispatch(actions.setSchedule(schedule)),
-  setTooltips: tooltips => dispatch(actions.setTooltips(tooltips)),
+  setSchedule:         schedule => dispatch(actions.setSchedule(schedule)),
+  setTooltips:         tooltips => dispatch(actions.setTooltips(tooltips)),
   setEmbeddedPrograms: programs => dispatch(actions.setEmbeddedPrograms(programs)),
-  turnLoadingOn:  () => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff: () => dispatch(actions.turnLoadingOff()),
+
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
+  turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:   () => dispatch(actions.turnLoadingOff()),
 
 });
 
@@ -218,7 +225,11 @@ Scheduler.propTypes = {
   programs: PropTypes.object,
 
   loading: PropTypes.bool,
-  open: PropTypes.bool,
+  open:    PropTypes.bool,
+
+  turnOffHamburger: PropTypes.func,
+  turnLoadingOff:   PropTypes.func,
+  turnLoadingOn:    PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Scheduler);

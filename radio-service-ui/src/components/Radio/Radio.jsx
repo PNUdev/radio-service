@@ -4,9 +4,9 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import * as actions from '../../redux/actions';
-
 import RadioPlayer from './RadioPlayer';
+
+import * as actions from '../../redux/actions';
 
 import clock from '../../images/clock.png'
 
@@ -26,10 +26,11 @@ class Radio extends React.Component {
     this.fetchTodayPrograms = this.fetchTodayPrograms.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     if(this.props.open){
       document.getElementById('menu').style.width = '0%';
       document.body.style.overflow = 'visible';
+      document.querySelector('.toggle').classList.remove('active');
       this.props.turnOffHamburger();
     }
   }
@@ -74,6 +75,7 @@ class Radio extends React.Component {
             <h1 className="text-center mb-3">
               {programs.length == 0 ?'Розклад на сьогоднішній день відсутній' : 'Розклад на сьогодні'}
             </h1>
+
             <div className="time-table">
               <div className="program-container">
                 { programs && programs.length > 0 && programs.map(item => {
@@ -116,20 +118,25 @@ class Radio extends React.Component {
 const mapStateToProps = state => {
   return {
     programs: state.radio.programs,
-    open: state.shared.open,
+    open:     state.shared.open,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   setTodayPrograms: programs => dispatch(actions.setTodayPrograms(programs)),
-  turnLoadingOn:   () => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff:  () => dispatch(actions.turnLoadingOff()),
+
+  turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
+  turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:   () => dispatch(actions.turnLoadingOff()),
 });
 
 Radio.propTypes = {
   programs: PropTypes.array,
-  open: PropTypes.bool,
+  open:     PropTypes.bool,
+
+  turnOffHamburger: PropTypes.func,
+  turnLoadingOff:   PropTypes.func,
+  turnLoadingOn:    PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Radio);

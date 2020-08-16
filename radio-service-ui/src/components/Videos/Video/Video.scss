@@ -1,0 +1,32 @@
+@import "../../../colors";
+
+.video-card {
+  background: white;
+  color: black;
+  border-radius: 20px;
+
+  h3.title { border-bottom: 2px solid $orange }
+  iframe { min-width: 560px; }
+}
+
+@media screen and (min-width: 1440px) {
+  .video-card {
+    .video { flex-direction: row !important; }
+  }
+}
+
+@media screen and (max-width: 1440px) {
+  .video-card {
+    .description { margin-top: 20px; }
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .video-card {
+    iframe.youtube-video {
+      min-width: auto;
+      width: 100% !important;
+    }
+  }
+}
+

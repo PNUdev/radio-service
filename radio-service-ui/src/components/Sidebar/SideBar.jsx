@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link, NavLink, useLocation } from "react-router-dom";
 
-
 import logo from '../../images/logo.png';
 
 import radio from '../../images/menu-items/radio.png';
@@ -26,7 +25,7 @@ const SideBar = () => {
   const currentPath = useLocation().pathname;
 
   return(
-    <div className="sidebar-content pt-lg-5">
+    <div className="sidebar-content pt-lg-5 h-100 d-flex flex-column d-lg-block ">
       <header>
         <div className="logo-wrapper d-flex justify-content-center">
           <Link to="/radio" className="header-link">
