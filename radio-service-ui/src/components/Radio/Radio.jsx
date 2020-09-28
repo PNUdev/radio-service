@@ -7,12 +7,14 @@ import { connect } from 'react-redux';
 import RadioPlayer from './RadioPlayer';
 
 import * as actions from '../../redux/actions';
+import { extractBannerLink } from '../../utils/';
 
 import clock from '../../images/clock.png'
 
 import './Radio.scss'
 
 const TODAY_PROGRAM_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/schedule/today'
+const BANNER_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/banners'
 const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 
 class Radio extends React.Component {
@@ -21,6 +23,7 @@ class Radio extends React.Component {
 
     this.fetchBackground();
     this.fetchTodayPrograms();
+    this.fetchBanner();
 
     this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchTodayPrograms = this.fetchTodayPrograms.bind(this);
@@ -63,13 +66,29 @@ class Radio extends React.Component {
     });
   }
 
+  fetchBanner() {
+    this.props.turnLoadingOn();
+
+    axios.get(BANNER_LINK)
+    .then((response) => {
+      this.props.turnLoadingOff();
+      this.props.setSecondaryBanner(extractBannerLink(response.data["secondary-banner"]))
+    })
+    .catch((errors) => {
+      this.props.turnLoadingOff();
+      console.error(errors)
+    })
+  }
+
   render() {
-    const { programs } = this.props;
+    const { programs, secondaryBanner } = this.props;
 
     return (
       <div className="radio-container d-flex flex-column justify-content-between h-100">
         <div className="player-container d-flex flex-column justify-content-between h-100">
           <RadioPlayer />
+
+          <img src={secondaryBanner} alt="" className="secondary-banner my-3" />
 
           <div className="scheduler-day-card mb-3">
             <h1 className="text-center mb-3">
@@ -119,11 +138,14 @@ const mapStateToProps = state => {
   return {
     programs: state.radio.programs,
     open:     state.shared.open,
+
+    secondaryBanner: state.banners.secondaryBanner,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
-  setTodayPrograms: programs => dispatch(actions.setTodayPrograms(programs)),
+  setTodayPrograms:   programs => dispatch(actions.setTodayPrograms(programs)),
+  setSecondaryBanner: banner   => dispatch(actions.setSecondaryBanner(banner)),
 
   turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
@@ -133,6 +155,10 @@ const mapDispatchToProps = dispatch => ({
 Radio.propTypes = {
   programs: PropTypes.array,
   open:     PropTypes.bool,
+  secondaryBanner: PropTypes.string,
+
+  setTodayPrograms:   PropTypes.func,
+  setSecondaryBanner: PropTypes.func,
 
   turnOffHamburger: PropTypes.func,
   turnLoadingOff:   PropTypes.func,

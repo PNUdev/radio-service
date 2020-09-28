@@ -5,11 +5,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as actions from '../../../redux/actions';
+import { extractBannerLink } from '../../../utils';
+
 
 import Video from '../Video';
 
 const RECENT_URL = process.env.REACT_APP_SITE_URL + '/api/v1/videos/recent'
 const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
+const BANNER_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/banners'
+
 
 class Recent extends React.Component {
   constructor(props) {
@@ -17,9 +21,11 @@ class Recent extends React.Component {
 
     this.fetchBackground();
     this.fetchVideos(RECENT_URL);
+    this.fetchBanner();
 
     this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchVideos = this.fetchVideos.bind(this);
+    this.fetchBanner = this.fetchBanner.bind(this)
   }
 
   componentDidMount() {
@@ -59,12 +65,36 @@ class Recent extends React.Component {
     });
   }
 
+  fetchBanner() {
+    this.props.turnLoadingOn();
+
+    axios.get(BANNER_LINK)
+    .then((response) => {
+      this.props.turnLoadingOff();
+      this.props.setAdditionalBanner(extractBannerLink(response.data["main-banner"]))
+    })
+    .catch((errors) => {
+      this.props.turnLoadingOff();
+      console.error(errors)
+    })
+  }
+
   render() {
-    const { recent } = this.props;
+    const { recent, additionalBanner } = this.props;
 
     return (
       <div className="recent-container">
-        {recent && recent.length > 0 && recent.map(video => <Video video={video} key={video.id} />)}
+        {recent && recent.length > 0 && recent.map(video => {
+          return (
+            <>
+              <Video video={video} key={video.id} />
+              {
+                recent.indexOf(video) == 0 &&
+                <img src={additionalBanner} alt="" className="additional-banner my-3" />
+              }
+            </>
+          )
+        })}
       </div>
     )
   }
@@ -74,12 +104,14 @@ const mapStateToProps = state => {
   return {
     recent: state.videos.recent,
     open:   state.shared.open,
-
+    additionalBanner: state.banners.additionalBanner,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
   setRecent:      recent => dispatch(actions.setRecent(recent)),
+  setAdditionalBanner: banner => dispatch(actions.setAdditionalBanner(banner)),
+
 
   turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
   turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
@@ -89,6 +121,8 @@ const mapDispatchToProps = dispatch => ({
 Recent.propTypes = {
   recent: PropTypes.array,
   open:   PropTypes.bool,
+  additionalBanner: PropTypes.string,
+
 
   turnOffHamburger: PropTypes.func,
   turnLoadingOff:   PropTypes.func,

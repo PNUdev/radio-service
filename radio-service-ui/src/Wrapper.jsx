@@ -20,6 +20,8 @@ import Scheduler   from './components/Scheduler';
 import Recommended from './components/Videos/Recommended';
 import Programs    from './components/Programs';
 
+import InstallPWA from './components/InstallPWA'
+
 import bg from './images/main.jpg'
 import miniLogo from './images/logo-mini.png'
 
@@ -57,6 +59,7 @@ class Wrapper extends React.Component {
         <div className="wrapper d-flex flex-column flex-lg-row ">
           <div id="menu" className="sidebar">
             <SideBar />
+            <InstallPWA />
           </div>
 
           <div className="hamburger d-flex align-items-center justify-content-between d-lg-none px-3 py-2">

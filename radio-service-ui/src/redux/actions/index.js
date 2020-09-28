@@ -11,3 +11,7 @@ export const setTooltips         = tooltips                            => ({ typ
 export const setRecommended      = (recommended, currentPage)          => ({ type: 'VIDEOS/SET_RECOMMENDED',   recommended, currentPage });
 export const setHasMore          = hasMore                             => ({ type: 'VIDEOS/SET_HAS_MORE',      hasMore })
 export const setPrograms         = (programs, currentPage, totalPages) => ({ type: 'PROGRAMS/SET_PROGRAMS',    programs, currentPage, totalPages });
+
+export const setMainBanner       = mainBanner => ({ type: 'BANNERS/SET_MAIN_BANNER', mainBanner });
+export const setSecondaryBanner  = secondaryBanner => ({ type: 'BANNERS/SET_SECONDARY_BANNER', secondaryBanner });
+export const setAdditionalBanner = additionalBanner => ({ type: 'BANNERS/SET_ADDITIONAL_BANNER', additionalBanner });

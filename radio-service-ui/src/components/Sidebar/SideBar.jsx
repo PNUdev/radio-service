@@ -1,5 +1,15 @@
 import React from 'react';
-import { Link, NavLink, useLocation } from "react-router-dom";
+import axios from 'axios';
+
+import PropTypes from 'prop-types';
+
+import { Link, NavLink } from "react-router-dom";
+import { connect } from 'react-redux';
+
+import * as actions from '../../redux/actions';
+import { extractBannerLink } from '../../utils';
+
+import InstallButton from './InstallButton'
 
 import logo from '../../images/logo.png';
 
@@ -21,62 +31,112 @@ import youtube from '../../images/socials/youtube.svg';
 
 import './SideBar.scss'
 
-const SideBar = () => {
-  const currentPath = useLocation().pathname;
+const BANNER_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/banners'
 
-  return(
-    <div className="sidebar-content pt-lg-5 h-100 d-flex flex-column d-lg-block ">
-      <header>
-        <div className="logo-wrapper d-flex justify-content-center">
-          <Link to="/radio" className="header-link">
-            <img src={logo} alt="" className="logo"/>
-          </Link>
-        </div>
+class SideBar extends React.Component {
+  constructor(props) {
+    super(props);
 
-        <div className="socials d-flex justify-content-center mt-3">
-          <a className="header-link" href="https://www.facebook.com/ShpaltaIF" target='_blank'>
-            <img src={facebook} alt="" className="mr-3"/>
-          </a>
-          <a className="header-link" href="https://instagram.com/shpalta.if" target='_blank'>
-            <img src={instagram} alt="" className="mr-3"/>
-          </a>
-          <a className="header-link" href="https://www.youtube.com/channel/UCPTybYwJGc9-WuKTP2fVuZg" target='_blank'>
-            <img src={youtube} alt="" className="mr-3"/>
-          </a>
-          <a className="header-link" href="https://www.facebook.com/groups/StudRadioIF" target='_blank'>
-            <img src={facebook} alt=""/>
-          </a>
-        </div>
-      </header>
+    this.fetchBanner();
 
-      <nav className="mt-4">
-        <NavLink to="/radio" className="header-link d-flex align-items-center radio">
-          <img src={currentPath === '/radio' ? radioActive : radio} alt="" className="mr-2"/>
-          Радіо
-        </NavLink>
+    this.fetchBanner = this.fetchBanner.bind(this)
+  }
 
-        <NavLink to="recent" className="header-link d-flex align-items-center recent">
-          <img src={currentPath === '/recent' ? broadcastActive : broadcast} alt="" className="mr-2"/>
-          Нещодавні відео
-        </NavLink>
+  fetchBanner() {
+    this.props.turnLoadingOn();
 
-        <NavLink to="schedule" className="header-link d-flex align-items-center scheduler">
-          <img src={currentPath === '/schedule' ? schedulerActive : scheduler} alt="" className="mr-2"/>
-          Розклад
-        </NavLink>
+    axios.get(BANNER_LINK)
+    .then((response) => {
+      this.props.turnLoadingOff();
+      this.props.setMainBanner(extractBannerLink(response.data["main-banner"]))
+    })
+    .catch((errors) => {
+      this.props.turnLoadingOff();
+      console.error(errors)
+    })
+  }
 
-        <NavLink to="recommended" className="header-link d-flex align-items-center recommended">
-          <img src={currentPath === '/recommended' ? videoActive : video} alt="" className="mr-2"/>
-          Рекомендовані відео
-        </NavLink>
+  render() {
+    const currentPath = window.location.pathname;
+    const { mainBanner } = this.props;
 
-        <NavLink to="programs" className="header-link d-flex align-items-center programs">
-          <img src={currentPath === '/programs' ? programsActive : programs} alt="" className="mr-2"/>
-          Програми
-        </NavLink>
-      </nav>
-    </div>
-  )
+    return (
+      <div className="sidebar-content pt-lg-5 h-100 d-flex flex-column d-lg-block ">
+        <header>
+          <div className="logo-wrapper d-flex justify-content-center">
+            <Link to="/radio" className="header-link">
+              <img src={logo} alt="" className="logo"/>
+            </Link>
+          </div>
+
+          <div className="socials d-flex justify-content-center mt-3">
+            <a className="header-link" href="https://www.facebook.com/ShpaltaIF" target='_blank'>
+              <img src={facebook} alt="" className="mr-3"/>
+            </a>
+            <a className="header-link" href="https://instagram.com/shpalta.if" target='_blank'>
+              <img src={instagram} alt="" className="mr-3"/>
+            </a>
+            <a className="header-link" href="https://www.youtube.com/channel/UCPTybYwJGc9-WuKTP2fVuZg" target='_blank'>
+              <img src={youtube} alt="" className="mr-3"/>
+            </a>
+            <a className="header-link" href="https://www.facebook.com/groups/StudRadioIF" target='_blank'>
+              <img src={facebook} alt=""/>
+            </a>
+          </div>
+        </header>
+
+        <nav className="mt-4">
+          <NavLink to="/radio" className="header-link d-flex align-items-center radio">
+            <img src={currentPath === '/radio' ? radioActive : radio} alt="" className="mr-2"/>
+            Радіо
+          </NavLink>
+
+          <NavLink to="recent" className="header-link d-flex align-items-center recent">
+            <img src={currentPath === '/recent' ? broadcastActive : broadcast} alt="" className="mr-2"/>
+            Нещодавні відео
+          </NavLink>
+
+          <NavLink to="schedule" className="header-link d-flex align-items-center scheduler">
+            <img src={currentPath === '/schedule' ? schedulerActive : scheduler} alt="" className="mr-2"/>
+            Розклад
+          </NavLink>
+
+          <NavLink to="recommended" className="header-link d-flex align-items-center recommended">
+            <img src={currentPath === '/recommended' ? videoActive : video} alt="" className="mr-2"/>
+            Рекомендовані відео
+          </NavLink>
+
+          <NavLink to="programs" className="header-link d-flex align-items-center programs">
+            <img src={currentPath === '/programs' ? programsActive : programs} alt="" className="mr-2"/>
+            Програми
+          </NavLink>
+
+          <InstallButton />
+
+          <img src={mainBanner} alt="" className="m-3 main-banner" />
+        </nav>
+      </div>
+    )
+  }
 }
 
-export default SideBar;
+const mapStateToProps = state => {
+  return {
+    loading: state.shared.loading,
+    mainBanner: state.banners.mainBanner,
+  }
+};
+
+const mapDispatchToProps = dispatch => ({
+  setMainBanner: banner => dispatch(actions.setMainBanner(banner)),
+
+  turnLoadingOn:   () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:  () => dispatch(actions.turnLoadingOff()),
+});
+
+SideBar.propTypes = {
+  loading: PropTypes.bool,
+  mainBanner: PropTypes.string,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SideBar);

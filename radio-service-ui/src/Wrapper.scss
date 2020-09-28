@@ -3,6 +3,21 @@
 html, body { min-height: 100vh; }
 *, *:before, *:after { box-sizing: border-box; }
 
+.main-banner {
+  width: 200px;
+  height: 200px;
+}
+
+.secondary-banner {
+  width: 970;
+  height: 90;
+}
+
+.additional-banner {
+  width: 468px;
+  height: 60px;
+}
+
 .wrapper {
   height: 100vh;
   background: linear-gradient(90deg, rgba(24,141,154,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
@@ -11,6 +26,8 @@ html, body { min-height: 100vh; }
     overflow: auto;
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
+    background-size: cover;
+    // background-position: 0 0;
 
     .bg-wrapper {
       padding: 20px;
