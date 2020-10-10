@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux';
 
 import * as actions from './redux/actions';
+import InstallButton from './components/InstallButton'
 
 import SideBar     from './components/Sidebar';
 import Radio       from "./components/Radio";
@@ -89,6 +90,8 @@ class Wrapper extends React.Component {
 
           {loading && <div className="loader-container"><div className="loader"></div></div>}
         </div>
+
+        <InstallButton />
       </Router>
     )
   }
