@@ -3,17 +3,16 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ReactMarkdown from "react-markdown";
 
-import * as actions from '../../redux/actions';
-
+import { LinkRenderer } from '../../utils/linkRenderer';
 import RadioPlayer from './RadioPlayer';
+import { BANNER_LINK, BG_URL, TODAY_PROGRAM_LINK } from '../shared/endpointConstants';
+import * as actions from '../../redux/actions';
 
 import clock from '../../images/clock.png'
 
 import './Radio.scss'
-
-const TODAY_PROGRAM_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/schedule/today'
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 
 class Radio extends React.Component {
   constructor(props) {
@@ -21,15 +20,17 @@ class Radio extends React.Component {
 
     this.fetchBackground();
     this.fetchTodayPrograms();
+    this.fetchBanner();
 
     this.fetchBackground = this.fetchBackground.bind(this);
     this.fetchTodayPrograms = this.fetchTodayPrograms.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     if(this.props.open){
       document.getElementById('menu').style.width = '0%';
       document.body.style.overflow = 'visible';
+      document.querySelector('.toggle').classList.remove('active');
       this.props.turnOffHamburger();
     }
   }
@@ -62,18 +63,40 @@ class Radio extends React.Component {
     });
   }
 
+  fetchBanner() {
+    this.props.turnLoadingOn();
+
+    axios.get(BANNER_LINK)
+    .then((response) => {
+      this.props.turnLoadingOff();
+      this.props.setSecondaryBanner(response.data["secondary-banner"])
+    })
+    .catch((errors) => {
+      this.props.turnLoadingOff();
+      console.error(errors)
+    })
+  }
+
   render() {
-    const { programs } = this.props;
+    const { programs, secondaryBanner } = this.props;
 
     return (
       <div className="radio-container d-flex flex-column justify-content-between h-100">
         <div className="player-container d-flex flex-column justify-content-between h-100">
           <RadioPlayer />
 
+          <div className="secondary-banner my-3">
+            <ReactMarkdown
+              source={secondaryBanner}
+              renderers={{link: LinkRenderer}}
+            />
+          </div>
+
           <div className="scheduler-day-card mb-3">
             <h1 className="text-center mb-3">
-              {programs.length == 0 ?'Розклад на сьогоднішній день відсутній' : 'Розклад на сьогодні'}
+              {programs && programs.length == 0 ?'Розклад на сьогоднішній день відсутній' : 'Розклад на сьогодні'}
             </h1>
+
             <div className="time-table">
               <div className="program-container">
                 { programs && programs.length > 0 && programs.map(item => {
@@ -116,20 +139,32 @@ class Radio extends React.Component {
 const mapStateToProps = state => {
   return {
     programs: state.radio.programs,
-    open: state.shared.open,
+    open:     state.shared.open,
+
+    secondaryBanner: state.banners.secondaryBanner,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  setTodayPrograms:   programs => dispatch(actions.setTodayPrograms(programs)),
+  setSecondaryBanner: banner   => dispatch(actions.setSecondaryBanner(banner)),
+
   turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
-  setTodayPrograms: programs => dispatch(actions.setTodayPrograms(programs)),
-  turnLoadingOn:   () => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff:  () => dispatch(actions.turnLoadingOff()),
+  turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:   () => dispatch(actions.turnLoadingOff()),
 });
 
 Radio.propTypes = {
   programs: PropTypes.array,
-  open: PropTypes.bool,
+  open:     PropTypes.bool,
+  secondaryBanner: PropTypes.string,
+
+  setTodayPrograms:   PropTypes.func,
+  setSecondaryBanner: PropTypes.func,
+
+  turnOffHamburger: PropTypes.func,
+  turnLoadingOff:   PropTypes.func,
+  turnLoadingOn:    PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Radio);

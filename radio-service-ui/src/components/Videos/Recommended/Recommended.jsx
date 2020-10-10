@@ -3,17 +3,14 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+
 import InfiniteScroll from 'react-infinite-scroller';
+import PaginationLoader from '../../../components/PaginationLoader';
 
-import PaginationLoader from '../PaginationLoader';
+import Video from '../Video';
 
-import * as actions from '../../redux/actions';
-
-import './Recommended.scss'
-
-const RECOMENDED_URL = process.env.REACT_APP_SITE_URL + '/api/v1/videos/recommended?page='
-const DESCRIPTION_LENGTH = 1000;
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
+import * as actions from '../../../redux/actions';
+import { RECOMENDED_URL, BG_URL } from '../../shared/endpointConstants';
 
 class Recommended extends React.Component {
   constructor(props) {
@@ -26,10 +23,11 @@ class Recommended extends React.Component {
     this.fetchVideos = this.fetchVideos.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     if(this.props.open){
       document.getElementById('menu').style.width = '0%';
       document.body.style.overflow = 'visible';
+      document.querySelector('.toggle').classList.remove('active');
       this.props.turnOffHamburger();
     }
   }
@@ -69,25 +67,6 @@ class Recommended extends React.Component {
   render() {
     const { recommended, currentPage, hasMore } = this.props;
 
-    const renderVideo = video => {
-      return (
-        <div className="video-card mb-4 p-3" key={video.id}>
-          <h3 className="title mb-3 pb-2">{video.title}</h3>
-          <div className="d-flex flex-column video">
-            <iframe width="560"
-                    height="315"
-                    src={"https://www.youtube.com/embed/" + video.id}
-                    frameBorder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="youtube-video"></iframe>
-
-            <div className="description ml-2">{video.description.substring(0, DESCRIPTION_LENGTH)}</div>
-          </div>
-        </div>
-      )
-    };
-
     return (
       <div className="recommended-container">
         {/* <InfiniteScroll
@@ -98,7 +77,7 @@ class Recommended extends React.Component {
           useWindow={true}
           getScrollParent={() => this.props.scrollParentRef}
         > */}
-          { recommended && recommended.length > 0 && recommended.map(video => renderVideo(video)) }
+          { recommended && recommended.length > 0 && recommended.map(video => <Video video={video} key={video.id} />) }
         {/* </InfiniteScroll> */}
       </div>
     )
@@ -110,24 +89,30 @@ const mapStateToProps = state => {
     currentPage: state.videos.currentPage,
     recommended: state.videos.recommended,
     hasMore:     state.videos.hasMore,
-    open: state.shared.open,
 
+    open:        state.shared.open,
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  setRecommended: (recommended,
+                  currentPage) => dispatch(actions.setRecommended(recommended, currentPage)),
+  setHasMore:     bool         => dispatch(actions.setHasMore(bool)),
+
   turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
-  setRecommended: (recommended, currentPage) => dispatch(actions.setRecommended(recommended, currentPage)),
-  setHasMore:     bool                       => dispatch(actions.setHasMore(bool)),
-  turnLoadingOn:  ()                         => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff: ()                         => dispatch(actions.turnLoadingOff()),
+  turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:   () => dispatch(actions.turnLoadingOff()),
 });
 
 Recommended.propTypes = {
   currentPage: PropTypes.number,
   recommended: PropTypes.array,
   hasMore:     PropTypes.bool,
-  open: PropTypes.bool,
+  open:        PropTypes.bool,
+
+  turnOffHamburger: PropTypes.func,
+  turnLoadingOff:   PropTypes.func,
+  turnLoadingOn:    PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Recommended);

@@ -8,10 +8,10 @@ import InfiniteScroll from 'react-infinite-scroller';
 import PaginationLoader from '../PaginationLoader';
 
 import * as actions from '../../redux/actions';
+import { PROGRAMS_URL, BG_URL } from '../shared/endpointConstants';
+
 import './Programs.scss'
 
-const PROGRAMS_URL = process.env.REACT_APP_SITE_URL + '/api/v1/programs'
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 const DESCRIPTION_LENGTH = 1000;
 
 class Programs extends React.Component {
@@ -25,10 +25,11 @@ class Programs extends React.Component {
     this.fetchPrograms = this.fetchPrograms.bind(this);
   }
 
-  componentDidMount(){
+  componentDidMount() {
     if(this.props.open){
       document.getElementById('menu').style.width = '0%';
       document.body.style.overflow = 'visible';
+      document.querySelector('.toggle').classList.remove('active');
       this.props.turnOffHamburger();
     }
   }
@@ -69,18 +70,19 @@ class Programs extends React.Component {
 
     const dayNamesShort = {
       'Понеділок': 'пн',
-      'Вівторок': 'вт',
-      'Середа': 'ср',
-      'Четвер': 'чт',
-      "П'ятниця": 'пт',
-      'Субота': 'сб',
-      'Неділя': 'нд',
+      'Вівторок':  'вт',
+      'Середа':    'ср',
+      'Четвер':    'чт',
+      "П'ятниця":  'пт',
+      'Субота':    'сб',
+      'Неділя':    'нд',
     }
 
     const renderOccurrence = (occurence, last=false) => {
       return(
         <div className="occurence" key={occurence["dayOfWeek"]["nameUkr"]}>
           <span className="day">{dayNamesShort[occurence["dayOfWeek"]["nameUkr"]]}</span>
+
           <span className="time">
             ({occurence["timeRange"]["startTime"]} - {occurence["timeRange"]["endTime"]}){!last && "," + String.fromCharCode(160)}
           </span>
@@ -97,6 +99,7 @@ class Programs extends React.Component {
             <div className="mb-2">
               {program.title}
             </div>
+
             <div className="d-flex occurences">
               {
                 occurences.length > 0 &&
@@ -133,23 +136,30 @@ const mapStateToProps = state => {
     currentPage: state.programs.currentPage,
     totalPages:  state.programs.totalPages,
     programs:    state.programs.programs,
-    open: state.shared.open,
+    open:        state.shared.open,
 
   }
 };
 
 const mapDispatchToProps = dispatch => ({
+  setPrograms: (programs,
+               currentPage,
+               totalPages) => dispatch(actions.setPrograms(programs, currentPage, totalPages)),
+
   turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
-  setPrograms: (programs, currentPage, totalPages) => dispatch(actions.setPrograms(programs, currentPage, totalPages)),
-  turnLoadingOn:  () => dispatch(actions.turnLoadingOn()),
-  turnLoadingOff: () => dispatch(actions.turnLoadingOff()),
+  turnLoadingOn:    () => dispatch(actions.turnLoadingOn()),
+  turnLoadingOff:   () => dispatch(actions.turnLoadingOff()),
 });
 
 Programs.propTypes = {
   currentPage: PropTypes.number,
   totalPages:  PropTypes.number,
   programs:    PropTypes.array,
-  open: PropTypes.bool,
+  open:        PropTypes.bool,
+
+  turnOffHamburger: PropTypes.func,
+  turnLoadingOff:   PropTypes.func,
+  turnLoadingOn:    PropTypes.func,
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Programs);

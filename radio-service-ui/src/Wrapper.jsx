@@ -1,27 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import * as actions from './redux/actions';
-
 import {
   BrowserRouter as Router,
   Switch,
   Route,
   Redirect,
+  Link,
 } from "react-router-dom";
 
 import { connect } from 'react-redux';
 
-import HamburgerMenu from 'react-hamburger-menu'
+import * as actions from './redux/actions';
 
 import SideBar     from './components/Sidebar';
 import Radio       from "./components/Radio";
-import Recent      from "./components/Recent";
+import Recent      from "./components/Videos/Recent";
 import Scheduler   from './components/Scheduler';
-import Recommended from './components/Recommended';
+import Recommended from './components/Videos/Recommended';
 import Programs    from './components/Programs';
 
-import bg from './images/main.jpg'
+import InstallPWA from './components/InstallPWA'
+
+import miniLogo from './images/logo-mini.png'
+
 import './Wrapper.scss';
 
 class Wrapper extends React.Component {
@@ -32,8 +34,8 @@ class Wrapper extends React.Component {
   }
 
   handleClick() {
+    document.querySelector('.toggle').classList.toggle('active');
     this.props.toggleHamburger();
-    this.forceUpdate();
 
     if(this.props.open) {
       document.getElementById('menu').style.width = '0%';
@@ -42,40 +44,32 @@ class Wrapper extends React.Component {
   }
 
   componentDidUpdate() {
-    const menu = document.getElementById('menu');
-
     if(this.props.open) {
       document.body.style.overflow = 'hidden';
-      menu.style.width = '100%';
+      document.getElementById('menu').style.width = '100%';
     }
   }
 
   render() {
     const { loading } = this.props;
 
-    const bg_styles = {
-      backgroundImage: `url(${bg})`,
-      backgroundPosition: 'center',
-      backgroundSize: 'cover',
-      backgroundRepeat: 'no-repeat'
-    }
-
     return (
       <Router>
         <div className="wrapper d-flex flex-column flex-lg-row ">
           <div id="menu" className="sidebar">
             <SideBar />
+            <InstallPWA />
           </div>
 
-          <div className="hamburger d-lg-none p-2">
-            <HamburgerMenu
-              isOpen={this.props.open}
-              menuClicked={this.handleClick}
-              color='white'
-            />
+          <div className="hamburger d-flex align-items-center justify-content-between d-lg-none px-3 py-2">
+            <Link to="/radio" className="logo-link">
+              <img src={miniLogo} alt="" />
+            </Link>
+
+            <div className="toggle" onClick={this.handleClick}></div>
           </div>
 
-          <div id="content" className="content" style={bg_styles}>
+          <div id="content" className="content w-100 h-100">
             <div id="bg-wrapper" className="bg-wrapper" ref={(ref) => this.scrollParentRef = ref}>
               <Switch>
                 <Route path="/" exact>
@@ -86,7 +80,9 @@ class Wrapper extends React.Component {
                 <Route path="/recent"      component={Recent} />
                 <Route path="/schedule"    component={Scheduler} />
                 <Route path="/programs"    component={Programs} />
-                <Route path="/recommended" component={Recommended} recommended={true} parentRef={this.scrollParentRef} />
+                <Route path="/recommended" component={Recommended} parentRef={this.scrollParentRef} />
+
+                <Redirect to="/radio" />
               </Switch>
             </div>
           </div>

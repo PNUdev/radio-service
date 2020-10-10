@@ -2,10 +2,8 @@
 
 .radio-container {
   position: relative;
-
   .player-container { width: 100%; }
 }
-
 
 .scheduler-day-card {
   padding: 20px;
@@ -68,9 +66,7 @@
             border-bottom: none;
             border-right: 1px solid black;
           }
-          .to {
-            border-right: none;
-          }
+          .to { border-right: none; }
           .from, .to {
             display: flex;
             justify-content: center;
