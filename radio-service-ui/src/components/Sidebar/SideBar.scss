@@ -3,6 +3,8 @@
 .sidebar-content {
   color: white;
   width: 380px;
+  height: 100vh;
+  position: relative;
 
   header {
     .socials img {
@@ -49,12 +51,11 @@
         border-left: 4px solid $orange;
       }
     }
+  }
 
-    .small-img {
-      margin-left: 20px;
-      height: 30px;
-      width: 30px;
-    }
+  .small-img {
+    height: 30px;
+    width: 30px;
   }
 }
 
@@ -62,6 +63,7 @@
   .sidebar-content {
     width: auto;
     padding: 30px 15px 0;
+    height: calc(100vh - 60px);
 
     nav a.active {
       border-top-right-radius: 10px;

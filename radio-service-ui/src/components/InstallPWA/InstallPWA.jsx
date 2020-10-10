@@ -1,5 +1,7 @@
 import React from 'react';
+
 import { Button, Modal, Card, CardText, CardBody, CardTitle } from 'reactstrap';
+
 import useIosInstallPrompt from '../../pwa_utils/useIosInstallPrompt';
 import useWebInstallPrompt from '../../pwa_utils/useWebInstallPrompt';
 
@@ -55,7 +57,7 @@ const InstallPWA = () => {
                 Встановити
               </Button>
 
-              <Button onClick={handleWebInstallDeclined}>Відмінити</Button>
+              <Button onClick={handleWebInstallDeclined}>Запитати пізніше</Button>
             </div>
           )}
         </CardBody>

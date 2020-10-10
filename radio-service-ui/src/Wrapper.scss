@@ -18,6 +18,7 @@ html, body { min-height: 100vh; }
 .secondary-banner p img {
   width: 970px;
   height: 90px;
+  max-width: 100%;
 }
 
 .additional-banner p {
@@ -28,6 +29,7 @@ html, body { min-height: 100vh; }
   img {
     width: 468px;
     height: 60px;
+    max-width: 100%;
   }
 }
 

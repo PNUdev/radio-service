@@ -10,9 +10,7 @@ import PaginationLoader from '../../../components/PaginationLoader';
 import Video from '../Video';
 
 import * as actions from '../../../redux/actions';
-
-const RECOMENDED_URL = process.env.REACT_APP_SITE_URL + '/api/v1/videos/recommended?page='
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
+import { RECOMENDED_URL, BG_URL } from '../../shared/endpointConstants';
 
 class Recommended extends React.Component {
   constructor(props) {

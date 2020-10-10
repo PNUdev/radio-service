@@ -8,10 +8,10 @@ import InfiniteScroll from 'react-infinite-scroller';
 import PaginationLoader from '../PaginationLoader';
 
 import * as actions from '../../redux/actions';
+import { PROGRAMS_URL, BG_URL } from '../shared/endpointConstants';
+
 import './Programs.scss'
 
-const PROGRAMS_URL = process.env.REACT_APP_SITE_URL + '/api/v1/programs'
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 const DESCRIPTION_LENGTH = 1000;
 
 class Programs extends React.Component {

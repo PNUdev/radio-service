@@ -7,8 +7,10 @@ import { Link, NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
 import ReactMarkdown from "react-markdown";
 
+import { LinkRenderer } from '../../utils/linkRenderer';
 import * as actions from '../../redux/actions';
 import InstallButton from './InstallButton'
+import { BANNER_LINK } from '../shared/endpointConstants';
 
 import logo from '../../images/logo.png';
 
@@ -29,8 +31,6 @@ import instagram from '../../images/socials/instagram.svg';
 import youtube from '../../images/socials/youtube.svg';
 
 import './SideBar.scss'
-
-const BANNER_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/banners'
 
 class SideBar extends React.Component {
   constructor(props) {
@@ -60,7 +60,7 @@ class SideBar extends React.Component {
     const { mainBanner } = this.props;
 
     return (
-      <div className="sidebar-content pt-lg-5 h-100 d-flex flex-column d-lg-block ">
+      <div className="sidebar-content pt-lg-5">
         <header>
           <div className="logo-wrapper d-flex justify-content-center">
             <Link to="/radio" className="header-link">
@@ -110,12 +110,15 @@ class SideBar extends React.Component {
             Програми
           </NavLink>
 
-          <InstallButton />
-
           <div className="main-banner m-3">
-            <ReactMarkdown source={mainBanner} />
+            <ReactMarkdown
+              source={mainBanner}
+              renderers={{link: LinkRenderer}}
+            />
           </div>
         </nav>
+
+        <InstallButton />
       </div>
     )
   }

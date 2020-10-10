@@ -22,7 +22,6 @@ import Programs    from './components/Programs';
 
 import InstallPWA from './components/InstallPWA'
 
-import bg from './images/main.jpg'
 import miniLogo from './images/logo-mini.png'
 
 import './Wrapper.scss';
@@ -51,56 +50,47 @@ class Wrapper extends React.Component {
     }
   }
 
-
   render() {
     const { loading } = this.props;
 
-    const adminLInk = process.env.REACT_APP_SITE_URL + '/admin'
-
-    const adminRegex = /^\/admin/
-
-    // if (adminRegex.test(window.location.pathname)) {
-    //   return <div></div>
-    // } else {
-      return (
-        <Router>
-          <div className="wrapper d-flex flex-column flex-lg-row ">
-            <div id="menu" className="sidebar">
-              <SideBar />
-              <InstallPWA />
-            </div>
-
-            <div className="hamburger d-flex align-items-center justify-content-between d-lg-none px-3 py-2">
-              <Link to="/radio" className="logo-link">
-                <img src={miniLogo} alt="" />
-              </Link>
-
-              <div className="toggle" onClick={this.handleClick}></div>
-            </div>
-
-            <div id="content" className="content w-100 h-100">
-              <div id="bg-wrapper" className="bg-wrapper" ref={(ref) => this.scrollParentRef = ref}>
-                <Switch>
-                  <Route path="/" exact>
-                    <Redirect to="/radio" />
-                  </Route>
-
-                  <Route path="/radio"       component={Radio} />
-                  <Route path="/recent"      component={Recent} />
-                  <Route path="/schedule"    component={Scheduler} />
-                  <Route path="/programs"    component={Programs} />
-                  <Route path="/recommended" component={Recommended} parentRef={this.scrollParentRef} />
-
-                  <Redirect to="/radio" />
-                </Switch>
-              </div>
-            </div>
-
-            {loading && <div className="loader-container"><div className="loader"></div></div>}
+    return (
+      <Router>
+        <div className="wrapper d-flex flex-column flex-lg-row ">
+          <div id="menu" className="sidebar">
+            <SideBar />
+            <InstallPWA />
           </div>
-        </Router>
-      )
-  //   }
+
+          <div className="hamburger d-flex align-items-center justify-content-between d-lg-none px-3 py-2">
+            <Link to="/radio" className="logo-link">
+              <img src={miniLogo} alt="" />
+            </Link>
+
+            <div className="toggle" onClick={this.handleClick}></div>
+          </div>
+
+          <div id="content" className="content w-100 h-100">
+            <div id="bg-wrapper" className="bg-wrapper" ref={(ref) => this.scrollParentRef = ref}>
+              <Switch>
+                <Route path="/" exact>
+                  <Redirect to="/radio" />
+                </Route>
+
+                <Route path="/radio"       component={Radio} />
+                <Route path="/recent"      component={Recent} />
+                <Route path="/schedule"    component={Scheduler} />
+                <Route path="/programs"    component={Programs} />
+                <Route path="/recommended" component={Recommended} parentRef={this.scrollParentRef} />
+
+                <Redirect to="/radio" />
+              </Switch>
+            </div>
+          </div>
+
+          {loading && <div className="loader-container"><div className="loader"></div></div>}
+        </div>
+      </Router>
+    )
   }
 }
 

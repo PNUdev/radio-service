@@ -6,15 +6,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import * as actions from '../../redux/actions';
+import { SITE_URL, BG_URL, SCHEDULE_URL  } from '../shared/endpointConstants';
 
 import './Scheduler.scss';
 
 import clock from '../../images/clock.png'
 import program_image from '../../images/menu-items/programs-active.png';
-
-const SITE_URL     = process.env.REACT_APP_SITE_URL
-const SCHEDULE_URL = SITE_URL + '/api/v1/schedule/week'
-const BG_URL       = SITE_URL + '/api/v1/backgrounds'
 
 class Scheduler extends React.Component {
   constructor(props) {

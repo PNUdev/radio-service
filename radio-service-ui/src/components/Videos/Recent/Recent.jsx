@@ -5,14 +5,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactMarkdown from "react-markdown";
 
+import { LinkRenderer } from '../../../utils/linkRenderer';
 import * as actions from '../../../redux/actions';
+import { BANNER_LINK, BG_URL, RECENT_URL } from '../../shared/endpointConstants';
 
 import Video from '../Video';
-
-const RECENT_URL = process.env.REACT_APP_SITE_URL + '/api/v1/videos/recent'
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
-const BANNER_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/banners'
-
 
 class Recent extends React.Component {
   constructor(props) {
@@ -90,7 +87,10 @@ class Recent extends React.Component {
               {
                 recent.indexOf(video) == 0 &&
                 <div className="additional-banner my-3">
-                  <ReactMarkdown source={additionalBanner}/>
+                  <ReactMarkdown
+                    source={additionalBanner}
+                    renderers={{link: LinkRenderer}}
+                  />
                 </div>
               }
             </>

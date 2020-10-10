@@ -5,17 +5,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactMarkdown from "react-markdown";
 
+import { LinkRenderer } from '../../utils/linkRenderer';
 import RadioPlayer from './RadioPlayer';
-
+import { BANNER_LINK, BG_URL, TODAY_PROGRAM_LINK } from '../shared/endpointConstants';
 import * as actions from '../../redux/actions';
 
 import clock from '../../images/clock.png'
 
 import './Radio.scss'
-
-const TODAY_PROGRAM_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/schedule/today'
-const BANNER_LINK = process.env.REACT_APP_SITE_URL + '/api/v1/banners'
-const BG_URL = process.env.REACT_APP_SITE_URL + '/api/v1/backgrounds'
 
 class Radio extends React.Component {
   constructor(props) {
@@ -89,7 +86,10 @@ class Radio extends React.Component {
           <RadioPlayer />
 
           <div className="secondary-banner my-3">
-            <ReactMarkdown source={secondaryBanner}/>
+            <ReactMarkdown
+              source={secondaryBanner}
+              renderers={{link: LinkRenderer}}
+            />
           </div>
 
           <div className="scheduler-day-card mb-3">

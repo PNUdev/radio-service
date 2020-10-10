@@ -8,15 +8,15 @@ const setInstallPromptSeenToday = (promptName) => {
   localStorage.setItem(promptName, today);
 };
 
-function getUserShouldBePromptedToInstall(promptName, daysToWaitBeforePromptingAgain) {
+function getUserShouldBePromptedToInstall(promptName, hoursToWaitBeforePromptingAgain) {
   const lastPrompt = moment(getInstallPromptLastSeenAt(promptName));
-  const daysSinceLastPrompt = moment().diff(lastPrompt, 'days');
-  return isNaN(daysSinceLastPrompt) || daysSinceLastPrompt > daysToWaitBeforePromptingAgain;
+  const daysSinceLastPrompt = moment().diff(lastPrompt, 'hours');
+  return isNaN(daysSinceLastPrompt) || daysSinceLastPrompt > hoursToWaitBeforePromptingAgain;
 }
 
-const useShouldShowPrompt = (promptName, daysToWaitBeforePromptingAgain = 30) => {
+const useShouldShowPrompt = (promptName, hoursToWaitBeforePromptingAgain = 6) => {
   const [userShouldBePromptedToInstall, setUserShouldBePromptedToInstall] = useState(
-    getUserShouldBePromptedToInstall(promptName, daysToWaitBeforePromptingAgain)
+    getUserShouldBePromptedToInstall(promptName, hoursToWaitBeforePromptingAgain)
   );
 
   const handleUserSeeingInstallPrompt = () => {
