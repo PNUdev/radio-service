@@ -11,25 +11,25 @@ const InstallButton = () => {
   useEffect(() => {
     const handler = e => {
       e.preventDefault();
-      // console.log("we are being triggered :D");
       setSupportsPWA(true);
       setPromptInstall(e);
     };
-    window.addEventListener("beforeinstallprompt", handler);
 
+    window.addEventListener("beforeinstallprompt", handler);
     return () => window.removeEventListener("transitionend", handler);
   }, []);
 
   const onClick = evt => {
     evt.preventDefault();
+
     if (!promptInstall) {
       return;
     }
     promptInstall.prompt();
   };
-  if (!supportsPWA) {
-    return null;
-  }
+
+  if (!supportsPWA) return null;
+
   return (
     <div className="d-flex align-items-center">
       <img src={download} className="mr-2 small-img"/>

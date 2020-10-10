@@ -9,9 +9,8 @@ const InstallPWA = () => {
   const [iosInstallPrompt, handleIOSInstallDeclined] = useIosInstallPrompt();
   const [webInstallPrompt, handleWebInstallDeclined, handleWebInstallAccepted] = useWebInstallPrompt();
 
-  if (!iosInstallPrompt && !webInstallPrompt) {
-    return null;
-  }
+  if (!iosInstallPrompt && !webInstallPrompt) return null;
+
   return (
     <Modal isOpen centered>
       <Card>
@@ -44,6 +43,7 @@ const InstallPWA = () => {
                 />
                 а потім &quot;Добавити на робочий стіл&quot;
               </CardText>
+
               <div className="d-flex justify-content-center">
                 <Button onClick={handleIOSInstallDeclined}>Close</Button>
               </div>
@@ -52,9 +52,10 @@ const InstallPWA = () => {
           {webInstallPrompt && (
             <div className="d-flex justify-content-around">
               <Button color="primary" onClick={handleWebInstallAccepted}>
-                Install
+                Встановити
               </Button>
-              <Button onClick={handleWebInstallDeclined}>Close</Button>
+
+              <Button onClick={handleWebInstallDeclined}>Відмінити</Button>
             </div>
           )}
         </CardBody>
