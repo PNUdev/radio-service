@@ -9,7 +9,7 @@ import ReactMarkdown from "react-markdown";
 
 import { LinkRenderer } from '../../utils/linkRenderer';
 import * as actions from '../../redux/actions';
-import InstallButton from './InstallButton'
+import InstallButton from '../InstallButton'
 import { BANNER_LINK } from '../shared/endpointConstants';
 
 import logo from '../../images/logo.png';
@@ -117,8 +117,6 @@ class SideBar extends React.Component {
             />
           </div>
         </nav>
-
-        <InstallButton />
       </div>
     )
   }

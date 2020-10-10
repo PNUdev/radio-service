@@ -123,6 +123,8 @@ html, body { min-height: 100vh; }
       height: 60px;
       overflow: hidden;
       padding: 8px 10px;
+      z-index: 20;
+      background: $black;
 
       a.logo-link, a.logo-link img {
         height: 100%;
@@ -158,7 +160,8 @@ html, body { min-height: 100vh; }
       width: 0%;
       z-index: 10;
       position: absolute;
-      top: 60px;
+      padding-top: 60px;
+      top: 0;
       left: 0;
       right: 0;
       bottom: 0;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import './InstallButton.scss';
-import download from  '../../../images/download.png';
+import download from  '../../images/download.png';
 
 const InstallButton = () => {
   const [supportsPWA, setSupportsPWA] = useState(false);
@@ -30,20 +30,16 @@ const InstallButton = () => {
   if (!supportsPWA) return null;
 
   return (
-    <div className="install-btn-container d-flex justify-content-center">
-      <div className="d-flex align-items-center">
+    <div className="install-btn-container d-flex justify-content-center align-items-center">
+      <button
+        className="pwa-install"
+        id="setup_button"
+        aria-label="Install app"
+        title="Встановити"
+        onClick={onClick}
+      >
         <img src={download} className="small-img" />
-
-        <button
-          className="pwa-install"
-          id="setup_button"
-          aria-label="Install app"
-          title="Встановити"
-          onClick={onClick}
-        >
-          Встановити програму
-        </button>
-      </div>
+      </button>
     </div>
   );
 };
