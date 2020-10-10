@@ -91,11 +91,6 @@ class Wrapper extends React.Component {
                   <Route path="/programs"    component={Programs} />
                   <Route path="/recommended" component={Recommended} parentRef={this.scrollParentRef} />
 
-                  <Route path="/admin" component={() => {
-                    window.location.href = `${adminLInk}`
-                    return null;
-                  }} />
-
                   <Redirect to="/radio" />
                 </Switch>
               </div>

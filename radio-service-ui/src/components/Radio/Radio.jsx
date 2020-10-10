@@ -94,7 +94,7 @@ class Radio extends React.Component {
 
           <div className="scheduler-day-card mb-3">
             <h1 className="text-center mb-3">
-              {programs.length == 0 ?'Розклад на сьогоднішній день відсутній' : 'Розклад на сьогодні'}
+              {programs && programs.length == 0 ?'Розклад на сьогоднішній день відсутній' : 'Розклад на сьогодні'}
             </h1>
 
             <div className="time-table">
