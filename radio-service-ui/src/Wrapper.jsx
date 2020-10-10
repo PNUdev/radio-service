@@ -55,11 +55,13 @@ class Wrapper extends React.Component {
   render() {
     const { loading } = this.props;
 
-    const admin_regex = /^\/admin/
+    const adminLInk = process.env.REACT_APP_SITE_URL + '/admin'
 
-    if (admin_regex.test(window.location.pathname)) {
-      return <div></div>
-    } else {
+    const adminRegex = /^\/admin/
+
+    // if (adminRegex.test(window.location.pathname)) {
+    //   return <div></div>
+    // } else {
       return (
         <Router>
           <div className="wrapper d-flex flex-column flex-lg-row ">
@@ -89,6 +91,11 @@ class Wrapper extends React.Component {
                   <Route path="/programs"    component={Programs} />
                   <Route path="/recommended" component={Recommended} parentRef={this.scrollParentRef} />
 
+                  <Route path="/admin" component={() => {
+                    window.location.href = `${adminLInk}`
+                    return null;
+                  }} />
+
                   <Redirect to="/radio" />
                 </Switch>
               </div>
@@ -98,7 +105,7 @@ class Wrapper extends React.Component {
           </div>
         </Router>
       )
-    }
+  //   }
   }
 }
 
