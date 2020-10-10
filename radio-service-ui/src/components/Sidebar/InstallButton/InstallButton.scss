@@ -14,3 +14,17 @@ button.pwa-install {
   right: 0;
   border-top: 2px solid #ccc;
 }
+
+@media screen and (max-width: 992px) {
+  .install-btn-container {
+    border: 2px solid #ccc;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .install-btn-container {
+    position: static;
+    border: none;
+    border-top: 2px solid #ccc;
+  }
+}
