@@ -3,19 +3,32 @@
 html, body { min-height: 100vh; }
 *, *:before, *:after { box-sizing: border-box; }
 
-.main-banner {
+.main-banner p,
+.secondary-banner p {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.main-banner p img {
   width: 200px;
   height: 200px;
 }
 
-.secondary-banner {
+.secondary-banner p img {
   width: 970;
   height: 90;
 }
 
-.additional-banner {
-  width: 468px;
-  height: 60px;
+.additional-banner p {
+  margin: 0;
+  display: flex;
+  justify-content: center;
+
+  img {
+    width: 468px;
+    height: 60px;
+  }
 }
 
 .wrapper {
@@ -27,7 +40,6 @@ html, body { min-height: 100vh; }
     border-top-left-radius: 30px;
     border-bottom-left-radius: 30px;
     background-size: cover;
-    // background-position: 0 0;
 
     .bg-wrapper {
       padding: 20px;

@@ -3,11 +3,11 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ReactMarkdown from "react-markdown";
 
 import RadioPlayer from './RadioPlayer';
 
 import * as actions from '../../redux/actions';
-import { extractBannerLink } from '../../utils/';
 
 import clock from '../../images/clock.png'
 
@@ -72,7 +72,7 @@ class Radio extends React.Component {
     axios.get(BANNER_LINK)
     .then((response) => {
       this.props.turnLoadingOff();
-      this.props.setSecondaryBanner(extractBannerLink(response.data["secondary-banner"]))
+      this.props.setSecondaryBanner(response.data["secondary-banner"])
     })
     .catch((errors) => {
       this.props.turnLoadingOff();
@@ -88,7 +88,9 @@ class Radio extends React.Component {
         <div className="player-container d-flex flex-column justify-content-between h-100">
           <RadioPlayer />
 
-          <img src={secondaryBanner} alt="" className="secondary-banner my-3" />
+          <div className="secondary-banner my-3">
+            <ReactMarkdown source={secondaryBanner}/>
+          </div>
 
           <div className="scheduler-day-card mb-3">
             <h1 className="text-center mb-3">

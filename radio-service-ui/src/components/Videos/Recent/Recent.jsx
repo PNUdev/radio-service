@@ -3,10 +3,9 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import ReactMarkdown from "react-markdown";
 
 import * as actions from '../../../redux/actions';
-import { extractBannerLink } from '../../../utils';
-
 
 import Video from '../Video';
 
@@ -71,7 +70,7 @@ class Recent extends React.Component {
     axios.get(BANNER_LINK)
     .then((response) => {
       this.props.turnLoadingOff();
-      this.props.setAdditionalBanner(extractBannerLink(response.data["main-banner"]))
+      this.props.setAdditionalBanner(response.data["main-banner"])
     })
     .catch((errors) => {
       this.props.turnLoadingOff();
@@ -90,7 +89,9 @@ class Recent extends React.Component {
               <Video video={video} key={video.id} />
               {
                 recent.indexOf(video) == 0 &&
-                <img src={additionalBanner} alt="" className="additional-banner my-3" />
+                <div className="additional-banner my-3">
+                  <ReactMarkdown source={additionalBanner}/>
+                </div>
               }
             </>
           )

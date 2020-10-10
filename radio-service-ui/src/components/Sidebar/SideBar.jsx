@@ -5,10 +5,9 @@ import PropTypes from 'prop-types';
 
 import { Link, NavLink } from "react-router-dom";
 import { connect } from 'react-redux';
+import ReactMarkdown from "react-markdown";
 
 import * as actions from '../../redux/actions';
-import { extractBannerLink } from '../../utils';
-
 import InstallButton from './InstallButton'
 
 import logo from '../../images/logo.png';
@@ -48,7 +47,7 @@ class SideBar extends React.Component {
     axios.get(BANNER_LINK)
     .then((response) => {
       this.props.turnLoadingOff();
-      this.props.setMainBanner(extractBannerLink(response.data["main-banner"]))
+      this.props.setMainBanner(response.data["main-banner"])
     })
     .catch((errors) => {
       this.props.turnLoadingOff();
@@ -113,7 +112,9 @@ class SideBar extends React.Component {
 
           <InstallButton />
 
-          <img src={mainBanner} alt="" className="m-3 main-banner" />
+          <div className="main-banner m-3">
+            <ReactMarkdown source={mainBanner} />
+          </div>
         </nav>
       </div>
     )
