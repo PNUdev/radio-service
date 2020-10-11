@@ -163,7 +163,7 @@ class Scheduler extends React.Component {
 
                                   <div className="d-flex flex-column justify-content-center">
                                     <div className="description ml-2">
-                                      {tooltip.description && tooltip.description.length > 50 ? (tooltip.description.substr(0, 50) + '...') : tooltip.description}
+                                      {tooltip.description && tooltip.description.length > 70 ? (tooltip.description.substr(0, 70) + '...') : tooltip.description}
                                     </div>
 
                                     <div className="occurences ml-2 d-flex">
