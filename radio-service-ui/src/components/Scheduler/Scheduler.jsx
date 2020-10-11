@@ -73,57 +73,49 @@ class Scheduler extends React.Component {
   }
 
   render() {
-    const { schedule, loading } = this.props;
+    const {
+      schedule,
+      loading,
+      setTooltip,
+      tooltip,
+    } = this.props;
 
     const daysOfWeek = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday']
 
-    // const dayNamesShort = {
-    //   'Понеділок': 'пн',
-    //   'Вівторок': 'вт',
-    //   'Середа': 'ср',
-    //   'Четвер': 'чт',
-    //   "П'ятниця": 'пт',
-    //   'Субота': 'сб',
-    //   'Неділя': 'нд',
-    // }
+    const dayNamesShort = {
+      'Понеділок': 'пн',
+      'Вівторок': 'вт',
+      'Середа': 'ср',
+      'Четвер': 'чт',
+      "П'ятниця": 'пт',
+      'Субота': 'сб',
+      'Неділя': 'нд',
+    }
 
-    // const renderOccurrence = (occurence, last=false) => {
-    //   return(
-    //     <div className="occurence" key={occurence.dayOfWeek.nameUkr}>
-    //       <span className="day">{dayNamesShort[occurence.dayOfWeek.nameUkr]}</span>
-    //       <span className="time">
-    //         ({occurence.timeRange.startTime} - {occurence.timeRange.endTime}){!last && "," + String.fromCharCode(160)}
-    //       </span>
-    //     </div>
-    //   )
-    // }
-
-    const renderProgramTooltip = programLink => {
-      const program = axios.get(SITE_URL + programLink).then(response => response.data)
-
-      return (
-        <div className="tooltip-wrapper d-flex">
-          {
-            program &&
-            <>
-              <img src={program.imageUrl} alt=""/>
-
-              <div className="d-flex-flex-column">
-                <div className="description ml-2">
-                  {program.description > 50 ? (program.description.substr(0, 50) + '...') : program.description}
-                </div>
-
-                <div className="occurences ml-2 d-flex">
-                  {/* {
-                    program.scheduleOccurrences &&
-                    program.scheduleOccurrences.map(occurence => renderOccurrence(occurence, (program.scheduleOccurrences.indexOf(occurence) == program.scheduleOccurrences.length - 1)))
-                  } */}
-                </div>
-              </div>
-            </>
-          }
+    const renderOccurrence = (occurence, last=false) => {
+      return(
+        <div className="occurence" key={occurence.dayOfWeek.nameUkr}>
+          <span className="day">{dayNamesShort[occurence.dayOfWeek.nameUkr]}</span>
+          <span className="time">
+            ({occurence.timeRange.startTime} - {occurence.timeRange.endTime}){!last && "," + String.fromCharCode(160)}
+          </span>
         </div>
       )
+    }
+
+    const onTooltipHover = (programLink, id) => {
+      console.log("ENTER")
+      axios
+      .get(SITE_URL + programLink)
+      .then(response => {
+        setTooltip(response.data);
+        document.getElementsByClassName('tooltip-' + id)[0].classList.add('active');
+      })
+    }
+
+    const onTooltipHoverLeave = id => {
+      setTooltip({})
+      document.getElementsByClassName('tooltip-' + id)[0].classList.remove('active');
     }
 
     const renderScheduleDay = (key, day) => {
@@ -156,16 +148,35 @@ class Scheduler extends React.Component {
                         <div className="d-flex align-items-center">
                           <h3 className="d-flex">{item.programName}</h3>
 
+                          <div
+                            className="program-tooltip d-flex justify-content-center align-items-center ml-2"
+                            onMouseEnter={() => onTooltipHover(item.programLink, item.id)}
+                            onMouseLeave={() => onTooltipHoverLeave(item.id)}
+                          >
+                            <img src={program_image} alt=""/>
 
-                          <div className="d-none d-lg-block">
-                            <div data-tip="React-tooltip" className="program-tooltip d-flex justify-content-center align-items-center ml-2">
-                              <img src={program_image} alt=""/>
+
+                            <div className={"custom-tooltip tooltip-" + item.id}>
+                              {Object.keys(tooltip).length > 1 &&
+                                <>
+                                  <img src={tooltip.imageUrl} alt=""/>
+
+                                  <div className="d-flex flex-column justify-content-center">
+                                    <div className="description ml-2">
+                                      {tooltip.description && tooltip.description.length > 50 ? (tooltip.description.substr(0, 50) + '...') : tooltip.description}
+                                    </div>
+
+                                    <div className="occurences ml-2 d-flex">
+                                      {
+                                        tooltip.scheduleOccurrences &&
+                                        tooltip.scheduleOccurrences.map(occurence => renderOccurrence(occurence, (tooltip.scheduleOccurrences.indexOf(occurence) == tooltip.scheduleOccurrences.length - 1)))
+                                      }
+                                    </div>
+                                  </div>
+                                </>
+                              }
                             </div>
                           </div>
-
-                          <ReactTooltip place="top" type="dark" effect="solid">
-                            {renderProgramTooltip(item.programLink)}
-                          </ReactTooltip>
                         </div>
 
                         {
@@ -197,7 +208,7 @@ class Scheduler extends React.Component {
 const mapStateToProps = state => {
   return {
     schedule: state.schedule.schedule,
-    tooltips: state.schedule.tooltips,
+    tooltip:  state.schedule.tooltip,
     programs: state.schedule.programs,
 
     loading: state.shared.loading,
@@ -207,7 +218,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   setSchedule:         schedule => dispatch(actions.setSchedule(schedule)),
-  setTooltips:         tooltips => dispatch(actions.setTooltips(tooltips)),
+  setTooltip:          tooltip  => dispatch(actions.setTooltip(tooltip)),
   setEmbeddedPrograms: programs => dispatch(actions.setEmbeddedPrograms(programs)),
 
   turnOffHamburger: () => dispatch(actions.turnOffHamburger()),
@@ -218,7 +229,7 @@ const mapDispatchToProps = dispatch => ({
 
 Scheduler.propTypes = {
   schedule: PropTypes.object,
-  tooltips: PropTypes.object,
+  tooltip:  PropTypes.object,
   programs: PropTypes.object,
 
   loading: PropTypes.bool,
