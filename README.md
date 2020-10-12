@@ -13,14 +13,32 @@ Each of them can be built and run independently for dev purposes
 
 ## Start locally
 ```
-mvn clean install
-java -jar <env variables: -DvariableName='value'> <jar location>
+mvn <env variables: -DvariableName='value'> clean install
+java <env variables: -DvariableName='value'> -jar <jar location>
 ```
 ## Environment variables:
+
+#### Maven build env:
+- REACT_APP_SITE_URL **(required)** - _your API url_
+- REACT_APP_STREAM_URL **(required)** - _your radio stream url_
+
+#### Java env:
 - YOUTUBE_API_KEY **(required)** - _your youtube API key_
 - YOUTUBE_CHANNEL_ID **(required)** - _id of connected channel_
 - MONGO_DB_URI (_default_: 'mongodb://localhost/radio_service') - _URI for MongoDB_
 - ADMIN_USERNAME (_default_: 'admin') - _admin panel username_
 - ADMIN_PASSWORD (_default_: 'admin') - _admin panel password_
-- REACT_APP_SITE_URL **(required)** - _your API url_
-- REACT_APP_STREAM_URL **(required)** - _your radio stream url_
+
+## Docker
+
+#### Local development:
+```
+mvn <env variables: -DvariableName='value'> clean install
+docker-compose -f docker-compose-dev.yml up
+```
+
+#### Start standalone instance:
+```
+mvn <env variables: -DvariableName='value'> clean install
+docker-compose -f docker-compose-prod.yml up
+```
