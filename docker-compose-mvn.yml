@@ -1,0 +1,32 @@
+version: '3'
+services:
+  mongo-db:
+    image: mongo:3.6.20
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo-data:/data/db
+
+  app:
+    build: 
+      context: .
+      args: 
+        REACT_APP_SITE_URL: http://localhost
+        REACT_APP_STREAM_URL : http://localhost
+    ports:
+      - 8080:8080
+    environment:
+      YOUTUBE_API_KEY: <your-key>
+      YOUTUBE_CHANNEL_ID: <your-channel-id>
+      MONGO_DB_URI: mongodb://root:root@mongo-db/radio_db?authSource=admin
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+    depends_on: 
+      - mongo-db
+
+volumes:
+  mongo-data: 
+    driver: local  
