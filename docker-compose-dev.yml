@@ -1,0 +1,42 @@
+version: '3'
+services:
+  mongo-db:
+    image: mongo:3.6.20
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    volumes:
+      - mongo-data:/data/db
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: root
+      ME_CONFIG_MONGODB_SERVER: mongo-db
+    depends_on: 
+      - mongo-db
+
+  app:
+    image: openjdk:8-jre-alpine
+    ports:
+      - 8080:8080
+    environment:
+      YOUTUBE_API_KEY: <your-key>
+      YOUTUBE_CHANNEL_ID: <your-channel-id>
+      MONGO_DB_URI: mongodb://root:root@mongo-db/radio_db?authSource=admin
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+    volumes:
+      - ./radio-service-api/target:/target
+    command: ["java", "-jar", "/target/radio-service-api-0.0.1-SNAPSHOT.jar"]
+    depends_on: 
+      - mongo-db
+
+volumes:
+  mongo-data: 
+    driver: local 
