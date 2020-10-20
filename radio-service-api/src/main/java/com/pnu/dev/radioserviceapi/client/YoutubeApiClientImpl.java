@@ -5,6 +5,7 @@ import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.YoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -36,8 +37,9 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
 
     private final RestTemplate restTemplate;
 
-    public YoutubeApiClientImpl() {
-        this.restTemplate = new RestTemplate();
+    @Autowired
+    public YoutubeApiClientImpl(RestTemplate restTemplate) {
+        this.restTemplate = restTemplate;
     }
 
     @Override

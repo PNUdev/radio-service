@@ -16,3 +16,6 @@ youtube:
 admin_user:
   username: ${ADMIN_USERNAME:admin}
   password: ${ADMIN_PASSWORD:admin}
+
+ping:
+  server: "https://google.com"
