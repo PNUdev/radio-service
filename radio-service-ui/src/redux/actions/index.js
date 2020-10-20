@@ -7,7 +7,7 @@ export const setTodayPrograms    = programs                            => ({ typ
 export const setRecent           = recent                              => ({ type: 'VIDEOS/SET_RECENT',        recent });
 export const setSchedule         = schedule                            => ({ type: 'SCHEDULE/SET_SCHEDULE',    schedule });
 export const setEmbeddedPrograms = programs                            => ({ type: 'SHEDULE/SET_PROGRAMS',     programs })
-export const setTooltips         = tooltips                            => ({ type: 'SCHEDULE/SET_TOOLTIPS',    tooltips })
+export const setTooltip          = tooltip                             => ({ type: 'SCHEDULE/SET_TOOLTIP',     tooltip })
 export const setRecommended      = (recommended, currentPage)          => ({ type: 'VIDEOS/SET_RECOMMENDED',   recommended, currentPage });
 export const setHasMore          = hasMore                             => ({ type: 'VIDEOS/SET_HAS_MORE',      hasMore })
 export const setPrograms         = (programs, currentPage, totalPages) => ({ type: 'PROGRAMS/SET_PROGRAMS',    programs, currentPage, totalPages });

@@ -9,7 +9,12 @@
     border-radius: 20px;
 
     h3.title { border-bottom: 2px solid $orange }
-    img { width: 560px; }
+    img {
+      width: 560px;
+      min-width: 560px;
+      max-height: 300px;
+      object-fit: contain;
+    }
 
     .occurences {
       color: gray;
@@ -38,7 +43,10 @@
 @media screen and (max-width: 992px) {
   .programs-container {
     .program-card {
-      img { width: 100% !important; }
+      img {
+        width: 100% !important;
+        min-width: auto;
+      }
     }
   }
 }
