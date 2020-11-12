@@ -7,6 +7,7 @@ import $ from 'jquery';
 // eslint-disable-next-line no-unused-vars
 import Popper from 'popper.js';
 import 'bootstrap/dist/css/bootstrap.css';
+import { checkSSL } from './utils/checker';
 
 import './index.css';
 import App from './App';
@@ -25,4 +26,5 @@ ReactDOM.render(
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.register();
+checkSSL() ? serviceWorker.register() : serviceWorker.unregister();
+

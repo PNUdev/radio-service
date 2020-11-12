@@ -1,0 +1,33 @@
+.install-window {
+  height: 100vh;
+  background: #ccc;
+
+  .bg {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.45);
+    height: 95%;
+    width: 95%;
+    color: white;
+
+    .install-button,
+    .install-button button {
+      font-size: 32px;
+    }
+
+    .not-supported {
+      font-size: 32px;
+      width: 80%;
+
+      a.back-link {
+        font-size: 32px;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 438px) {
+  .install-window .bg {
+    .not-supported,
+    .not-supported a.back-link {font-size: 26px;}
+  }
+}

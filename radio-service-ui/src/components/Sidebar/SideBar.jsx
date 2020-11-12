@@ -8,9 +8,8 @@ import { connect } from 'react-redux';
 import ReactMarkdown from "react-markdown";
 
 import { LinkRenderer } from '../../utils/linkRenderer';
-import * as actions from '../../redux/actions';
-import InstallButton from '../InstallButton'
 import { BANNER_LINK } from '../shared/endpointConstants';
+import * as actions from '../../redux/actions';
 
 import logo from '../../images/logo.png';
 
@@ -85,8 +84,8 @@ class SideBar extends React.Component {
         </header>
 
         <nav className="mt-4">
-          <NavLink to="/radio" className="header-link d-flex align-items-center radio">
-            <img src={currentPath === '/radio' ? radioActive : radio} alt="" className="mr-2"/>
+          <NavLink to="/" exact className="header-link d-flex align-items-center radio">
+            <img src={currentPath === '/' ? radioActive : radio} alt="" className="mr-2"/>
             Радіо
           </NavLink>
 

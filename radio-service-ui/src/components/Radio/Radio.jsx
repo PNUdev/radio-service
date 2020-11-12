@@ -100,7 +100,7 @@ class Radio extends React.Component {
             <div className="time-table">
               <div className="program-container">
                 { programs && programs.length > 0 && programs.map(item => {
-                  return(
+                  return (
                     <div className="d-flex program flex-column flex-lg-row" key={item.id}>
                       <div className="duration d-flex flex-row flex-lg-column">
                         <div className="from h-50 p-3">

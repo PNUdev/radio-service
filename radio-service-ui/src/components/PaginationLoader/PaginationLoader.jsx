@@ -2,7 +2,7 @@ import React from "react";
 import './PaginationLoader.scss'
 
 const PaginationLoader = () => {
-  return(
+  return (
   <div className="pagination-loading d-flex flex-column align-items-center justify-content-center">
     <div className="circles-wrapper d-flex justify-content-between">
       <div className="circle"></div>

@@ -93,7 +93,7 @@ class Scheduler extends React.Component {
     }
 
     const renderOccurrence = (occurence, last=false) => {
-      return(
+      return (
         <div className="occurence" key={occurence.dayOfWeek.nameUkr}>
           <span className="day">{dayNamesShort[occurence.dayOfWeek.nameUkr]}</span>
           <span className="time">
@@ -119,7 +119,7 @@ class Scheduler extends React.Component {
     }
 
     const renderScheduleDay = (key, day) => {
-      return(
+      return (
         <>
           {
             day &&
@@ -130,7 +130,7 @@ class Scheduler extends React.Component {
                 {day["scheduleItems"].length === 0 && <h3 className='no-programs'>Немає запланованих програм на цей день</h3>}
 
                 {day["scheduleItems"].map(item => {
-                  return(
+                  return (
                     <div className="d-flex program flex-column flex-lg-row" key={item.id}>
                       <div className="duration  d-flex flex-row flex-lg-column">
                         <div className="from h-50 p-3">
