@@ -8,26 +8,11 @@
     height: 95%;
     width: 95%;
     color: white;
+    font-size: 32px;
 
-    .install-button,
+    a.back-link,
     .install-button button {
       font-size: 32px;
     }
-
-    .not-supported {
-      font-size: 32px;
-      width: 80%;
-
-      a.back-link {
-        font-size: 32px;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 438px) {
-  .install-window .bg {
-    .not-supported,
-    .not-supported a.back-link {font-size: 26px;}
   }
 }

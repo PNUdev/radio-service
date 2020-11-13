@@ -33,13 +33,18 @@ const InstallerWindow = () => {
 
       <div className="bg d-flex justify-content-center align-items-center">
         {!supportsPWA &&
+          <div className="d-flex flex-column justify-content-center align-items-center text-center">
+            Зачекайте відбувається перевірка
+          </div>
+        }
+        {/* {supportsPWA && !promptInstall &&
           <div className="not-supported d-flex flex-column justify-content-center align-items-center text-center">
             Ваш пристрій не підтримує встановлення такого типу програм
             <a href="http://radio.shpalta.if.ua" className="back-link btn btn-primary mt-3">Повернутись на сайт</a>
           </div>
-        }
+        } */}
         {supportsPWA &&
-          <div className="install-button d-flex flex-column justify-content-center align-items-center text-center">
+          <div className="d-flex flex-column justify-content-center align-items-center text-center">
             Натисніть щоб встановити
             <button className="btn btn-primary mt-3" onClick={onClick}>Встановити</button>
           </div>
