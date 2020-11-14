@@ -42,7 +42,7 @@ const Radio = () => {
         <div id="message" className="long-loading-message d-none flex-column justify-content-center text-center">
           <div className='d-flex align-items-center'>
             <img src={warningIcon} alt="" className="d-none d-lg-inline mr-2" />
-            З'єднання може зайняти декілька секунд
+            Зачекайте, триває з'єднання
           </div>
           <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
         </div>
