@@ -3,7 +3,7 @@ import useShouldShowPrompt from './useShouldShowPrompt';
 const iosInstallPromptedAt = 'iosInstallPromptedAt';
 
 const isIOS = () => {
-  if (navigator.standalone) return false; //user has already installed the app
+  if (navigator.standalone) return false;
 
   const userAgent = window.navigator.userAgent;
   const isIPad = !!userAgent.match(/iPad/i);

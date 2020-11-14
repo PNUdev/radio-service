@@ -79,7 +79,7 @@ class Programs extends React.Component {
     }
 
     const renderOccurrence = (occurence, last=false) => {
-      return(
+      return (
         <div className="occurence" key={occurence["dayOfWeek"]["nameUkr"]}>
           <span className="day">{dayNamesShort[occurence["dayOfWeek"]["nameUkr"]]}</span>
 
@@ -93,7 +93,7 @@ class Programs extends React.Component {
     const renderProgram = program => {
       let occurences = program['scheduleOccurrences']
 
-      return(
+      return (
         <div className="program-card mb-4 p-3" key={program.id}>
           <h3 className="title mb-3 pb-2 d-flex flex-column">
             <div className="mb-2">

@@ -21,7 +21,9 @@
     <div id="root"></div>
 
     <script>
-      if ('serviceWorker' in navigator) {
+      const regex = new RegExp('^(https)')
+
+      if ('serviceWorker' in navigator && regex.test(window.location.href)) {
         window.addEventListener('load', function() {
           navigator.serviceWorker.register('worker.js').then(function(registration) {
             console.log('Worker registration successful', registration.scope);

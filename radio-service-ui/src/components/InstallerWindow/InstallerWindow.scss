@@ -1,0 +1,20 @@
+@import '../../colors.scss';
+
+.install-window {
+  height: 100vh;
+  background: #ccc;
+
+  .bg {
+    border-radius: 10px;
+    background: rgba(0,0,0,0.45);
+    height: 95%;
+    width: 95%;
+    color: white;
+    font-size: 32px;
+
+    a.back-link,
+    button.install-button {
+      font-size: 32px;
+    }
+  }
+}
