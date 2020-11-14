@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux';
 
 import * as actions from './redux/actions';
-import { checkSSL } from './utils/checker';
+import { isSSL, isPWA } from './utils/checker';
 import InstallButton from './components/InstallButton';
 import InstallerWindow from './components/InstallerWindow';
 
@@ -32,7 +32,6 @@ class Wrapper extends React.Component {
     super(props)
 
     this.handleClick = this.handleClick.bind(this)
-    this.isPWA = this.isPWA.bind(this)
   }
 
   handleClick() {
@@ -52,14 +51,10 @@ class Wrapper extends React.Component {
     }
   }
 
-  isPWA() {
-    return window.matchMedia('(display-mode: standalone)').matches
-  }
-
   render() {
     const { loading } = this.props;
 
-    if (checkSSL() && !this.isPWA()) {
+    if (isSSL && !isPWA) {
       return <InstallerWindow />
     } else {
       return (
@@ -94,7 +89,7 @@ class Wrapper extends React.Component {
             {loading && <div className="loader-container"><div className="loader"></div></div>}
           </div>
 
-          {!this.isPWA() && <InstallButton />}
+          {!isPWA && <InstallButton />}
         </Router>
       )
     }

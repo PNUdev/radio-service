@@ -48,7 +48,12 @@ $rhap_bar-color: $orange;
   padding: 100px 0;
 
   .long-loading-message {
-    color: white;
-    font-size: 32px;
+    color: $orange;
+    font-size: 28px;
+
+    img {
+      width: 38.5px;
+      height: 32px;
+    }
   }
 }

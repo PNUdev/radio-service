@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 
+import {isChrome} from '../../utils/checker';
+
 import './InstallerWindow.scss';
 import radioBG from '../../images/radio-bg.jpg'
 
@@ -25,28 +27,29 @@ const InstallerWindow = () => {
   };
 
   return (
-    <div className="install-window d-flex justify-content-center align-items-center" style={{
+    <div className="install-window d-flex justify-content-center align-items-center p-3" style={{
       backgroundImage: `url(${radioBG})`,
       backgroundPosition: 'center',
       backgroundSize: 'cover',
       backgroundRepeat: 'no-repeat' }}>
 
       <div className="bg d-flex justify-content-center align-items-center">
-        {!supportsPWA &&
+        {!supportsPWA && isChrome &&
           <div className="d-flex flex-column justify-content-center align-items-center text-center">
-            Зачекайте відбувається перевірка
+            Зачекайте, будь ласка, відбувається підготовка
+            <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
           </div>
         }
-        {/* {supportsPWA && !promptInstall &&
+        {!isChrome &&
           <div className="not-supported d-flex flex-column justify-content-center align-items-center text-center">
-            Ваш пристрій не підтримує встановлення такого типу програм
+            Ми не можемо встановити програму на ваш пристрій. Будь ласка, переконайтесь, що ви використовуєте браузер Google Chrome.
             <a href="http://radio.shpalta.if.ua" className="back-link btn btn-primary mt-3">Повернутись на сайт</a>
           </div>
-        } */}
-        {supportsPWA &&
+        }
+        {supportsPWA && isChrome &&
           <div className="d-flex flex-column justify-content-center align-items-center text-center">
             Натисніть щоб встановити
-            <button className="btn btn-primary mt-3" onClick={onClick}>Встановити</button>
+            <button className="install-button btn btn-primary mt-3" onClick={onClick}>Встановити</button>
           </div>
         }
       </div>

@@ -2,24 +2,25 @@ import React, { useState } from 'react'
 
 import AudioPlayer from 'react-h5-audio-player';
 
+import warningIcon from '../../../images/warning.svg';
+
 import './RadioPlayer.scss'
 
 const STREAM_URL = process.env.REACT_APP_STREAM_URL;
 
 const Radio = () => {
   const [messageShown, setMessageShow] = useState();
+  const messageContainer = document.getElementById('message');
 
-  const showTemproraryMessage = () => {
-    const messageContainer = document.getElementById('message');
+  const showLoader = () => {
     if (!messageContainer || messageShown) return;
+    messageContainer.classList.add('d-flex','flex-column', 'align-items-center')
+  }
 
-    console.log(messageContainer)
-    messageContainer.classList.add('d-block')
-
-    setTimeout(() => {
-      messageContainer.classList.remove('d-block')
-      setMessageShow(true)
-    }, 3000)
+  const turnOffLoader = () => {
+    if (!messageContainer || messageShown) return;
+    messageContainer.classList.remove('d-flex')
+    setMessageShow(true)
   }
 
   return (
@@ -34,11 +35,16 @@ const Radio = () => {
           customProgressBarSection={[]}
           customAdditionalControls={[]}
           customVolumeControls={[]}
-          onPlay={() => showTemproraryMessage()}
+          onPlay={() => showLoader()}
+          onCanPlay={() => turnOffLoader()}
         />
 
-        <div id="message" className="d-none long-loading-message text-center">
-          З'єднання може зайняти деякий час, зачекайте будь ласка (:
+        <div id="message" className="long-loading-message d-none flex-column justify-content-center text-center">
+          <div className='d-flex align-items-center'>
+            <img src={warningIcon} alt="" className="d-none d-lg-inline mr-2" />
+            З'єднання може зайняти декілька секунд
+          </div>
+          <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
         </div>
       </div>
     </div>
