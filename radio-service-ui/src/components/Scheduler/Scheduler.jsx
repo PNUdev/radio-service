@@ -148,7 +148,7 @@ class Scheduler extends React.Component {
                         <div className="d-flex align-items-center">
                           <h3 className="d-flex">{item.programName}</h3>
 
-                          <div
+                          {/* <div
                             className="program-tooltip d-flex justify-content-center align-items-center ml-2"
                             onMouseEnter={() => onTooltipHover(item.programLink, item.id)}
                             onMouseLeave={() => onTooltipHoverLeave(item.id)}
@@ -176,7 +176,7 @@ class Scheduler extends React.Component {
                                 </>
                               }
                             </div>
-                          </div>
+                          </div> */}
                         </div>
 
                         {
