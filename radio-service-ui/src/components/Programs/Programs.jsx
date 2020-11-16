@@ -100,7 +100,7 @@ class Programs extends React.Component {
               {program.title}
             </div>
 
-            <div className="d-flex occurences">
+            <div className="occurences d-flex flex-wrap">
               {
                 occurences.length > 0 &&
                 occurences.map(occurence => renderOccurrence(occurence, (occurences.indexOf(occurence) === occurences.length -1)))
