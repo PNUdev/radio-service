@@ -1,4 +1,5 @@
 import React from 'react';
+import stripHtml from 'string-strip-html';
 
 import './Video.scss';
 
@@ -7,7 +8,7 @@ const DESCRIPTION_LENGTH = 1000;
 const Video = ({video}) => {
   return (
     <div className="video-card mb-4 p-3">
-      <h3 className="title mb-3 pb-2">{video.title}</h3>
+      <h3 className="title mb-3 pb-2">{stripHtml(video.title).result}</h3>
       <div className="d-flex flex-column video">
         <iframe width="560"
                 height="315"
