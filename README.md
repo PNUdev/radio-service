@@ -29,6 +29,9 @@ java <env variables: -DvariableName='value'> -jar <jar location>
 - ADMIN_USERNAME (_default_: 'admin') - _admin panel username_
 - ADMIN_PASSWORD (_default_: 'admin') - _admin panel password_
 
+## Spring profiles
+- local - *run application for local development*
+
 ## Docker
 
 #### Local development:
