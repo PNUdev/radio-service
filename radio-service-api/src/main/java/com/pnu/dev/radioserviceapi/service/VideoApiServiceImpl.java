@@ -13,6 +13,7 @@ import com.pnu.dev.radioserviceapi.repository.RecommendedVideoRepository;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
 import com.pnu.dev.radioserviceapi.util.mapper.VideoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
+@Profile("local")
 @Service
 public class VideoApiServiceImpl implements VideoApiService {
 
