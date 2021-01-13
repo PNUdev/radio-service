@@ -30,7 +30,9 @@ java <env variables: -DvariableName='value'> -jar <jar location>
 - ADMIN_PASSWORD (_default_: 'admin') - _admin panel password_
 
 ## Spring profiles
-- local - *run application for local development*
+- default - *profile used in production*
+- local - *run application for local development(No need in YOUTUBE_API_KEY)*
+- production = *run application in production environment(YOUTUBE_API_KEY is required)*
 
 ## Docker
 
