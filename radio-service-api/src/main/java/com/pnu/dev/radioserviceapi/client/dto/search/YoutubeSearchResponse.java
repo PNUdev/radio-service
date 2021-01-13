@@ -1,10 +1,11 @@
 package com.pnu.dev.radioserviceapi.client.dto.search;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
 
-
+@Builder(toBuilder = true)
 @Data
 public class YoutubeSearchResponse {
 

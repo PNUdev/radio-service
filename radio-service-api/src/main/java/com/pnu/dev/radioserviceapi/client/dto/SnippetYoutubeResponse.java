@@ -1,9 +1,11 @@
 package com.pnu.dev.radioserviceapi.client.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
+@Builder(toBuilder = true)
 @Data
 public class SnippetYoutubeResponse {
 
