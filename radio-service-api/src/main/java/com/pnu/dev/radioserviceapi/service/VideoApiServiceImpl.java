@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 import static java.util.Objects.nonNull;
 
-@Profile("local")
 @Service
 public class VideoApiServiceImpl implements VideoApiService {
 
