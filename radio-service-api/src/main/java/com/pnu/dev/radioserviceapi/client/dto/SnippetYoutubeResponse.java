@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
-@Builder(toBuilder = true)
 @Data
 public class SnippetYoutubeResponse {
 
