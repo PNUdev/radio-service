@@ -13,7 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-@Profile("production")
+@Profile("default")
 @Component
 @Data
 public class YoutubeApiClientImpl implements YoutubeApiClient {

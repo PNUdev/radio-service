@@ -5,7 +5,6 @@ import lombok.Data;
 
 import java.util.List;
 
-@Builder(toBuilder = true)
 @Data
 public class YoutubeSearchResponse {
 

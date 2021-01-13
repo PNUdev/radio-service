@@ -6,78 +6,84 @@ import com.pnu.dev.radioserviceapi.client.dto.search.VideoIdYoutubeResponse;
 import com.pnu.dev.radioserviceapi.client.dto.search.YoutubeSearchResponse;
 import com.pnu.dev.radioserviceapi.client.dto.videos.ItemYoutubeVideosResponse;
 import com.pnu.dev.radioserviceapi.util.OperationResult;
-import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
-@Profile({"default", "local"})
+@Profile("local")
 @Service
 public class YoutubeApiClientStub implements YoutubeApiClient {
 
-    List<YoutubeVideoDetails> videos;
-
-    @AllArgsConstructor
-    private class YoutubeVideoDetails {
-        private String id;
-        private String title;
-        private String description;
-        private String LiveBroadcastContent;
-    }
-
-    private ItemYoutubeSearchResponse buildItemYoutubeSearchResponse(YoutubeVideoDetails video) {
-
-        return ItemYoutubeSearchResponse.builder()
-                .id(
-                        VideoIdYoutubeResponse.builder()
-                                .videoId(video.id).build())
-                .snippet(
-                        SnippetYoutubeResponse.builder()
-                                .title(video.title)
-                                .description(video.description)
-                                .publishedAt(LocalDateTime.now())
-                                .liveBroadcastContent(video.LiveBroadcastContent)
-                                .build())
-                .build();
-    }
-
     @Override
     public OperationResult<YoutubeSearchResponse> findRecentVideos() {
-        YoutubeSearchResponse response = YoutubeSearchResponse.builder()
-                .items(
-                        videos.stream()
-                                .map(this::buildItemYoutubeSearchResponse)
-                                .collect(Collectors.toList())
-                ).build();
+
+        YoutubeSearchResponse response = new YoutubeSearchResponse(){{
+            setItems(Arrays.asList(
+                    new ItemYoutubeSearchResponse(){{
+                        setId(
+                                new VideoIdYoutubeResponse(){{ setVideoId("ByH9LuSILxU"); }}
+                        );
+                        setSnippet(
+                                new SnippetYoutubeResponse(){{
+                                    setTitle("Cats");
+                                    setDescription("Lorem ipsum");
+                                    setPublishedAt(LocalDateTime.now());
+                                    setLiveBroadcastContent("NONE");
+                                }}
+                        );
+                    }},
+
+                    new ItemYoutubeSearchResponse(){{
+                        setId(
+                                new VideoIdYoutubeResponse(){{ setVideoId("5qap5aO4i9A"); }}
+                        );
+                        setSnippet(
+                                new SnippetYoutubeResponse(){{
+                                    setTitle("lofi hip hop");
+                                    setDescription("Lorem ipsum");
+                                    setPublishedAt(LocalDateTime.now());
+                                    setLiveBroadcastContent("LIVE");
+                                }}
+                        );
+                    }},
+
+                    new ItemYoutubeSearchResponse(){{
+                        setId(
+                                new VideoIdYoutubeResponse(){{ setVideoId("nybtOIxlku8"); }}
+                        );
+                        setSnippet(
+                                new SnippetYoutubeResponse(){{
+                                    setTitle("Гімн України");
+                                    setDescription("Lorem ipsum");
+                                    setPublishedAt(LocalDateTime.now());
+                                    setLiveBroadcastContent("NONE");
+                                }}
+                        );
+                    }}
+
+            ));
+        }};
 
         return OperationResult.success(response);
     }
 
     @Override
     public OperationResult<ItemYoutubeVideosResponse> findVideo(String id) {
-        return null;
+        ItemYoutubeVideosResponse response = new ItemYoutubeVideosResponse();
+
+        SnippetYoutubeResponse snippet = new SnippetYoutubeResponse() {{
+            setTitle("Гімн України");
+            setDescription("lorem ipsum");
+            setPublishedAt(LocalDateTime.now());
+            setLiveBroadcastContent("NONE");
+        }};
+
+        response.setId("nybtOIxlku8");
+        response.setSnippet(snippet);
+
+        return OperationResult.success(response);
     }
 
-    {
-        videos = Arrays.asList(
-                new YoutubeVideoDetails("ByH9LuSILxU",
-                        "cats :3",
-                        "Lorem ipsum",
-                        "NONE"),
-
-                new YoutubeVideoDetails("5qap5aO4i9A",
-                        "lofi hip hop radio",
-                        "Beats to study and relax",
-                        "LIVE"),
-
-                new YoutubeVideoDetails("nybtOIxlku8",
-                        "Гімн України",
-                        "Put your hand on your heart, and be proud of who you are",
-                        "NONE")
-        );
-    }
 }
