@@ -19,69 +19,53 @@ public class YoutubeApiClientStub implements YoutubeApiClient {
     @Override
     public OperationResult<YoutubeSearchResponse> findRecentVideos() {
 
-        YoutubeSearchResponse response = new YoutubeSearchResponse(){{
-            setItems(Arrays.asList(
-                    new ItemYoutubeSearchResponse(){{
-                        setId(
-                                new VideoIdYoutubeResponse(){{ setVideoId("ByH9LuSILxU"); }}
-                        );
-                        setSnippet(
-                                new SnippetYoutubeResponse(){{
-                                    setTitle("Cats");
-                                    setDescription("Lorem ipsum");
-                                    setPublishedAt(LocalDateTime.now());
-                                    setLiveBroadcastContent("NONE");
-                                }}
-                        );
-                    }},
+        YoutubeSearchResponse response = YoutubeSearchResponse.builder()
+                .items(Arrays.asList(
+                        ItemYoutubeSearchResponse.builder()
+                            .id(VideoIdYoutubeResponse.builder().videoId("ByH9LuSILxU").build())
+                            .snippet(SnippetYoutubeResponse.builder()
+                                    .title("Cats")
+                                    .description("lorem ipsum")
+                                    .publishedAt(LocalDateTime.now())
+                                    .liveBroadcastContent("NONE")
+                                    .build())
+                            .build(),
 
-                    new ItemYoutubeSearchResponse(){{
-                        setId(
-                                new VideoIdYoutubeResponse(){{ setVideoId("5qap5aO4i9A"); }}
-                        );
-                        setSnippet(
-                                new SnippetYoutubeResponse(){{
-                                    setTitle("lofi hip hop");
-                                    setDescription("Lorem ipsum");
-                                    setPublishedAt(LocalDateTime.now());
-                                    setLiveBroadcastContent("LIVE");
-                                }}
-                        );
-                    }},
+                        ItemYoutubeSearchResponse.builder()
+                                .id(VideoIdYoutubeResponse.builder().videoId("5qap5aO4i9A").build())
+                                .snippet(SnippetYoutubeResponse.builder()
+                                        .title("lofi hip hop")
+                                        .description("lorem ipsum")
+                                        .publishedAt(LocalDateTime.now())
+                                        .liveBroadcastContent("NONE")
+                                        .build())
+                                .build(),
 
-                    new ItemYoutubeSearchResponse(){{
-                        setId(
-                                new VideoIdYoutubeResponse(){{ setVideoId("nybtOIxlku8"); }}
-                        );
-                        setSnippet(
-                                new SnippetYoutubeResponse(){{
-                                    setTitle("Гімн України");
-                                    setDescription("Lorem ipsum");
-                                    setPublishedAt(LocalDateTime.now());
-                                    setLiveBroadcastContent("NONE");
-                                }}
-                        );
-                    }}
-
-            ));
-        }};
+                        ItemYoutubeSearchResponse.builder()
+                                .id(VideoIdYoutubeResponse.builder().videoId("nybtOIxlku8").build())
+                                .snippet(SnippetYoutubeResponse.builder()
+                                        .title("Гімн України")
+                                        .description("lorem ipsum")
+                                        .publishedAt(LocalDateTime.now())
+                                        .liveBroadcastContent("NONE")
+                                        .build())
+                                .build()
+                )).build();
 
         return OperationResult.success(response);
     }
 
     @Override
     public OperationResult<ItemYoutubeVideosResponse> findVideo(String id) {
-        ItemYoutubeVideosResponse response = new ItemYoutubeVideosResponse();
-
-        SnippetYoutubeResponse snippet = new SnippetYoutubeResponse() {{
-            setTitle("Гімн України");
-            setDescription("lorem ipsum");
-            setPublishedAt(LocalDateTime.now());
-            setLiveBroadcastContent("NONE");
-        }};
-
-        response.setId("nybtOIxlku8");
-        response.setSnippet(snippet);
+        ItemYoutubeVideosResponse response = ItemYoutubeVideosResponse.builder()
+                .id("nybtOIxlku8")
+                .snippet(SnippetYoutubeResponse.builder()
+                        .title("Гімн України")
+                        .description("lorem ipsum")
+                        .publishedAt(LocalDateTime.now())
+                        .liveBroadcastContent("NONE")
+                        .build())
+                .build();
 
         return OperationResult.success(response);
     }
