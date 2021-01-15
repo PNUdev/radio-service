@@ -29,6 +29,10 @@ java <env variables: -DvariableName='value'> -jar <jar location>
 - ADMIN_USERNAME (_default_: 'admin') - _admin panel username_
 - ADMIN_PASSWORD (_default_: 'admin') - _admin panel password_
 
+## Spring profiles
+- default - *profile, used in production (uses real Youtube client and requires YOUTUBE_API_KEY)*
+- local - *run application for local development (doesn't require YOUTUBE_API_KEY)*
+
 ## Docker
 
 #### Local development:

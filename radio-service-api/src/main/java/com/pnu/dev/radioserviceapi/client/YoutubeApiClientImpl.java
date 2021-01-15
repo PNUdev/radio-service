@@ -7,12 +7,13 @@ import com.pnu.dev.radioserviceapi.util.OperationResult;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 
-
+@Profile("default")
 @Component
 @Data
 public class YoutubeApiClientImpl implements YoutubeApiClient {
