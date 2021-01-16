@@ -46,10 +46,8 @@ public class YoutubeApiClientImpl implements YoutubeApiClient {
     @Override
     public OperationResult<YoutubeSearchResponse> findRecentVideos() {
 
-        UriComponents uriRequest;
-
         try {
-            uriRequest = UriComponentsBuilder
+            UriComponents uriRequest = UriComponentsBuilder
                     .fromHttpUrl(GET_VIDEOS_BY_CHANNEL_URI)
                     .queryParam("key", API_KEY)
                     .queryParam("channelId", CHANNEL_ID)
