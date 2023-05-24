@@ -12,6 +12,8 @@ import { isSSL } from './utils/checker';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 require('dotenv').config({ path: '../.env' });
 console.log(process.env);
@@ -19,6 +21,7 @@ console.log(process.env);
 ReactDOM.render(
   <React.StrictMode>
     <App />
+    <ToastContainer />
   </React.StrictMode>,
   document.getElementById('root')
 );
@@ -27,4 +30,3 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 isSSL ? serviceWorker.register() : serviceWorker.unregister();
-

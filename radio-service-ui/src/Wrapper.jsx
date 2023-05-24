@@ -30,25 +30,22 @@ import './Wrapper.scss';
 class Wrapper extends React.Component {
   constructor(props) {
     super(props)
-
     this.handleClick = this.handleClick.bind(this)
   }
 
   handleClick() {
     document.querySelector('.toggle').classList.toggle('active');
     this.props.toggleHamburger();
-
-    if(this.props.open) {
+    document.body.style.overflow = 'visible';
+    if (this.props.open) {
       document.getElementById('menu').style.width = '0%';
-      document.body.style.overflow = 'visible';
+    } else {
+      document.getElementById('menu').style.width = '100%';
     }
   }
 
   componentDidUpdate() {
-    if(this.props.open) {
-      document.body.style.overflow = 'hidden';
-      document.getElementById('menu').style.width = '100%';
-    }
+    document.body.style.overflow = 'hidden';
   }
 
   render() {

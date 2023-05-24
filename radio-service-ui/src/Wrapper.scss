@@ -33,6 +33,12 @@ html, body { min-height: 100vh; }
   }
 }
 
+@media screen and (min-width: 992px) {
+  .sidebar {
+    width: 380px !important;
+  }
+}
+
 .wrapper {
   height: 100vh;
   background: linear-gradient(90deg, rgba(24,141,154,1) 0%, rgba(47,9,66,1) 35%, rgba(0,212,255,1) 100%);
@@ -158,7 +164,7 @@ html, body { min-height: 100vh; }
     }
 
     .sidebar {
-      width: 0%;
+      width: 0;
       z-index: 10;
       position: absolute;
       padding-top: 60px;
