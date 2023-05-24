@@ -30,31 +30,7 @@ import './Wrapper.scss';
 class Wrapper extends React.Component {
   constructor(props) {
     super(props)
-    this.updateMenuSize = this.updateMenuSize.bind(this);
     this.handleClick = this.handleClick.bind(this)
-    this.menuToggled = false;
-  }
-
-  componentDidMount() {
-    this.updateMenuSize();
-    window.addEventListener('resize', this.updateMenuSize);
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.updateMenuSize);
-  }
-
-  updateMenuSize() {
-    if (window.innerWidth >= 992) {
-      document.getElementById('menu').style.width = '380px';
-      this.menuToggled = false;
-    } else if (!this.menuToggled) {
-      if (document.querySelector('.toggle').classList.contains('active')) {
-        document.querySelector('.toggle').classList.toggle('active');
-      }
-      document.getElementById('menu').style.width = '0%';
-      this.menuToggled = true;
-    }
   }
 
   handleClick() {
